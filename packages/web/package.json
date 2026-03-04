@@ -1,6 +1,6 @@
 {
   "name": "@dangerousthings/web",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Web CSS theme for the Dangerous Things design system — bevels, glows, form styles",
   "license": "MIT",
   "main": "dist/index.css",
@@ -19,7 +19,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node scripts/build.js",
     "clean": "rm -rf dist"
