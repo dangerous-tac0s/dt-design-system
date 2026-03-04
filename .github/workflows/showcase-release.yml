@@ -1,0 +1,171 @@
+name: Showcase Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 0.1.0)'
+        required: true
+        type: string
+      build_desktop:
+        description: 'Build desktop (Electron) artifacts'
+        required: false
+        type: boolean
+        default: true
+      build_mobile:
+        description: 'Build mobile (Android APK) artifact'
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: showcase-release
+  cancel-in-progress: false
+
+jobs:
+  # ─── Desktop Linux Build ───────────────────────────────────────
+  desktop-linux:
+    if: inputs.build_desktop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design system packages
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+
+      - name: Build desktop showcase
+        working-directory: packages/showcase/desktop
+        run: npm run build
+
+      - name: Package desktop (Linux)
+        working-directory: packages/showcase/desktop
+        run: npx electron-builder --linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-linux
+          path: |
+            packages/showcase/desktop/release/*.AppImage
+            packages/showcase/desktop/release/*.deb
+          retention-days: 30
+
+  # ─── Mobile Android Build ──────────────────────────────────────
+  mobile-android:
+    if: inputs.build_mobile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design system packages
+        run: npx turbo run build --filter='@dangerousthings/tokens'
+
+      - name: Expo prebuild
+        working-directory: packages/showcase/mobile
+        run: npx expo prebuild --clean --platform android
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('packages/showcase/mobile/android/**/*.gradle*', 'packages/showcase/mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - name: Build release APK
+        working-directory: packages/showcase/mobile/android
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-android
+          path: packages/showcase/mobile/android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+
+  # ─── Create GitHub Release ─────────────────────────────────────
+  create-release:
+    needs: [desktop-linux, mobile-android]
+    if: always() && (needs.desktop-linux.result == 'success' || needs.mobile-android.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Rename artifacts with version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          mkdir -p final-artifacts
+
+          # Desktop artifacts — replace 0.0.0 with release version
+          if [ -d release-artifacts/desktop-linux ]; then
+            for f in release-artifacts/desktop-linux/*; do
+              filename=$(basename "$f")
+              newname=$(echo "$filename" | sed "s/0\.0\.0/${RELEASE_VERSION}/g")
+              cp "$f" "final-artifacts/$newname"
+            done
+          fi
+
+          # Mobile APK — give it a descriptive name
+          if [ -f release-artifacts/mobile-android/app-release.apk ]; then
+            cp release-artifacts/mobile-android/app-release.apk \
+               "final-artifacts/dt-showcase-mobile-${RELEASE_VERSION}.apk"
+          fi
+
+          echo "Release artifacts:"
+          ls -lh final-artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: showcase-v${{ inputs.version }}
+          name: Showcase v${{ inputs.version }}
+          body: |
+            ## DT Design System Showcase v${{ inputs.version }}
+
+            ### Desktop (Electron)
+            - **AppImage** (Linux, portable) — download and `chmod +x` to run
+            - **deb** (Debian/Ubuntu) — install with `sudo dpkg -i <file>.deb`
+
+            ### Mobile (Android)
+            - **APK** — sideload on any Android device (Settings > Install unknown apps)
+
+            ---
+            Built from commit ${{ github.sha }}
+          files: final-artifacts/*
+          draft: false
+          prerelease: false
