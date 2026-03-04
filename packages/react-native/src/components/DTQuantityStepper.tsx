@@ -9,10 +9,10 @@
  * - Quantity display between buttons
  */
 
-import {StyleSheet, View, ViewStyle, StyleProp, Pressable} from 'react-native';
+import {StyleSheet, View, ViewStyle, StyleProp, Pressable, Text as RNText} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildButtonBevelPath} from '../utils/bevelPaths';
 
@@ -124,7 +124,9 @@ export function DTQuantityStepper({
   color,
   style,
 }: DTQuantityStepperProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const useBevels = theme.custom.bevelMd > 0;
+  const accentColor = getVariantColor(theme, variant, color);
   const config = sizeConfigs[size];
   const atMin = value <= min;
   const atMax = value >= max;
@@ -168,21 +170,37 @@ export function DTQuantityStepper({
         style={({pressed}) => ({
           opacity: disabled || isDisabled ? 0.3 : pressed ? 0.7 : 1,
         })}>
-        <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>
-          <Path
-            d={buildButtonBevelPath(s, s, config.bevelSize, borderWidth)}
-            fill="transparent"
-            stroke={accentColor}
-            strokeWidth={borderWidth}
-          />
-          <Path
-            d={iconPath}
-            fill="none"
-            stroke={accentColor}
-            strokeWidth={sw}
-            strokeLinecap="round"
-          />
-        </Svg>
+        {useBevels ? (
+          <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>
+            <Path
+              d={buildButtonBevelPath(s, s, config.bevelSize, borderWidth)}
+              fill="transparent"
+              stroke={accentColor}
+              strokeWidth={borderWidth}
+            />
+            <Path
+              d={iconPath}
+              fill="none"
+              stroke={accentColor}
+              strokeWidth={sw}
+              strokeLinecap="round"
+            />
+          </Svg>
+        ) : (
+          <View style={{
+            width: s,
+            height: s,
+            borderWidth,
+            borderColor: accentColor,
+            borderRadius: theme.custom.radiusSm,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <RNText style={{color: accentColor, fontSize: s * 0.5, lineHeight: s * 0.6}}>
+              {type === 'minus' ? '−' : '+'}
+            </RNText>
+          </View>
+        )}
       </Pressable>
     );
   };
@@ -190,7 +208,7 @@ export function DTQuantityStepper({
   return (
     <View style={[styles.wrapper, style]}>
       {label && (
-        <Text style={[styles.label, {color: DTColors.light}]}>{label}</Text>
+        <Text style={[styles.label, {color: theme.colors.onSurface}]}>{label}</Text>
       )}
       <View style={styles.container}>
         {renderStepButton('minus', handleDecrement, atMin)}

@@ -8,7 +8,7 @@
 import {StyleSheet, View, ViewStyle, StyleProp, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildButtonBevelPath} from '../utils/bevelPaths';
 import {useComponentLayout} from '../utils/useComponentLayout';
@@ -83,16 +83,18 @@ export function DTButton({
   borderWidth = 2,
   bevelSize = 8,
 }: DTButtonProps) {
+  const theme = useDTTheme();
   const {dimensions, onLayout, hasDimensions} = useComponentLayout();
   const [pressed, setPressed] = useState(false);
 
-  const accentColor = getVariantColor(variant, color);
+  const accentColor = getVariantColor(theme, variant, color);
   const isContained = mode === 'contained';
   const bgColor = isContained ? accentColor : 'transparent';
-  const textColor = isContained ? DTColors.dark : accentColor;
+  const textColor = isContained ? theme.colors.onPrimary : accentColor;
 
   const {width, height} = dimensions;
   const opacity = disabled ? 0.5 : pressed ? 0.7 : 1;
+  const useBevels = theme.custom.bevelMd > 0;
 
   return (
     <Pressable
@@ -101,8 +103,18 @@ export function DTButton({
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
       style={[{opacity}, style]}>
-      <View style={styles.container} onLayout={onLayout}>
-        {hasDimensions && (
+      <View
+        style={[
+          styles.container,
+          !useBevels && {
+            borderWidth,
+            borderColor: accentColor,
+            borderRadius: theme.custom.radiusSm,
+            backgroundColor: bgColor,
+          },
+        ]}
+        onLayout={onLayout}>
+        {useBevels && hasDimensions && (
           <Svg
             style={StyleSheet.absoluteFill}
             width={width}

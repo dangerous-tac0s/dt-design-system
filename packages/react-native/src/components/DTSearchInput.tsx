@@ -11,7 +11,7 @@
 import {useState, useRef, useEffect} from 'react';
 import {StyleSheet, View, ViewStyle, TextStyle, StyleProp, Animated} from 'react-native';
 import {Searchbar, ActivityIndicator} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 interface DTSearchInputProps {
@@ -86,7 +86,8 @@ export function DTSearchInput({
   style,
   inputStyle,
 }: DTSearchInputProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant, color);
   const [focused, setFocused] = useState(false);
   const focusAnim = useRef(new Animated.Value(0)).current;
 
@@ -110,7 +111,7 @@ export function DTSearchInput({
         onBlur={() => setFocused(false)}
         returnKeyType="search"
         placeholder={placeholder}
-        placeholderTextColor={DTColors.disabled}
+        placeholderTextColor={theme.colors.onSurfaceDisabled}
         editable={!disabled}
         autoFocus={autoFocus}
         icon={
@@ -119,13 +120,13 @@ export function DTSearchInput({
             : 'magnify'
         }
         iconColor={accentColor}
-        inputStyle={[styles.input, {color: DTColors.light}, inputStyle]}
-        style={[styles.searchbar, {borderColor: accentColor}]}
+        inputStyle={[styles.input, {color: theme.colors.onSurface}, inputStyle]}
+        style={[styles.searchbar, {borderColor: accentColor, backgroundColor: theme.colors.background}]}
         rippleColor={accentColor}
         theme={{
           colors: {
-            elevation: {level3: DTColors.dark},
-            onSurface: DTColors.light,
+            elevation: {level3: theme.colors.background},
+            onSurface: theme.colors.onSurface,
             onSurfaceVariant: accentColor,
           },
           roundness: 0,
@@ -149,7 +150,6 @@ const styles = StyleSheet.create({
   container: {},
   searchbar: {
     borderWidth: 2,
-    backgroundColor: DTColors.dark,
     elevation: 0,
   },
   input: {

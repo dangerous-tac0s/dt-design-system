@@ -20,7 +20,7 @@ import {
   Animated,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 export interface DTAccordionSection {
@@ -93,6 +93,7 @@ export function DTAccordion({
   onSectionToggle,
   style,
 }: DTAccordionProps) {
+  const theme = useDTTheme();
   const [openKeys, setOpenKeys] = useState<Set<string>>(
     new Set(initialOpenKeys),
   );
@@ -114,8 +115,8 @@ export function DTAccordion({
     [allowMultiple, onSectionToggle],
   );
 
-  const inactiveColor = getVariantColor(variant);
-  const activeColor = getVariantColor(activeVariant);
+  const inactiveColor = getVariantColor(theme, variant);
+  const activeColor = getVariantColor(theme, activeVariant);
 
   return (
     <View style={[styles.container, style]}>
@@ -146,6 +147,7 @@ function AccordionSection({
   inactiveColor: string;
   activeColor: string;
 }) {
+  const theme = useDTTheme();
   const heightAnim = useRef(new Animated.Value(isOpen ? 1 : 0)).current;
   const chevronAnim = useRef(new Animated.Value(isOpen ? 1 : 0)).current;
   const [contentHeight, setContentHeight] = useState(0);
@@ -187,6 +189,7 @@ function AccordionSection({
           {
             borderColor: sectionColor,
             borderTopColor: sectionColor,
+            backgroundColor: theme.colors.background,
             opacity: pressed ? 0.7 : 1,
           },
         ]}>
@@ -214,7 +217,7 @@ function AccordionSection({
           },
         ]}>
         <View
-          style={styles.content}
+          style={[styles.content, {backgroundColor: theme.colors.background}]}
           onLayout={e => {
             const h = e.nativeEvent.layout.height;
             if (h > 0 && !measured) {
@@ -240,7 +243,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: DTColors.dark,
     borderWidth: 1,
     borderTopWidth: 5,
     paddingVertical: 12,
@@ -256,7 +258,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: DTColors.dark,
   },
   chevron: {
     justifyContent: 'center',

@@ -15,7 +15,7 @@ import {
   Animated,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 const TRACK_WIDTH = 48;
@@ -73,7 +73,8 @@ export function DTSwitch({
   color,
   style,
 }: DTSwitchProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant, color);
   const thumbAnim = useRef(new Animated.Value(value ? 1 : 0)).current;
 
   useEffect(() => {
@@ -91,9 +92,8 @@ export function DTSwitch({
 
   const trackColor = thumbAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [DTColors.disabledBackground, accentColor],
+    outputRange: [theme.colors.surfaceDisabled, accentColor],
   });
-
 
   return (
     <Pressable
@@ -104,7 +104,7 @@ export function DTSwitch({
         style,
       ]}>
       {label && (
-        <Text style={[styles.label, {color: DTColors.light}]}>{label}</Text>
+        <Text style={[styles.label, {color: theme.colors.onSurface}]}>{label}</Text>
       )}
       <Animated.View
         style={[
@@ -118,7 +118,7 @@ export function DTSwitch({
           style={[
             styles.thumb,
             {
-              backgroundColor: value ? DTColors.dark : DTColors.light,
+              backgroundColor: value ? theme.colors.onPrimary : theme.colors.onSurface,
               transform: [{translateX: thumbTranslateX}],
             },
           ]}

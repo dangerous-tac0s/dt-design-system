@@ -124,6 +124,14 @@ export interface DTExtendedTheme extends MD3Theme {
     modeOther: string;
     border: string;
     borderEmphasis: string;
+    /** Bevel sizes in pixels (0 = no bevels, use borderRadius instead) */
+    bevelSm: number;
+    bevelMd: number;
+    bevelLg: number;
+    /** Border radius in pixels (0 = angular/beveled) */
+    radiusSm: number;
+    radius: number;
+    radiusLg: number;
   };
 }
 
@@ -139,6 +147,12 @@ export const DTExtendedDarkTheme: DTExtendedTheme = {
     modeOther: DTColors.modeOther,
     border: DTColors.border,
     borderEmphasis: DTColors.borderEmphasis,
+    bevelSm: 16,
+    bevelMd: 32,
+    bevelLg: 40,
+    radiusSm: 0,
+    radius: 0,
+    radiusLg: 0,
   },
 };
 

@@ -14,7 +14,7 @@ import {ReactNode} from 'react';
 import {StyleSheet, View, ViewStyle, StyleProp, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildCardBevelPath} from '../utils/bevelPaths';
 import {useComponentLayout} from '../utils/useComponentLayout';
@@ -68,8 +68,7 @@ interface DTCardProps {
    */
   bevelSizeSmall?: number;
   /**
-   * Background color
-   * @default '#000000'
+   * Background color (defaults to theme background)
    */
   backgroundColor?: string;
   /**
@@ -103,34 +102,49 @@ export function DTCard({
   borderWidth = 3,
   bevelSize = 32,
   bevelSizeSmall = 16,
-  backgroundColor = '#000000',
+  backgroundColor,
   onPress,
 }: DTCardProps) {
+  const theme = useDTTheme();
   const {dimensions, onLayout, hasDimensions} = useComponentLayout();
-  const accentColor = getVariantColor(mode, borderColor);
+  const accentColor = getVariantColor(theme, mode, borderColor);
   const shouldShowHeader = showHeader ?? !!title;
+  const bgColor = backgroundColor ?? theme.colors.background;
 
   const {width, height} = dimensions;
+  const useBevels = theme.custom.bevelMd > 0;
 
   // Outer bevel path (full card shape)
-  const outerPath = hasDimensions
+  const outerPath = useBevels && hasDimensions
     ? buildCardBevelPath(width, height, bevelSize, bevelSizeSmall, 0)
     : '';
   // Inner bevel path at border inset (for background + frame cutout)
-  const innerPath = hasDimensions
+  const innerPath = useBevels && hasDimensions
     ? buildCardBevelPath(width, height, bevelSize - borderWidth, bevelSizeSmall - borderWidth, borderWidth)
     : '';
 
   const content = (
-    <View style={[styles.container, style]} onLayout={onLayout}>
-      {/* Background fill (behind content) */}
-      {hasDimensions && (
+    <View
+      style={[
+        styles.container,
+        !useBevels && {
+          borderWidth,
+          borderColor: accentColor,
+          borderRadius: theme.custom.radius,
+          backgroundColor: bgColor,
+          overflow: 'hidden',
+        },
+        style,
+      ]}
+      onLayout={onLayout}>
+      {/* Background fill (behind content) — beveled mode only */}
+      {useBevels && hasDimensions && (
         <Svg
           style={StyleSheet.absoluteFill}
           width={width}
           height={height}
           viewBox={`0 0 ${width} ${height}`}>
-          <Path d={innerPath} fill={backgroundColor} />
+          <Path d={innerPath} fill={bgColor} />
         </Svg>
       )}
       <View style={styles.innerContainer}>
@@ -139,7 +153,7 @@ export function DTCard({
             {title && (
               <Text
                 variant="titleMedium"
-                style={[styles.headerText, {color: DTColors.dark}]}>
+                style={[styles.headerText, {color: theme.colors.onPrimary}]}>
                 {title}
               </Text>
             )}
@@ -147,8 +161,8 @@ export function DTCard({
         )}
         <View style={[styles.content, {padding}, contentStyle]}>{children}</View>
       </View>
-      {/* Frame overlay (above content) — clips content at beveled border */}
-      {hasDimensions && (
+      {/* Frame overlay (above content) — beveled mode only */}
+      {useBevels && hasDimensions && (
         <Svg
           style={[StyleSheet.absoluteFill, styles.frameOverlay]}
           width={width}

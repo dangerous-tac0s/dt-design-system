@@ -13,7 +13,7 @@
 import {ReactNode, useRef, useEffect} from 'react';
 import {StyleSheet, View, ViewStyle, StyleProp, Animated} from 'react-native';
 import Svg, {Path, Defs, ClipPath} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildMediaFrameBevelPath} from '../utils/bevelPaths';
 import {useComponentLayout} from '../utils/useComponentLayout';
@@ -91,9 +91,10 @@ export function DTMediaFrame({
   style,
   contentStyle,
 }: DTMediaFrameProps) {
+  const theme = useDTTheme();
   const {dimensions, onLayout, hasDimensions} = useComponentLayout();
   const scaleAnim = useRef(new Animated.Value(animated ? 0 : 1)).current;
-  const accentColor = getVariantColor(variant, color);
+  const accentColor = getVariantColor(theme, variant, color);
 
   useEffect(() => {
     if (animated) {
@@ -107,13 +108,14 @@ export function DTMediaFrame({
   }, [animated, animationDelay, scaleAnim]);
 
   const {width, height} = dimensions;
+  const useBevels = theme.custom.bevelMd > 0;
 
   // Outer bevel path (full frame shape)
-  const outerPath = hasDimensions
+  const outerPath = useBevels && hasDimensions
     ? buildMediaFrameBevelPath(width, height, bevelSize)
     : '';
   // Inner bevel path at border inset
-  const innerPath = hasDimensions
+  const innerPath = useBevels && hasDimensions
     ? buildMediaFrameBevelPath(width, height, bevelSize - borderWidth, borderWidth)
     : '';
 
@@ -123,21 +125,27 @@ export function DTMediaFrame({
         styles.container,
         aspectRatio ? {aspectRatio} : undefined,
         {transform: [{scale: scaleAnim}]},
+        !useBevels && {
+          borderWidth,
+          borderColor: accentColor,
+          borderRadius: theme.custom.radius,
+          overflow: 'hidden',
+        },
         style,
       ]}
       onLayout={onLayout}>
-      {/* Background fill (behind content) */}
-      {hasDimensions && (
+      {/* Background fill (behind content) — beveled mode only */}
+      {useBevels && hasDimensions && (
         <Svg
           style={StyleSheet.absoluteFill}
           width={width}
           height={height}
           viewBox={`0 0 ${width} ${height}`}>
-          <Path d={innerPath} fill={DTColors.dark} />
+          <Path d={innerPath} fill={theme.colors.background} />
         </Svg>
       )}
-      {/* Content clipped to the inner bevel shape */}
-      {hasDimensions ? (
+      {/* Content */}
+      {useBevels && hasDimensions ? (
         <View style={[styles.content, contentStyle]}>
           <Svg
             width={width}
@@ -155,7 +163,6 @@ export function DTMediaFrame({
               StyleSheet.absoluteFill,
               {
                 margin: borderWidth,
-                // Use borderRadius 0 to keep angular, overflow hidden clips rectangular part
                 overflow: 'hidden',
               },
             ]}>
@@ -163,30 +170,27 @@ export function DTMediaFrame({
           </View>
         </View>
       ) : (
-        <View style={[styles.content, {padding: borderWidth}, contentStyle]}>
+        <View style={[styles.content, !useBevels ? undefined : {padding: borderWidth}, contentStyle]}>
           {children}
         </View>
       )}
-      {/* Frame overlay (above content) — masks content at beveled corners */}
-      {hasDimensions && (
+      {/* Frame overlay (above content) — beveled mode only */}
+      {useBevels && hasDimensions && (
         <Svg
           style={[StyleSheet.absoluteFill, styles.frameOverlay]}
           width={width}
           height={height}
           viewBox={`0 0 ${width} ${height}`}
           pointerEvents="none">
-          {/* Outer frame border */}
           <Path
             d={outerPath + ' ' + innerPath}
             fillRule="evenodd"
             fill={accentColor}
           />
-          {/* Corner masks: fill the rectangular area outside the bevel shape with black
-              to hide content that overflows past the beveled corners */}
           <Path
             d={`M 0 0 L ${width} 0 L ${width} ${height} L 0 ${height} Z ` + outerPath}
             fillRule="evenodd"
-            fill={DTColors.dark}
+            fill={theme.colors.background}
           />
         </Svg>
       )}

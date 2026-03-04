@@ -1,6 +1,34 @@
-import { MD3DarkTheme } from 'react-native-paper';
+import { Platform } from 'react-native';
+import { MD3DarkTheme, configureFonts } from 'react-native-paper';
 import type { BrandTokens } from '@dangerousthings/tokens';
 import type { DTExtendedTheme } from '@dangerousthings/react-native';
+
+/** Parse CSS size token ("1rem", "0.25rem", "0px", "0") to pixels (1rem = 16px) */
+function parseSize(value: string): number {
+  if (value === '0' || value === '0px') return 0;
+  const num = parseFloat(value);
+  if (value.endsWith('rem')) return num * 16;
+  if (value.endsWith('px')) return num;
+  return num;
+}
+
+/** Build RNP font config from brand typography tokens */
+function buildFonts(brand: BrandTokens) {
+  const usesTektur = brand.typography.heading.includes('Tektur');
+  if (!usesTektur) {
+    // System sans-serif — use RNP defaults
+    return MD3DarkTheme.fonts;
+  }
+  // Tektur custom font
+  const fontFamily = Platform.select({
+    ios: 'Tektur',
+    android: 'Tektur-Regular',
+    default: 'Tektur',
+  })!;
+  return configureFonts({
+    config: { fontFamily },
+  });
+}
 
 export function buildThemeFromBrand(brand: BrandTokens): DTExtendedTheme {
   const colors = brand.dark;
@@ -9,7 +37,7 @@ export function buildThemeFromBrand(brand: BrandTokens): DTExtendedTheme {
     ...MD3DarkTheme,
     dark: true,
     roundness: brand.shape.radiusSm === '0' || brand.shape.radiusSm === '0px' ? 0 : 4,
-    fonts: MD3DarkTheme.fonts,
+    fonts: buildFonts(brand),
     colors: {
       ...MD3DarkTheme.colors,
       primary: colors.primary,
@@ -63,6 +91,12 @@ export function buildThemeFromBrand(brand: BrandTokens): DTExtendedTheme {
       modeOther: colors.other,
       border: colors.border,
       borderEmphasis: colors.secondary,
+      bevelSm: parseSize(brand.shape.bevelSm),
+      bevelMd: parseSize(brand.shape.bevelMd),
+      bevelLg: parseSize(brand.shape.bevelLg),
+      radiusSm: parseSize(brand.shape.radiusSm),
+      radius: parseSize(brand.shape.radius),
+      radiusLg: parseSize(brand.shape.radiusLg),
     },
   };
 }

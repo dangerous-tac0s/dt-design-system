@@ -8,10 +8,10 @@
  * Uses diagonal-symmetry bevels (top-left + bottom-right) on the indicator.
  */
 
-import {StyleSheet, ViewStyle, TextStyle, StyleProp, Pressable} from 'react-native';
+import {StyleSheet, View, ViewStyle, TextStyle, StyleProp, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildBeveledRectPath} from '../utils/bevelPaths';
 
@@ -76,16 +76,20 @@ export function DTCheckbox({
   style,
   labelStyle,
 }: DTCheckboxProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant, color);
   const opacity = disabled ? 0.5 : 1;
   const borderWidth = 2;
+  const useBevels = theme.custom.bevelMd > 0;
   const bevelSize = Math.round(size * 0.3);
 
   // Outer beveled path (border)
-  const outerPath = buildBeveledRectPath(size, size, {
-    corners: {topLeft: bevelSize, bottomRight: bevelSize},
-    strokeWidth: borderWidth,
-  });
+  const outerPath = useBevels
+    ? buildBeveledRectPath(size, size, {
+        corners: {topLeft: bevelSize, bottomRight: bevelSize},
+        strokeWidth: borderWidth,
+      })
+    : '';
 
   return (
     <Pressable
@@ -96,28 +100,44 @@ export function DTCheckbox({
         {opacity: pressed ? 0.7 : opacity},
         style,
       ]}>
-      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Beveled border */}
-        <Path
-          d={outerPath}
-          fill={checked ? accentColor : 'transparent'}
-          stroke={accentColor}
-          strokeWidth={borderWidth}
-        />
-        {/* Checkmark path (only when checked) */}
-        {checked && (
+      {useBevels ? (
+        <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
           <Path
-            d={`M ${size * 0.2} ${size * 0.5} L ${size * 0.4} ${size * 0.7} L ${size * 0.8} ${size * 0.25}`}
-            fill="none"
-            stroke={DTColors.dark}
-            strokeWidth={borderWidth + 0.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d={outerPath}
+            fill={checked ? accentColor : 'transparent'}
+            stroke={accentColor}
+            strokeWidth={borderWidth}
           />
-        )}
-      </Svg>
+          {checked && (
+            <Path
+              d={`M ${size * 0.2} ${size * 0.5} L ${size * 0.4} ${size * 0.7} L ${size * 0.8} ${size * 0.25}`}
+              fill="none"
+              stroke={theme.colors.onPrimary}
+              strokeWidth={borderWidth + 0.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+        </Svg>
+      ) : (
+        <View
+          style={{
+            width: size,
+            height: size,
+            borderWidth,
+            borderColor: accentColor,
+            borderRadius: theme.custom.radiusSm,
+            backgroundColor: checked ? accentColor : 'transparent',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {checked && (
+            <Text style={{color: theme.colors.onPrimary, fontSize: size * 0.6, lineHeight: size * 0.7}}>✓</Text>
+          )}
+        </View>
+      )}
       {label && (
-        <Text style={[styles.label, {color: DTColors.light}, labelStyle]}>
+        <Text style={[styles.label, {color: theme.colors.onSurface}, labelStyle]}>
           {label}
         </Text>
       )}

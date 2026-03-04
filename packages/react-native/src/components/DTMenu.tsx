@@ -20,7 +20,7 @@ import {
   Animated,
 } from 'react-native';
 import {Menu, Text} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 export interface DTMenuItem {
@@ -163,7 +163,8 @@ export function DTMenuDropdown({
   onDismiss,
   style,
 }: DTMenuDropdownProps) {
-  const accentColor = getVariantColor(variant);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant);
 
   return (
     <Menu
@@ -173,12 +174,12 @@ export function DTMenuDropdown({
       anchorPosition="bottom"
       contentStyle={[
         styles.dropdownContent,
-        {borderColor: accentColor},
+        {borderColor: accentColor, backgroundColor: theme.colors.background},
         style,
       ]}
       theme={{
         colors: {
-          elevation: {level2: DTColors.dark},
+          elevation: {level2: theme.colors.background},
         },
       }}>
       {items.map(item => (
@@ -189,7 +190,7 @@ export function DTMenuDropdown({
             item.onPress?.();
             onDismiss();
           }}
-          titleStyle={[styles.dropdownItemTitle, {color: DTColors.light}]}
+          titleStyle={[styles.dropdownItemTitle, {color: theme.colors.onSurface}]}
           style={styles.dropdownItem}
         />
       ))}
@@ -210,10 +211,11 @@ function DTMenuItemRow({
   activeVariant: DTVariant;
   level: number;
 }) {
+  const theme = useDTTheme();
   const [expanded, setExpanded] = useState(false);
   const hasChildren = item.items && item.items.length > 0;
   const isActive = item.isActive || expanded;
-  const itemColor = getVariantColor(isActive ? activeVariant : variant);
+  const itemColor = getVariantColor(theme, isActive ? activeVariant : variant);
 
   const heightAnim = useRef(new Animated.Value(0)).current;
   const chevronAnim = useRef(new Animated.Value(0)).current;
@@ -265,7 +267,7 @@ function DTMenuItemRow({
             borderTopColor: itemColor,
             backgroundColor: isActive
               ? `${itemColor}20`
-              : DTColors.dark,
+              : theme.colors.background,
             paddingLeft: 16 + level * 16,
             opacity: pressed ? 0.7 : 1,
           },
@@ -360,7 +362,6 @@ const styles = StyleSheet.create({
   dropdownContent: {
     borderWidth: 2,
     borderRadius: 0,
-    backgroundColor: DTColors.dark,
   },
   dropdownItem: {
     borderRadius: 0,

@@ -11,7 +11,7 @@
 
 import {StyleSheet, View, ViewStyle, StyleProp} from 'react-native';
 import {ProgressBar, Text} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {useComponentLayout} from '../utils/useComponentLayout';
 
@@ -77,7 +77,8 @@ export function DTProgressBar({
   color,
   style,
 }: DTProgressBarProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant, color);
   const clampedValue = Math.max(0, Math.min(1, value));
 
   if (orientation === 'vertical') {
@@ -85,6 +86,7 @@ export function DTProgressBar({
       <VerticalProgressBar
         value={clampedValue}
         color={accentColor}
+        trackColor={theme.colors.surfaceDisabled}
         width={height}
         showLabel={showLabel}
         style={style}
@@ -100,7 +102,7 @@ export function DTProgressBar({
         style={[styles.bar, {height}]}
         theme={{
           colors: {
-            surfaceVariant: DTColors.disabledBackground,
+            surfaceVariant: theme.colors.surfaceDisabled,
           },
         }}
       />
@@ -120,12 +122,14 @@ export function DTProgressBar({
 function VerticalProgressBar({
   value,
   color,
+  trackColor,
   width,
   showLabel,
   style,
 }: {
   value: number;
   color: string;
+  trackColor: string;
   width: number;
   showLabel: boolean;
   style?: StyleProp<ViewStyle>;
@@ -135,7 +139,7 @@ function VerticalProgressBar({
 
   return (
     <View style={[styles.verticalContainer, {width}, style]}>
-      <View style={styles.verticalTrack} onLayout={onLayout}>
+      <View style={[styles.verticalTrack, {backgroundColor: trackColor}]} onLayout={onLayout}>
         <View
           style={[
             styles.verticalFill,
@@ -169,7 +173,6 @@ const styles = StyleSheet.create({
   verticalTrack: {
     flex: 1,
     width: '100%',
-    backgroundColor: DTColors.disabledBackground,
     justifyContent: 'flex-end',
   },
   verticalFill: {

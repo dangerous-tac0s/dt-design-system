@@ -20,7 +20,7 @@ import {
   Animated,
 } from 'react-native';
 import {TextInput, TextInputProps} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 interface DTTextInputProps
@@ -79,12 +79,13 @@ export function DTTextInput({
   style,
   ...props
 }: DTTextInputProps) {
+  const theme = useDTTheme();
   const [focused, setFocused] = useState(false);
   const focusAnim = useRef(new Animated.Value(0)).current;
 
   const accentColor = error
-    ? DTColors.modeWarning
-    : getVariantColor(variant, color);
+    ? theme.custom.modeWarning
+    : getVariantColor(theme, variant, color);
 
   useEffect(() => {
     const anim = Animated.timing(focusAnim, {
@@ -101,7 +102,7 @@ export function DTTextInput({
       <View
         style={[
           styles.inputWrapper,
-          {borderColor: accentColor, borderWidth},
+          {borderColor: accentColor, borderWidth, backgroundColor: theme.colors.background},
         ]}>
         <TextInput
           {...props}
@@ -116,8 +117,8 @@ export function DTTextInput({
             onBlur?.(e);
           }}
           style={[styles.input, inputStyle, style]}
-          textColor={DTColors.light}
-          placeholderTextColor={DTColors.disabled}
+          textColor={theme.colors.onSurface}
+          placeholderTextColor={theme.colors.onSurfaceDisabled}
           activeUnderlineColor="transparent"
           underlineColor="transparent"
           theme={{
@@ -141,7 +142,7 @@ export function DTTextInput({
       />
       {error && errorMessage && (
         <View style={styles.errorContainer}>
-          <Animated.Text style={[styles.errorText, {color: DTColors.modeWarning}]}>
+          <Animated.Text style={[styles.errorText, {color: theme.custom.modeWarning}]}>
             {errorMessage}
           </Animated.Text>
         </View>
@@ -151,9 +152,7 @@ export function DTTextInput({
 }
 
 const styles = StyleSheet.create({
-  inputWrapper: {
-    backgroundColor: DTColors.dark,
-  },
+  inputWrapper: {},
   input: {
     backgroundColor: 'transparent',
   },

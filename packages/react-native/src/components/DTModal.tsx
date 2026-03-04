@@ -11,7 +11,7 @@
 
 import {StyleSheet, ViewStyle, StyleProp, KeyboardAvoidingView, Platform} from 'react-native';
 import {Portal, Modal} from 'react-native-paper';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant} from '../utils/variantColors';
 import {DTCard} from './DTCard';
 
@@ -75,6 +75,8 @@ export function DTModal({
   contentStyle,
   style,
 }: DTModalProps) {
+  const theme = useDTTheme();
+
   return (
     <Portal>
       <Modal
@@ -85,7 +87,7 @@ export function DTModal({
         style={styles.modal}
         theme={{
           colors: {
-            backdrop: DTColors.overlay,
+            backdrop: theme.colors.backdrop,
           },
         }}>
         <KeyboardAvoidingView

@@ -31,7 +31,7 @@ import {
 import {Portal, Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildDrawerBevelPath} from '../utils/bevelPaths';
 
@@ -108,9 +108,11 @@ export function DTDrawer({
   children,
   style,
 }: DTDrawerProps) {
+  const theme = useDTTheme();
+  const useBevels = theme.custom.bevelMd > 0;
   const slideAnim = useRef(new Animated.Value(0)).current;
   const overlayAnim = useRef(new Animated.Value(0)).current;
-  const headerColor = getVariantColor(headingVariant);
+  const headerColor = getVariantColor(theme, headingVariant);
   const {width: screenWidth, height: screenHeight} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const effectiveWidth = Math.min(drawerWidth, screenWidth);
@@ -172,7 +174,7 @@ export function DTDrawer({
         {/* Overlay backdrop */}
         <Animated.View style={[StyleSheet.absoluteFill, {opacity: overlayAnim}]}>
           <Pressable
-            style={[StyleSheet.absoluteFill, styles.overlay]}
+            style={[StyleSheet.absoluteFill, {backgroundColor: theme.colors.backdrop}]}
             onPress={onDismiss}
           />
         </Animated.View>
@@ -183,42 +185,49 @@ export function DTDrawer({
             styles.panel,
             position === 'right' ? styles.panelRight : styles.panelLeft,
             {width: effectiveWidth, transform: [{translateX}]},
+            !useBevels && {
+              borderWidth,
+              borderColor: headerColor,
+              borderRadius: theme.custom.radius,
+              backgroundColor: theme.colors.background,
+              overflow: 'hidden',
+            },
             style,
           ]}>
-          {/* Dual-SVG-path technique: outer border + inner dark fill */}
-          <View style={StyleSheet.absoluteFill}>
-            <Svg width={effectiveWidth} height={screenHeight}>
-              {/* Outer path: accent border color */}
-              <Path
-                d={buildDrawerBevelPath(
-                  effectiveWidth,
-                  screenHeight,
-                  bevelSize,
-                  position,
-                )}
-                fill={headerColor}
-              />
-              {/* Inner path: dark background (inset by borderWidth) */}
-              <Path
-                d={buildDrawerBevelPath(
-                  effectiveWidth - borderWidth * 2,
-                  screenHeight - borderWidth * 2,
-                  bevelSize - borderWidth,
-                  position,
-                )}
-                fill={DTColors.dark}
-                transform={`translate(${borderWidth}, ${borderWidth})`}
-              />
-            </Svg>
-          </View>
+          {/* Dual-SVG-path technique: outer border + inner dark fill — beveled mode only */}
+          {useBevels && (
+            <View style={StyleSheet.absoluteFill}>
+              <Svg width={effectiveWidth} height={screenHeight}>
+                <Path
+                  d={buildDrawerBevelPath(
+                    effectiveWidth,
+                    screenHeight,
+                    bevelSize,
+                    position,
+                  )}
+                  fill={headerColor}
+                />
+                <Path
+                  d={buildDrawerBevelPath(
+                    effectiveWidth - borderWidth * 2,
+                    screenHeight - borderWidth * 2,
+                    bevelSize - borderWidth,
+                    position,
+                  )}
+                  fill={theme.colors.background}
+                  transform={`translate(${borderWidth}, ${borderWidth})`}
+                />
+              </Svg>
+            </View>
+          )}
 
           {/* Header bar */}
           <View style={[styles.header, {backgroundColor: headerColor, paddingTop: insets.top + 16}]}>
-            <Text style={styles.headerText}>{heading}</Text>
+            <Text style={[styles.headerText, {color: theme.colors.onPrimary}]}>{heading}</Text>
             <Pressable
               onPress={onDismiss}
               style={({pressed}) => ({opacity: pressed ? 0.7 : 1})}>
-              <Text style={styles.closeButton}>✕</Text>
+              <Text style={[styles.closeButton, {color: theme.colors.onPrimary}]}>✕</Text>
             </Pressable>
           </View>
 
@@ -235,9 +244,6 @@ export function DTDrawer({
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    backgroundColor: DTColors.overlay,
-  },
   panel: {
     position: 'absolute',
     top: 0,
@@ -258,13 +264,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerText: {
-    color: DTColors.dark,
     fontWeight: '700',
     fontSize: 18,
     letterSpacing: 0.5,
   },
   closeButton: {
-    color: DTColors.dark,
     fontSize: 20,
     fontWeight: '700',
     paddingHorizontal: 8,

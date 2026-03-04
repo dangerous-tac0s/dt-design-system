@@ -14,7 +14,7 @@ import {createContext, useContext} from 'react';
 import {StyleSheet, View, ViewStyle, StyleProp, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Polygon} from 'react-native-svg';
-import {DTColors, getColor} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 // --- Context ---
@@ -115,6 +115,15 @@ function hexPoints(cx: number, cy: number, r: number): string {
   return pts.join(' ');
 }
 
+/** Convert hex color to rgba with given alpha */
+function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace('#', '');
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 /**
  * DT-styled RadioOption with hexagonal indicator
  *
@@ -130,6 +139,7 @@ export function DTRadioOption({
   disabled = false,
   style,
 }: DTRadioOptionProps) {
+  const theme = useDTTheme();
   const context = useContext(RadioContext);
   if (!context) {
     throw new Error('DTRadioOption must be used inside DTRadioGroup');
@@ -137,14 +147,9 @@ export function DTRadioOption({
 
   const {value: selectedValue, onValueChange, variant} = context;
   const isSelected = selectedValue === value;
-  const accentColor = getVariantColor(variant);
-  const selectedBgColor = getColor(
-    variant === 'normal'
-      ? 'modeNormalSelected'
-      : variant === 'emphasis'
-        ? 'modeEmphasisSelected'
-        : 'modeNormal',
-  );
+  const accentColor = getVariantColor(theme, variant);
+  const selectedBgColor = hexToRgba(accentColor, 0.7);
+  const unselectedBorderColor = hexToRgba(theme.custom.modeNormal, 0.3);
   const opacity = disabled ? 0.5 : 1;
 
   return (
@@ -153,7 +158,7 @@ export function DTRadioOption({
       style={({pressed}) => [
         styles.option,
         {
-          borderColor: isSelected ? accentColor : getColor('modeNormal', 0.3),
+          borderColor: isSelected ? accentColor : unselectedBorderColor,
           backgroundColor: isSelected ? selectedBgColor : 'transparent',
           opacity: pressed ? 0.7 : opacity,
         },
@@ -183,7 +188,7 @@ export function DTRadioOption({
         <Text
           style={[
             styles.optionLabel,
-            {color: isSelected ? DTColors.dark : DTColors.light},
+            {color: isSelected ? theme.colors.onPrimary : theme.colors.onSurface},
           ]}>
           {label}
         </Text>
@@ -192,7 +197,7 @@ export function DTRadioOption({
             variant="bodySmall"
             style={[
               styles.optionDescription,
-              {color: isSelected ? DTColors.dark : DTColors.disabled},
+              {color: isSelected ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled},
             ]}>
             {description}
           </Text>

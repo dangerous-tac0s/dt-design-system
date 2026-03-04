@@ -13,6 +13,7 @@
 import {useRef, useEffect} from 'react';
 import {StyleSheet, View, ViewStyle, StyleProp, Animated} from 'react-native';
 import Svg, {Polygon} from 'react-native-svg';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 
 interface DTHexagonProps {
@@ -112,7 +113,8 @@ export function DTHexagon({
   style,
   children,
 }: DTHexagonProps) {
-  const accentColor = getVariantColor(variant, color);
+  const theme = useDTTheme();
+  const accentColor = getVariantColor(theme, variant, color);
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
 

@@ -8,16 +8,15 @@
 // React import not needed with new JSX transform
 import { StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { Chip, ChipProps } from 'react-native-paper';
-import { DTColors } from '../theme/colors';
-
-type DTChipVariant = 'normal' | 'emphasis' | 'warning' | 'success' | 'other';
+import { useDTTheme } from '../theme/DTThemeProvider';
+import { type DTVariant, getVariantColor } from '../utils/variantColors';
 
 interface DTChipProps extends Omit<ChipProps, 'mode'> {
   /**
    * Visual variant of the chip
    * @default 'normal'
    */
-  variant?: DTChipVariant;
+  variant?: DTVariant;
   /**
    * Whether the chip is in selected state
    * @default false
@@ -28,14 +27,6 @@ interface DTChipProps extends Omit<ChipProps, 'mode'> {
    */
   style?: StyleProp<ViewStyle>;
 }
-
-const variantColors: Record<DTChipVariant, string> = {
-  normal: DTColors.modeNormal,
-  emphasis: DTColors.modeEmphasis,
-  warning: DTColors.modeWarning,
-  success: DTColors.modeSuccess,
-  other: DTColors.modeOther,
-};
 
 /**
  * DT-styled Chip component
@@ -56,7 +47,8 @@ export function DTChip({
   children,
   ...props
 }: DTChipProps) {
-  const color = variantColors[variant];
+  const theme = useDTTheme();
+  const color = getVariantColor(theme, variant);
 
   const chipStyle: ViewStyle = {
     backgroundColor: selected ? color : 'transparent',
@@ -71,7 +63,7 @@ export function DTChip({
       mode="outlined"
       textStyle={[
         styles.text,
-        { color: selected ? DTColors.dark : color },
+        { color: selected ? theme.colors.onPrimary : color },
       ]}
       style={[styles.chip, chipStyle, style]}
       selectedColor={color}

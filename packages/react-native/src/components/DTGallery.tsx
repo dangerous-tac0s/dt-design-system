@@ -26,7 +26,7 @@ import {
   Platform,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildButtonBevelPath, buildMediaFrameBevelPath} from '../utils/bevelPaths';
 import {useComponentLayout} from '../utils/useComponentLayout';
@@ -110,9 +110,10 @@ export function DTGallery({
   borderWidth = 3,
   style,
 }: DTGalleryProps) {
+  const theme = useDTTheme();
   const flatListRef = useRef<FlatList>(null);
   const {dimensions, onLayout, hasDimensions} = useComponentLayout();
-  const accentColor = getVariantColor(variant);
+  const accentColor = getVariantColor(theme, variant);
   const atStart = activeIndex <= 0;
   const atEnd = activeIndex >= items.length - 1;
 
@@ -171,22 +172,45 @@ export function DTGallery({
         style={({pressed}) => ({
           opacity: isDisabled ? 0.3 : pressed ? 0.7 : 1,
         })}>
-        <Svg width={ARROW_SIZE} height={ARROW_SIZE} viewBox={`0 0 ${ARROW_SIZE} ${ARROW_SIZE}`}>
-          <Path
-            d={buildButtonBevelPath(ARROW_SIZE, ARROW_SIZE, ARROW_BEVEL, ARROW_BORDER)}
-            fill="transparent"
-            stroke={accentColor}
-            strokeWidth={ARROW_BORDER}
-          />
-          <Path
-            d={iconPath}
-            fill="none"
-            stroke={accentColor}
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </Svg>
+        {useBevels ? (
+          <Svg width={ARROW_SIZE} height={ARROW_SIZE} viewBox={`0 0 ${ARROW_SIZE} ${ARROW_SIZE}`}>
+            <Path
+              d={buildButtonBevelPath(ARROW_SIZE, ARROW_SIZE, ARROW_BEVEL, ARROW_BORDER)}
+              fill="transparent"
+              stroke={accentColor}
+              strokeWidth={ARROW_BORDER}
+            />
+            <Path
+              d={iconPath}
+              fill="none"
+              stroke={accentColor}
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </Svg>
+        ) : (
+          <View style={{
+            width: ARROW_SIZE,
+            height: ARROW_SIZE,
+            borderWidth: ARROW_BORDER,
+            borderColor: accentColor,
+            borderRadius: theme.custom.radiusSm,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Svg width={ARROW_SIZE * 0.6} height={ARROW_SIZE * 0.6} viewBox={`${ARROW_SIZE * 0.2} ${ARROW_SIZE * 0.2} ${ARROW_SIZE * 0.6} ${ARROW_SIZE * 0.6}`}>
+              <Path
+                d={iconPath}
+                fill="none"
+                stroke={accentColor}
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </Svg>
+          </View>
+        )}
       </Pressable>
     );
   };
@@ -204,6 +228,7 @@ export function DTGallery({
               width: thumbnailSize,
               height: thumbnailSize,
               borderColor: isActive ? accentColor : 'transparent',
+              borderRadius: useBevels ? 0 : theme.custom.radiusSm,
             },
             isActive && styles.thumbnailActive,
           ]}>
@@ -235,30 +260,41 @@ export function DTGallery({
   if (items.length === 0) return null;
 
   const {width, height} = dimensions;
+  const useBevels = theme.custom.bevelMd > 0;
 
   // Outer and inner bevel paths for frame overlay
-  const outerPath = hasDimensions
+  const outerPath = useBevels && hasDimensions
     ? buildMediaFrameBevelPath(width, height, bevelSize)
     : '';
-  const innerPath = hasDimensions
+  const innerPath = useBevels && hasDimensions
     ? buildMediaFrameBevelPath(width, height, bevelSize - borderWidth, borderWidth)
     : '';
 
   return (
     <View style={[styles.container, style]}>
       {/* Main image with beveled frame */}
-      <View style={styles.mainImageContainer} onLayout={onLayout}>
-        {/* Background fill */}
-        {hasDimensions && (
+      <View
+        style={[
+          styles.mainImageContainer,
+          !useBevels && {
+            borderWidth,
+            borderColor: accentColor,
+            borderRadius: theme.custom.radius,
+            overflow: 'hidden',
+          },
+        ]}
+        onLayout={onLayout}>
+        {/* Background fill — beveled mode only */}
+        {useBevels && hasDimensions && (
           <Svg
             style={StyleSheet.absoluteFill}
             width={width}
             height={height}
             viewBox={`0 0 ${width} ${height}`}>
-            <Path d={innerPath} fill={DTColors.surfaceVariant} />
+            <Path d={innerPath} fill={theme.colors.surfaceVariant} />
           </Svg>
         )}
-        <View style={[styles.mainImageContent, {padding: borderWidth}]}>
+        <View style={[styles.mainImageContent, {padding: useBevels ? borderWidth : 0}]}>
           <Image
             source={{uri: items[activeIndex]?.uri}}
             style={styles.mainImage}
@@ -266,21 +302,19 @@ export function DTGallery({
             resizeMode="contain"
           />
         </View>
-        {/* Frame overlay (above content) — clips image at beveled border */}
-        {hasDimensions && (
+        {/* Frame overlay — beveled mode only */}
+        {useBevels && hasDimensions && (
           <Svg
             style={[StyleSheet.absoluteFill, styles.frameOverlay]}
             width={width}
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             pointerEvents="none">
-            {/* Corner mask: fill area outside outer bevel with dark to hide overflow */}
             <Path
               d={`M 0 0 L ${width} 0 L ${width} ${height} L 0 ${height} Z ` + outerPath}
               fillRule="evenodd"
-              fill={DTColors.dark}
+              fill={theme.colors.background}
             />
-            {/* Colored border between outer and inner bevel paths */}
             <Path
               d={outerPath + ' ' + innerPath}
               fillRule="evenodd"

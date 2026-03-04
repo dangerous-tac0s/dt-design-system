@@ -14,7 +14,7 @@ import {ReactNode, useEffect, useRef} from 'react';
 import {StyleSheet, View, ViewStyle, StyleProp, Animated} from 'react-native';
 import {Text} from 'react-native-paper';
 import Svg, {Path} from 'react-native-svg';
-import {DTColors} from '../theme/colors';
+import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant, getVariantColor} from '../utils/variantColors';
 import {buildLabelBevelPath} from '../utils/bevelPaths';
 import {useComponentLayout} from '../utils/useComponentLayout';
@@ -150,12 +150,14 @@ export function DTLabel({
   bevelSize,
   style,
 }: DTLabelProps) {
+  const theme = useDTTheme();
   const {dimensions, onLayout, hasDimensions} = useComponentLayout();
   const scaleAnim = useRef(new Animated.Value(animated ? 0 : 1)).current;
   const pingAnim = useRef(new Animated.Value(1)).current;
-  const backgroundColor = getVariantColor(mode);
+  const backgroundColor = getVariantColor(theme, mode);
   const sizeConfig = sizeConfigs[size];
   const effectiveBevelSize = bevelSize ?? sizeConfig.bevel;
+  const onPrimaryColor = theme.colors.onPrimary;
 
   // Mount animation
   useEffect(() => {
@@ -196,6 +198,7 @@ export function DTLabel({
   }, [showIndicator, pingAnim]);
 
   const {width, height} = dimensions;
+  const useBevels = theme.custom.bevelMd > 0;
 
   return (
     <Animated.View
@@ -203,10 +206,14 @@ export function DTLabel({
         styles.container,
         fullWidth && styles.fullWidth,
         {transform: [{scale: scaleAnim}]},
+        !useBevels && {
+          backgroundColor,
+          borderRadius: theme.custom.radiusSm,
+        },
         style,
       ]}
       onLayout={onLayout}>
-      {hasDimensions && (
+      {useBevels && hasDimensions && (
         <Svg
           style={StyleSheet.absoluteFill}
           width={width}
@@ -228,7 +235,7 @@ export function DTLabel({
           <Text
             style={[
               styles.primaryText,
-              {fontSize: sizeConfig.fontSize},
+              {fontSize: sizeConfig.fontSize, color: onPrimaryColor},
             ]}>
             {primaryText}
           </Text>
@@ -236,7 +243,7 @@ export function DTLabel({
             <Text
               style={[
                 styles.secondaryText,
-                {fontSize: sizeConfig.fontSizeSecondary},
+                {fontSize: sizeConfig.fontSizeSecondary, color: onPrimaryColor},
               ]}>
               {secondaryText}
             </Text>
@@ -251,7 +258,7 @@ export function DTLabel({
             <View
               style={[
                 styles.indicatorLine,
-                {borderColor: DTColors.dark, width: sizeConfig.indicatorWidth},
+                {borderColor: onPrimaryColor, width: sizeConfig.indicatorWidth},
               ]}
             />
           </Animated.View>
@@ -299,11 +306,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryText: {
-    color: DTColors.dark,
     fontWeight: '500',
   },
   secondaryText: {
-    color: DTColors.dark,
     fontWeight: '800',
   },
   indicator: {},

@@ -27,7 +27,7 @@ export { DTThemeProvider, useDTTheme } from './theme/DTThemeProvider';
 
 // Shared utilities
 export type { DTVariant } from './utils/variantColors';
-export { variantColorMap, getVariantColor } from './utils/variantColors';
+export { getVariantColor } from './utils/variantColors';
 export { buildBeveledRectPath } from './utils/bevelPaths';
 export { useComponentLayout } from './utils/useComponentLayout';
 
