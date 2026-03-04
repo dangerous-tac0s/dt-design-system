@@ -24,7 +24,7 @@
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
 
-  /* Bevel sizes — DT sets real values; Classic/Supra leave at 0 */
+  /* Bevel sizes — DT sets real values; Classic leaves at 0 */
   --bevel-sm: 0px;
   --bevel-md: 0px;
   --bevel-lg: 0px;

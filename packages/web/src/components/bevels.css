@@ -126,7 +126,7 @@
 }
 
 [data-brand="dt"] .btn-secondary:hover::before {
-  background: rgba(var(--color-primary-rgb), 0.1);
+  background: var(--color-surface-hover);
 }
 
 /* ============================================================================
@@ -185,6 +185,18 @@
 [data-brand="dt"] .badge-info {
   --badge-border-color: var(--color-info);
   --badge-fill: rgba(var(--color-info-rgb), 0.25);
+}
+
+/* ============================================================================
+   Badge text override for Classic — ensure readable text in light mode
+   Status-color text on 25% opacity backgrounds fails WCAG AA on light bg.
+   Use primary text color instead (same approach as DT badges above).
+   ============================================================================ */
+[data-brand="classic"] .badge-success,
+[data-brand="classic"] .badge-error,
+[data-brand="classic"] .badge-warning,
+[data-brand="classic"] .badge-info {
+  color: var(--color-text-primary);
 }
 
 /* ============================================================================

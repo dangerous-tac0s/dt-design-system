@@ -10,13 +10,12 @@ npm install @dangerousthings/tokens
 
 ## Brands
 
-Three brand themes are included:
+Two brand themes are included:
 
 | Brand | Description |
 |-------|-------------|
 | **dt** | Neon cyberpunk — Tektur font, beveled corners, cyan/yellow/magenta palette |
 | **classic** | Dark navy with magenta accents, standard border radius |
-| **supra** | Material Design 3 — VivoKey blue, rounded corners, elevation shadows |
 
 Each brand provides dark and light mode values.
 
@@ -37,7 +36,7 @@ Import all brands at once:
 ```ts
 import { brands } from "@dangerousthings/tokens";
 
-Object.keys(brands); // ["dt", "classic", "supra"]
+Object.keys(brands); // ["dt", "classic"]
 ```
 
 ### Types
@@ -63,10 +62,8 @@ This provides custom properties like `--color-primary`, `--color-primary-rgb`, `
 | `@dangerousthings/tokens` | All brands, theme definitions, and types |
 | `@dangerousthings/tokens/brands/dt` | DT brand tokens |
 | `@dangerousthings/tokens/brands/classic` | Classic brand tokens |
-| `@dangerousthings/tokens/brands/supra` | Supra brand tokens |
 | `@dangerousthings/tokens/css/dt.css` | DT CSS custom properties |
 | `@dangerousthings/tokens/css/classic.css` | Classic CSS custom properties |
-| `@dangerousthings/tokens/css/supra.css` | Supra CSS custom properties |
 
 ## Token Categories
 

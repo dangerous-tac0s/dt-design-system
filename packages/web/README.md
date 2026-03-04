@@ -1,6 +1,6 @@
 # @dangerousthings/web
 
-Web CSS themes and components for the Dangerous Things design system — bevels, glows, form styles, and elevation patterns powered by CSS custom properties.
+Web CSS themes and components for the Dangerous Things design system — bevels, glows, and form styles powered by CSS custom properties.
 
 ## Install
 
@@ -26,7 +26,6 @@ Or import individual pieces:
 @import "@dangerousthings/web/components/bevels.css";
 @import "@dangerousthings/web/components/glows.css";
 @import "@dangerousthings/web/components/forms-dt.css";
-@import "@dangerousthings/web/components/elevation.css";
 ```
 
 ### Switching Brands
@@ -39,9 +38,6 @@ Swap the token import to change the entire look:
 
 /* Dark navy + magenta */
 @import "@dangerousthings/web/tokens/classic.css";
-
-/* Material Design 3 */
-@import "@dangerousthings/web/tokens/supra.css";
 ```
 
 ### Theme Registry (JS)
@@ -59,15 +55,12 @@ import { themes, brands } from "@dangerousthings/web/theme-registry";
 | `bevels.css` | Angular clip-path bevels for cards, buttons, labels, modals, drawers |
 | `glows.css` | Neon drop-shadow and text-shadow effects for clipped and standard elements |
 | `forms-dt.css` | Text inputs, checkboxes, switches, radio buttons, progress bars, accordions, quantity steppers |
-| `elevation.css` | Shadow elevation levels for the Supra / MD3 brand |
 
 ### Key Classes
 
 **Bevels** — `.dt-bevel-card`, `.dt-bevel-btn`, `.dt-bevel-label`, `.dt-bevel-modal`, `.dt-bevel-drawer-left`, `.dt-bevel-drawer-right`, `.dt-bevel-sm`
 
 **Glows** — `.dt-glow`, `.dt-glow-strong`, `.dt-glow-inset`, `.dt-text-glow`
-
-**Elevation** — `.supra-elevation-1` through `.supra-elevation-5`
 
 ## Exports
 

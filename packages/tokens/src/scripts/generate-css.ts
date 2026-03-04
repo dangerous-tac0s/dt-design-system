@@ -9,7 +9,6 @@ import { fileURLToPath } from "node:url";
 import type { BrandTokens, ColorTokens } from "../types.js";
 import { dt } from "../brands/dt.js";
 import { classic } from "../brands/classic.js";
-import { supra } from "../brands/supra.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dirname, "..", "css");
@@ -119,7 +118,7 @@ function generateBrandCSS(brand: BrandTokens): string {
 // --- Main ---
 mkdirSync(outDir, { recursive: true });
 
-for (const brand of [dt, classic, supra]) {
+for (const brand of [dt, classic]) {
   const css = generateBrandCSS(brand);
   const path = join(outDir, `${brand.id}.css`);
   writeFileSync(path, css, "utf-8");

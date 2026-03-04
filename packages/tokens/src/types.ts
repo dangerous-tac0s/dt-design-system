@@ -1,5 +1,5 @@
 /** Brand identifiers */
-export type ThemeBrand = "dt" | "classic" | "supra";
+export type ThemeBrand = "dt" | "classic";
 
 /** Color mode */
 export type ThemeMode = "dark" | "light" | "auto";
