@@ -1,0 +1,290 @@
+/* dt-web-theme: Bevel Utilities */
+/* Angular/beveled clip-path patterns from the DT design system */
+/* Source: dt-shopify-storefront clip-path patterns + react-native-dt-theme bevelPaths.ts */
+/*                                                                                        */
+/* clip-path clips CSS borders and box-shadow. This file uses the storefront's             */
+/* dual-element technique: the element's own background serves as the "border" color,      */
+/* and a ::before pseudo-element provides the inner surface fill. The gap between           */
+/* them follows the clip-path shape perfectly.                                              */
+/*                                                                                        */
+/* For glow effects on clipped elements, use filter: drop-shadow() (not box-shadow).       */
+
+/* ============================================================================
+   Card Bevels — dual bottom bevels (bottom-right large + bottom-left small)
+   Source: storefront .card-container + .clip-corners-inner pattern
+   Outer bg = border color, ::before = surface fill
+   Border width: ~3px uniform (storefront --card-border-width: 0.2em)
+   ============================================================================ */
+[data-brand="dt"] .dt-bevel-card,
+[data-brand="dt"] .card {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 0;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - var(--bevel-md)),
+    calc(100% - var(--bevel-md)) 100%,
+    var(--bevel-sm) 100%,
+    0% calc(100% - var(--bevel-sm))
+  );
+}
+
+[data-brand="dt"] .dt-bevel-card::before,
+[data-brand="dt"] .card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface);
+  z-index: -1;
+  /* Inner clip-path mirrors outer shape, inset 3px on all edges.
+     This creates a uniform cyan border along both straight edges AND bevel diagonals. */
+  clip-path: polygon(
+    3px 3px,
+    calc(100% - 3px) 3px,
+    calc(100% - 3px) calc(100% - var(--bevel-md)),
+    calc(100% - var(--bevel-md)) calc(100% - 3px),
+    var(--bevel-sm) calc(100% - 3px),
+    3px calc(100% - var(--bevel-sm))
+  );
+}
+
+/* Card Header — storefront .card-header pattern
+   Title extends edge-to-edge on the card's primary bg (cyan).
+   Below it, the ::before dark surface shows through for the body area. */
+[data-brand="dt"] .card > .card-title,
+[data-brand="dt"] .dt-bevel-card > .card-title {
+  /* Pull title to card edges, canceling card padding */
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-4) calc(-1 * var(--space-6));
+  padding: 1rem var(--space-6);
+  /* Sits above ::before so its own bg covers the dark surface */
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 1rem;
+  position: relative;
+}
+
+/* Force icon spans to inherit header color (overrides inline styles) */
+[data-brand="dt"] .card > .card-title > * {
+  color: inherit !important;
+}
+
+/* ============================================================================
+   Button Bevels — top-right corner cut
+   Source: storefront .label-clipped pattern (solid fill + clip-path)
+   Filled buttons (primary/danger): direct clip-path, solid bg
+   Outline button (secondary): dual-element technique via ::before
+   ============================================================================ */
+[data-brand="dt"] .btn-primary,
+[data-brand="dt"] .btn-danger {
+  border: none;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-sm)) 0%,
+    100% var(--bevel-sm),
+    100% 100%,
+    0% 100%
+  );
+}
+
+[data-brand="dt"] .btn-secondary {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-primary);
+  border: none;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-sm)) 0%,
+    100% var(--bevel-sm),
+    100% 100%,
+    0% 100%
+  );
+}
+
+[data-brand="dt"] .btn-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg);
+  z-index: -1;
+  clip-path: polygon(
+    2px 2px,
+    calc(100% - var(--bevel-sm)) 2px,
+    calc(100% - 2px) var(--bevel-sm),
+    calc(100% - 2px) calc(100% - 2px),
+    2px calc(100% - 2px)
+  );
+}
+
+[data-brand="dt"] .btn-secondary:hover {
+  background: var(--color-accent);
+}
+
+[data-brand="dt"] .btn-secondary:hover::before {
+  background: rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* ============================================================================
+   Badge/Label Bevels — top-right bevel
+   Source: storefront .label-clipped pattern
+   Dual-element technique: badge bg = border color, ::before = inner fill
+   ============================================================================ */
+[data-brand="dt"] .badge {
+  --badge-border-color: var(--color-border);
+  --badge-fill: var(--color-surface);
+  position: relative;
+  isolation: isolate;
+  background: var(--badge-border-color);
+  color: var(--color-text-primary);
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-sm)) 0%,
+    100% var(--bevel-sm),
+    100% 100%,
+    0% 100%
+  );
+  border: none;
+  border-radius: 0;
+}
+
+[data-brand="dt"] .badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--badge-fill);
+  z-index: -1;
+  clip-path: polygon(
+    2px 2px,
+    calc(100% - var(--bevel-sm)) 2px,
+    calc(100% - 2px) var(--bevel-sm),
+    calc(100% - 2px) calc(100% - 2px),
+    2px calc(100% - 2px)
+  );
+}
+
+[data-brand="dt"] .badge-success {
+  --badge-border-color: var(--color-success);
+  --badge-fill: rgba(var(--color-success-rgb), 0.25);
+}
+
+[data-brand="dt"] .badge-error {
+  --badge-border-color: var(--color-error);
+  --badge-fill: rgba(var(--color-error-rgb), 0.25);
+}
+
+[data-brand="dt"] .badge-warning {
+  --badge-border-color: var(--color-warning);
+  --badge-fill: rgba(var(--color-warning-rgb), 0.25);
+}
+
+[data-brand="dt"] .badge-info {
+  --badge-border-color: var(--color-info);
+  --badge-fill: rgba(var(--color-info-rgb), 0.25);
+}
+
+/* ============================================================================
+   Opt-in Bevel Utility Classes
+   Use these for custom elements that need bevel shapes
+   ============================================================================ */
+[data-brand="dt"] .dt-bevel-btn {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-sm)) 0%,
+    100% var(--bevel-sm),
+    100% 100%,
+    0% 100%
+  );
+}
+
+[data-brand="dt"] .dt-bevel-label {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-sm)) 0%,
+    100% var(--bevel-sm),
+    100% 100%,
+    0% 100%
+  );
+  border-radius: 0;
+}
+
+/* ============================================================================
+   Media Frame Bevels — diagonal opposite corners (top-left + bottom-right)
+   Source: storefront .media-frame-clipped pattern
+   ============================================================================ */
+.dt-bevel-media {
+  clip-path: polygon(
+    var(--bevel-md) 0%,
+    100% 0%,
+    100% calc(100% - var(--bevel-md)),
+    calc(100% - var(--bevel-md)) 100%,
+    0% 100%,
+    0% var(--bevel-md)
+  );
+}
+
+/* ============================================================================
+   Modal/Drawer Bevels — dual bottom bevels (bottom-right + bottom-left)
+   ============================================================================ */
+.dt-bevel-modal {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - var(--bevel-lg)),
+    calc(100% - var(--bevel-lg)) 100%,
+    var(--bevel-lg) 100%,
+    0% calc(100% - var(--bevel-lg))
+  );
+}
+
+/* ============================================================================
+   Drawer Bevels — exposed-edge bevels
+   Source: storefront aside clip-path pattern
+   ============================================================================ */
+.dt-bevel-drawer-right {
+  clip-path: polygon(
+    0% var(--bevel-lg),
+    var(--bevel-lg) 0%,
+    100% 0%,
+    100% 100%,
+    var(--bevel-lg) 100%,
+    0% calc(100% - var(--bevel-lg))
+  );
+}
+
+.dt-bevel-drawer-left {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--bevel-lg)) 0%,
+    100% var(--bevel-lg),
+    100% calc(100% - var(--bevel-lg)),
+    calc(100% - var(--bevel-lg)) 100%,
+    0% 100%
+  );
+}
+
+/* ============================================================================
+   Small Bevels — for compact elements (arrows, stepper buttons)
+   ============================================================================ */
+.dt-bevel-sm {
+  clip-path: polygon(
+    var(--bevel-sm) 0%,
+    100% 0%,
+    100% calc(100% - var(--bevel-sm)),
+    calc(100% - var(--bevel-sm)) 100%,
+    0% 100%,
+    0% var(--bevel-sm)
+  );
+}
+
+/* ============================================================================
+   Accordion/Menu — thick top border accent (storefront menu-item-clipped)
+   ============================================================================ */
+[data-brand="dt"] .dt-accent-top,
+[data-brand="dt"] .terminal {
+  border-top: 3px solid var(--color-primary);
+}

@@ -1,0 +1,31 @@
+/* @dangerousthings/web: Base Tokens (shared across all brands) */
+
+:root {
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition: 250ms ease;
+
+  /* Font stacks — brands override --font-heading and --font-body */
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-body: var(--font-sans);
+
+  /* Border Radius — brands override these */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Bevel sizes — DT sets real values; Classic/Supra leave at 0 */
+  --bevel-sm: 0px;
+  --bevel-md: 0px;
+  --bevel-lg: 0px;
+}

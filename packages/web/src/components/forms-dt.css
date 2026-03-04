@@ -1,0 +1,329 @@
+/* dt-web-theme: DT Form Component Styles */
+/* Source: react-native-dt-theme/src/components/DT*.tsx */
+/* These styles exist in the RN DT theme but NOT the Shopify storefront */
+
+/* ============================================================================
+   Text Input — Sharp corners + focus glow bar
+   Source: DTTextInput.tsx
+   ============================================================================ */
+[data-brand="dt"] input[type="text"],
+[data-brand="dt"] input[type="password"],
+[data-brand="dt"] input[type="email"],
+[data-brand="dt"] input[type="number"],
+[data-brand="dt"] input[type="search"],
+[data-brand="dt"] input[type="url"],
+[data-brand="dt"] input[type="tel"],
+[data-brand="dt"] textarea,
+[data-brand="dt"] select,
+[data-brand="dt"] .input {
+  border: 2px solid var(--color-primary);
+  border-radius: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+[data-brand="dt"] input:focus,
+[data-brand="dt"] textarea:focus,
+[data-brand="dt"] select:focus,
+[data-brand="dt"] .input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 0 1px var(--color-primary);
+}
+
+[data-brand="dt"] input.error,
+[data-brand="dt"] .input.error {
+  border-color: var(--color-error);
+}
+
+[data-brand="dt"] input.error:focus,
+[data-brand="dt"] .input.error:focus {
+  box-shadow: 0 4px 0 1px var(--color-error);
+}
+
+/* ============================================================================
+   Checkbox — Beveled opposing corners (top-left + bottom-right)
+   Source: DTCheckbox.tsx — bevel at 30% of size
+   Uses drop-shadow instead of border (clip-path clips CSS borders)
+   ============================================================================ */
+[data-brand="dt"] input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(var(--color-primary-rgb), 0.1);
+  cursor: pointer;
+  position: relative;
+  clip-path: polygon(
+    30% 0%, 100% 0%, 100% 70%, 70% 100%, 0% 100%, 0% 30%
+  );
+  filter: drop-shadow(0 0 1px var(--color-primary));
+  transition: background var(--transition-fast), filter var(--transition-fast);
+}
+
+[data-brand="dt"] input[type="checkbox"]:checked {
+  background: var(--color-primary);
+  filter: drop-shadow(0 0 2px var(--color-primary));
+}
+
+[data-brand="dt"] input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  width: 10px;
+  height: 6px;
+  border: 2px solid var(--color-bg);
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+}
+
+[data-brand="dt"] input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   Switch / Toggle — Angular track + sliding square thumb
+   Source: DTSwitch.tsx — 48x26 track, 20x20 thumb, 150ms
+   ============================================================================ */
+.dt-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.dt-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.dt-switch-track {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-primary);
+  border-radius: 0;
+  background: rgba(var(--color-primary-rgb), 0.1);
+  transition: background var(--transition-fast);
+}
+
+.dt-switch input:checked + .dt-switch-track {
+  background: var(--color-primary);
+}
+
+.dt-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  transition: left var(--transition-fast);
+}
+
+.dt-switch input:checked ~ .dt-switch-thumb,
+.dt-switch input:checked + .dt-switch-track + .dt-switch-thumb {
+  left: 25px;
+  background: var(--color-bg);
+}
+
+.dt-switch input:disabled + .dt-switch-track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   Radio Button — Hexagonal indicator
+   Source: DTRadioGroup.tsx — flat-top hexagon, 22px default
+   Uses drop-shadow instead of border (clip-path clips CSS borders)
+   ============================================================================ */
+[data-brand="dt"] input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: rgba(var(--color-primary-rgb), 0.1);
+  cursor: pointer;
+  clip-path: polygon(
+    50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%
+  );
+  filter: drop-shadow(0 0 1px var(--color-primary));
+  transition: background var(--transition-fast), filter var(--transition-fast);
+}
+
+[data-brand="dt"] input[type="radio"]:checked {
+  background: var(--color-primary);
+  filter: drop-shadow(0 0 2px var(--color-primary));
+}
+
+[data-brand="dt"] input[type="radio"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Radio group option container */
+.dt-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dt-radio-option.selected {
+  background: rgba(var(--color-primary-rgb), 0.15);
+  border-color: var(--color-primary);
+}
+
+/* ============================================================================
+   Progress Bar — Angular, no radius
+   Source: DTProgressBar.tsx — 4px height, no border-radius
+   ============================================================================ */
+.dt-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.dt-progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 300ms ease-out;
+}
+
+.dt-progress-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-top: 4px;
+  font-family: var(--font-mono);
+}
+
+/* Vertical variant */
+.dt-progress.vertical {
+  width: 8px;
+  height: 200px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.dt-progress.vertical .dt-progress-fill {
+  width: 100%;
+  height: 0%;
+  transition: height 300ms ease-out;
+}
+
+/* ============================================================================
+   Accordion — 5px top border, chevron rotation
+   Source: DTAccordion.tsx — 250ms animation
+   ============================================================================ */
+.dt-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dt-accordion-header {
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  border-top: 5px solid var(--color-primary);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  color: var(--color-text-primary);
+  transition: opacity var(--transition-fast);
+}
+
+.dt-accordion-header:hover {
+  opacity: 0.7;
+}
+
+.dt-accordion-header[aria-expanded="true"] {
+  color: var(--color-secondary);
+  border-top-color: var(--color-secondary);
+}
+
+.dt-accordion-chevron {
+  display: inline-block;
+  transition: transform 250ms ease-in-out;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid currentColor;
+}
+
+.dt-accordion-header[aria-expanded="true"] .dt-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.dt-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 250ms ease-in-out;
+}
+
+.dt-accordion-content[data-open="true"] {
+  max-height: 2000px;
+}
+
+/* ============================================================================
+   Quantity Stepper — Beveled +/- buttons
+   Source: DTQuantityStepper.tsx — bottom-right bevel
+   ============================================================================ */
+.dt-stepper {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dt-stepper-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.dt-stepper-btn:hover {
+  opacity: 0.7;
+}
+
+.dt-stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.dt-stepper-value {
+  min-width: 36px;
+  text-align: center;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-family: var(--font-mono);
+}

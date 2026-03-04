@@ -1,0 +1,35 @@
+{
+  "name": "dt-design-system",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dangerous Things design system — shared tokens, web CSS, and React Native components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangerous-tac0s/dt-design-system"
+  },
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "build:tokens": "npm run build -w packages/tokens",
+    "build:web": "npm run build -w packages/web",
+    "build:react-native": "npm run build -w packages/react-native",
+    "clean": "turbo run clean",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.30.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}

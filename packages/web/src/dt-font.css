@@ -1,0 +1,9 @@
+/* @dangerousthings/web: Tektur Font Face */
+@font-face {
+  font-family: 'Tektur';
+  src: url('../fonts/Tektur-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@dangerousthings/tokens",
+  "version": "0.1.0",
+  "description": "Canonical design tokens for the Dangerous Things design system",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./brands/*": {
+      "types": "./dist/brands/*.d.ts",
+      "import": "./dist/brands/*.js"
+    },
+    "./css/*": "./dist/css/*"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && node dist/scripts/generate-css.js",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "typescript": "^5.7.0"
+  }
+}

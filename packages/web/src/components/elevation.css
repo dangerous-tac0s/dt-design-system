@@ -1,0 +1,96 @@
+/* dt-web-theme: Supra Elevation & MD3 Styles */
+/* Source: react-native-supra-theme/src/theme/paperTheme.ts */
+/* Rounded Material Design 3 aesthetic with elevation shadows */
+
+/* ============================================================================
+   Card Elevation
+   ============================================================================ */
+[data-brand="supra"] .card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  border-radius: var(--radius-lg);
+}
+
+[data-brand="supra"] .card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.22);
+}
+
+/* ============================================================================
+   Button — Dual-layer inset shadow (hardware button feel)
+   Source: SupraButton.tsx — inner shadow for tactile appearance
+   ============================================================================ */
+[data-brand="supra"] .btn-primary {
+  box-shadow:
+    inset -2px -2px 4px rgba(0, 0, 0, 0.18),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius);
+}
+
+[data-brand="supra"] .btn-primary:hover {
+  box-shadow:
+    inset -2px -2px 6px rgba(0, 0, 0, 0.22),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+[data-brand="supra"] .btn-secondary {
+  border-radius: var(--radius);
+}
+
+[data-brand="supra"] .btn-danger {
+  border-radius: var(--radius);
+}
+
+/* ============================================================================
+   Badge — Rounded pill (MD3 chip style)
+   ============================================================================ */
+[data-brand="supra"] .badge {
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   Input — Rounded with standard focus ring
+   ============================================================================ */
+[data-brand="supra"] .input,
+[data-brand="supra"] input,
+[data-brand="supra"] textarea,
+[data-brand="supra"] select {
+  border-radius: var(--radius);
+}
+
+[data-brand="supra"] .input:focus,
+[data-brand="supra"] input:focus,
+[data-brand="supra"] textarea:focus,
+[data-brand="supra"] select:focus {
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* ============================================================================
+   Terminal — Rounded with subtle elevation
+   ============================================================================ */
+[data-brand="supra"] .terminal {
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+/* ============================================================================
+   Elevation Utility Classes
+   ============================================================================ */
+.supra-elevation-1 {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.supra-elevation-2 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.supra-elevation-3 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.22);
+}
+
+.supra-elevation-4 {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.supra-elevation-5 {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
