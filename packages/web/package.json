@@ -1,6 +1,6 @@
 {
   "name": "@dangerousthings/web",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Web CSS theme for the Dangerous Things design system — bevels, glows, form styles",
   "license": "MIT",
   "main": "dist/index.css",

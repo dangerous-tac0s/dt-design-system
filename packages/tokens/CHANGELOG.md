@@ -1,5 +1,11 @@
 # @dangerousthings/tokens
 
+## 0.2.1
+
+### Patch Changes
+
+- 0453af8: Add per-package README and LICENSE for npm
+
 ## 0.2.0
 
 ### Minor Changes
