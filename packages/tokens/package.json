@@ -1,6 +1,6 @@
 {
   "name": "@dangerousthings/tokens",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Canonical design tokens for the Dangerous Things design system",
   "license": "MIT",
   "type": "module",

@@ -1,5 +1,13 @@
 # @dangerousthings/web
 
+## 0.2.1
+
+### Patch Changes
+
+- 0453af8: Add per-package README and LICENSE for npm
+- Updated dependencies [0453af8]
+  - @dangerousthings/tokens@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
