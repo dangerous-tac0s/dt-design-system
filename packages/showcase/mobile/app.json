@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "DT Design System Showcase",
+    "slug": "dt-showcase",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dangerousthings.showcase"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#000000"
+      },
+      "package": "com.dangerousthings.showcase"
+    }
+  }
+}

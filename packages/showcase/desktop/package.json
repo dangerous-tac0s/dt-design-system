@@ -1,0 +1,38 @@
+{
+  "name": "@dangerousthings/showcase-desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Desktop showcase for the Dangerous Things design system",
+  "author": {
+    "name": "Dangerous Things",
+    "email": "info@dangerousthings.com"
+  },
+  "homepage": "https://github.com/dangerous-tac0s/dt-design-system",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "dev:electron": "npm run build:main && concurrently \"vite --config vite.config.ts\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "tsc -p tsconfig.main.json && vite build --config vite.config.ts",
+    "build:main": "tsc -p tsconfig.main.json",
+    "start": "electron .",
+    "package": "npm run build && electron-builder",
+    "package:dir": "npm run build && electron-builder --dir",
+    "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.main.json",
+    "clean": "rm -rf dist release"
+  },
+  "dependencies": {
+    "@dangerousthings/tokens": "*",
+    "@dangerousthings/web": "*"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "electron": "33.4.11",
+    "electron-builder": "^25.0.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.0.0",
+    "wait-on": "^8.0.0"
+  }
+}

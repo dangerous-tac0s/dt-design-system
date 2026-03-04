@@ -9,13 +9,16 @@
   },
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/showcase/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "build:tokens": "npm run build -w packages/tokens",
     "build:web": "npm run build -w packages/web",
     "build:react-native": "npm run build -w packages/react-native",
+    "start:mobile": "npm run start -w @dangerousthings/showcase-mobile",
+    "start:desktop": "npm run start -w @dangerousthings/showcase-desktop",
     "clean": "turbo run clean",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",

@@ -1,0 +1,305 @@
+/* Showcase App Layout */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+#app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+#sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: var(--color-surface);
+  border-right: 2px solid var(--color-border);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.nav-title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.brand-switcher-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.brand-btn {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.brand-btn:hover {
+  background: rgba(var(--color-primary-rgb), 0.1);
+}
+
+.brand-btn.active {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.mode-switcher {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.mode-btn {
+  flex: 1;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.625rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.mode-btn.active {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nav-link {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-left: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.05);
+}
+
+.nav-link.active {
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+}
+
+/* ---- Main Content ---- */
+#content {
+  flex: 1;
+  margin-left: 220px;
+  padding: var(--space-8);
+  max-width: 900px;
+}
+
+/* ---- Demo Sections ---- */
+.demo-section {
+  margin-bottom: var(--space-8);
+}
+
+.demo-section h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.demo-description {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-4);
+}
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.demo-label {
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.code-label {
+  color: rgba(var(--color-text-primary-rgb, 255, 255, 255), 0.35);
+  font-size: 0.625rem;
+  font-family: var(--font-mono);
+  margin-top: var(--space-1);
+}
+
+/* ---- Shared Component Base Styles ---- */
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-6);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-danger {
+  background: var(--color-error);
+  color: var(--color-bg);
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* Cards */
+.card {
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.card-title {
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-body {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Inputs */
+.input,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.875rem;
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+.input:focus,
+input:focus {
+  outline: none;
+}
+
+/* Terminal */
+.terminal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-accent, var(--color-primary));
+  line-height: 1.6;
+}
+
+/* Page title */
+.page-title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+}
+
+.page-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-8);
+}
