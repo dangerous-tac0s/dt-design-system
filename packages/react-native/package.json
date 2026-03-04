@@ -1,6 +1,6 @@
 {
   "name": "@dangerousthings/react-native",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React Native themed components for the Dangerous Things design system",
   "license": "MIT",
   "main": "dist/index.js",
