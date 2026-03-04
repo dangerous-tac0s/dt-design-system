@@ -40,7 +40,7 @@ export const classic: BrandTokens = {
     primary: "#0891b2",
     primaryDim: "#0e7490",
     secondary: "#c026d3",
-    accent: "#00ff88",
+    accent: "#059669",
     other: "#c026d3",
 
     success: "#16a34a",

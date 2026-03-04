@@ -124,7 +124,7 @@
   left: 3px;
   width: 20px;
   height: 20px;
-  background: #ffffff;
+  background: var(--color-text-primary);
   transition: left var(--transition-fast);
 }
 
@@ -192,7 +192,7 @@
 .dt-progress {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--color-primary-rgb), 0.1);
   border-radius: 0;
   overflow: hidden;
 }
@@ -253,7 +253,7 @@
 }
 
 .dt-accordion-header:hover {
-  opacity: 0.7;
+  background: var(--color-surface-hover);
 }
 
 .dt-accordion-header[aria-expanded="true"] {
@@ -312,7 +312,7 @@
 }
 
 .dt-stepper-btn:hover {
-  opacity: 0.7;
+  background: rgba(var(--color-primary-rgb), 0.1);
 }
 
 .dt-stepper-btn:disabled {
