@@ -10,6 +10,9 @@ import { FormsScreen } from '../screens/FormsScreen';
 import { FeedbackScreen } from '../screens/FeedbackScreen';
 import { OverlaysScreen } from '../screens/OverlaysScreen';
 import { ThemeScreen } from '../screens/ThemeScreen';
+import { AnimationsScreen } from '../screens/AnimationsScreen';
+import { CardsAdvancedScreen } from '../screens/CardsAdvancedScreen';
+import { FiltersScreen } from '../screens/FiltersScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -43,6 +46,11 @@ export function RootNavigator() {
         options={{ title: 'CARDS & LABELS' }}
       />
       <Stack.Screen
+        name="CardsAdvanced"
+        component={CardsAdvancedScreen}
+        options={{ title: 'ADVANCED CARDS' }}
+      />
+      <Stack.Screen
         name="Forms"
         component={FormsScreen}
         options={{ title: 'FORM CONTROLS' }}
@@ -56,6 +64,16 @@ export function RootNavigator() {
         name="Overlays"
         component={OverlaysScreen}
         options={{ title: 'OVERLAYS & NAV' }}
+      />
+      <Stack.Screen
+        name="Animations"
+        component={AnimationsScreen}
+        options={{ title: 'ANIMATIONS' }}
+      />
+      <Stack.Screen
+        name="Filters"
+        component={FiltersScreen}
+        options={{ title: 'FILTERS & FEATURES' }}
       />
       <Stack.Screen
         name="Theme"

@@ -28,4 +28,7 @@
   --bevel-sm: 0px;
   --bevel-md: 0px;
   --bevel-lg: 0px;
+
+  /* Interactive bevel corner size (buttons/menu items on hover) */
+  --menu-item-corner: 1em;
 }

@@ -57,6 +57,27 @@ const categories: {
     count: 5,
   },
   {
+    title: 'ADVANCED CARDS',
+    subtitle: 'Selected state, progress bar, badge overlays, stagger',
+    mode: 'emphasis',
+    route: 'CardsAdvanced',
+    count: 4,
+  },
+  {
+    title: 'ANIMATIONS',
+    subtitle: 'DTStaggerContainer, useScaleIn, usePulse',
+    mode: 'success',
+    route: 'Animations',
+    count: 3,
+  },
+  {
+    title: 'FILTERS & FEATURES',
+    subtitle: 'DTFeatureLegend, DTMobileFilterOverlay',
+    mode: 'other',
+    route: 'Filters',
+    count: 2,
+  },
+  {
     title: 'THEME REFERENCE',
     subtitle: 'Colors, Typography, Spacing',
     mode: 'normal',

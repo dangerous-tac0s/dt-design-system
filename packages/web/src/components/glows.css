@@ -35,7 +35,7 @@
    Link Glow
    ============================================================================ */
 [data-brand="dt"] a:hover {
-  text-shadow: 0 0 8px var(--color-primary);
+  text-shadow: 0 0 8px var(--dt-glow-color, var(--color-primary));
 }
 
 /* ============================================================================
@@ -49,8 +49,9 @@
 /* ============================================================================
    Card Hover Glow — filter: drop-shadow (cards have clip-path)
    ============================================================================ */
-[data-brand="dt"] .card:hover {
-  filter: drop-shadow(0 0 8px rgba(var(--color-primary-rgb), 0.3));
+[data-brand="dt"] .card:hover,
+[data-brand="dt"] .dt-bevel-card:hover {
+  filter: drop-shadow(0 0 8px rgba(var(--dt-card-color-rgb, var(--color-primary-rgb)), 0.3));
 }
 
 /* ============================================================================

@@ -30,6 +30,7 @@ export type { DTVariant } from './utils/variantColors';
 export { getVariantColor } from './utils/variantColors';
 export { buildBeveledRectPath } from './utils/bevelPaths';
 export { useComponentLayout } from './utils/useComponentLayout';
+export { useScaleIn, usePulse } from './utils/animations';
 
 // Component exports — existing
 export { DTCard, DTCardClipPath } from './components/DTCard';
@@ -50,12 +51,21 @@ export { DTMediaFrame } from './components/DTMediaFrame';
 export { DTAccordion } from './components/DTAccordion';
 export type { DTAccordionSection } from './components/DTAccordion';
 
+// Component exports — positioning & animation containers
+export { DTBadgeOverlay } from './components/DTBadgeOverlay';
+export { DTStaggerContainer } from './components/DTStaggerContainer';
+
 // Component exports — complex interactive
 export { DTModal } from './components/DTModal';
 export { DTDrawer } from './components/DTDrawer';
 export { DTGallery } from './components/DTGallery';
 export type { DTGalleryItem } from './components/DTGallery';
 export { DTSearchInput } from './components/DTSearchInput';
+
+// Component exports — filter & feature
+export { DTFeatureLegend } from './components/DTFeatureLegend';
+export type { DTFeatureItem } from './components/DTFeatureLegend';
+export { DTMobileFilterOverlay } from './components/DTMobileFilterOverlay';
 
 // Component exports — navigation & decorative
 export { DTMenu, DTMenuDropdown } from './components/DTMenu';

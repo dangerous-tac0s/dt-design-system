@@ -135,6 +135,20 @@ export function CardsScreen() {
         </View>
       </DemoSection>
 
+      {/* DTCard - Selected & Progress (quick preview) */}
+      <DemoSection
+        title="Progress Bar"
+        variant="warning"
+        description="Quick preview — see Advanced Cards screen for full demos."
+      >
+        <DTCard mode="normal" title="WITH PROGRESS" progress={0.6} style={{ marginBottom: 16 }}>
+          <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>
+            progress=0.6 — vertical left-edge bar
+          </Text>
+        </DTCard>
+        <CodeLabel text="See Advanced Cards for full progress/badge demos" />
+      </DemoSection>
+
       {/* DTMediaFrame */}
       <DemoSection
         title="DTMediaFrame"

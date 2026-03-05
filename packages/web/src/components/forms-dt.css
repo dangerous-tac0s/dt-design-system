@@ -327,3 +327,135 @@
   font-weight: 700;
   font-family: var(--font-mono);
 }
+
+/* ============================================================================
+   Menu Item — beveled clipped style with thick top border
+   Source: dt-shopify-storefront .menu-item-clipped pattern
+   ============================================================================ */
+[data-brand="dt"] .dt-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--dt-card-color, var(--color-primary));
+  border-top: 5px solid var(--dt-card-color, var(--color-primary));
+  background: var(--color-bg);
+  color: var(--accent-mode, var(--color-primary));
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+[data-brand="dt"] .dt-menu-item:hover {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - var(--menu-item-corner)),
+    calc(100% - var(--menu-item-corner)) 100%,
+    0% 100%
+  );
+  background-color: var(--dt-card-color, var(--color-primary));
+  color: var(--color-bg);
+  animation: dt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+[data-brand="dt"] .dt-menu-item.active,
+[data-brand="dt"] .dt-menu-item[aria-expanded="true"] {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-brand="dt"] .dt-menu-item.selected {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - var(--menu-item-corner)),
+    calc(100% - var(--menu-item-corner)) 100%,
+    0% 100%
+  );
+  background-color: var(--dt-card-color-selected, rgba(var(--color-primary-rgb), 0.7));
+  color: var(--color-bg);
+  animation: none;
+}
+
+[data-brand="dt"] .dt-menu-item.selected:hover {
+  animation: dt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Nested level indentation */
+.dt-menu-item[style*="--dt-menu-level"] {
+  padding-left: calc(0.75rem + var(--dt-menu-level, 0) * 1rem);
+}
+
+/* Classic brand: rounded, thinner borders */
+[data-brand="classic"] .dt-menu-item {
+  border-top-width: 2px;
+  border-radius: var(--radius-sm);
+}
+
+[data-brand="classic"] .dt-menu-item:hover {
+  clip-path: none;
+  border-radius: var(--radius-sm);
+}
+
+[data-brand="classic"] .dt-menu-item.selected {
+  clip-path: none;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================================
+   Filter Header — thick border accent bar
+   Source: dt-shopify-storefront FilterAccordion header
+   ============================================================================ */
+[data-brand="dt"] .dt-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 5px solid var(--color-primary);
+  border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+[data-brand="dt"] .dt-filter-header.active {
+  color: var(--color-secondary);
+  border-top-color: var(--color-secondary);
+}
+
+[data-brand="classic"] .dt-filter-header {
+  border-top-width: 1px;
+}
+
+/* ============================================================================
+   Mobile Filter Overlay
+   Source: dt-shopify-storefront MobileFilterMenu
+   ============================================================================ */
+.dt-filter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.dt-filter-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.dt-filter-overlay-content {
+  position: relative;
+  margin-top: auto;
+  max-height: 85vh;
+  background: var(--color-bg);
+  overflow-y: auto;
+  animation: dt-slide-up 0.3s ease-in-out both;
+}

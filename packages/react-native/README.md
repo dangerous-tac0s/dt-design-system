@@ -1,6 +1,6 @@
 # @dangerousthings/react-native
 
-React Native components for the Dangerous Things design system — 18 themed components built on React Native Paper with cyberpunk beveled aesthetics.
+React Native components for the Dangerous Things design system — 22 themed components built on React Native Paper with cyberpunk beveled aesthetics.
 
 ## Install
 
@@ -74,6 +74,9 @@ Options:
 | `DTMediaFrame` | Diagonal beveled frame for images |
 | `DTAccordion` | Collapsible sections with accent border |
 | `DTHexagon` | Decorative hexagon SVG shape |
+| `DTBadgeOverlay` | Absolute-positioned badge wrapper (top-left, top-right, bottom-left, bottom-right) |
+| `DTStaggerContainer` | Staggered scale-in entrance animation for child elements |
+| `DTFeatureLegend` | Product feature grid with icons and rotated labels |
 
 ### Interactive
 
@@ -83,6 +86,14 @@ Options:
 | `DTDrawer` | Side drawer with edge bevels |
 | `DTGallery` | Image gallery |
 | `DTMenu` | Dropdown menu with item variants |
+| `DTMobileFilterOverlay` | Full-screen slide-up filter overlay with backdrop |
+
+### Animation Hooks
+
+| Hook | Description |
+|------|-------------|
+| `useScaleIn` | Scale 0→1 entrance animation |
+| `usePulse` | Looping opacity pulse animation |
 
 ## Usage Examples
 
@@ -97,6 +108,11 @@ import { DTButton, DTCard, DTTextInput } from "@dangerousthings/react-native";
 // Card with title
 <DTCard title="Scan Results" mode="normal">
   <Text>Chip detected</Text>
+</DTCard>
+
+// Card with selected state and progress bar
+<DTCard title="PRODUCT" mode="emphasis" selected progress={0.6}>
+  <Text>Selected with 60% progress</Text>
 </DTCard>
 
 // Text input with error state

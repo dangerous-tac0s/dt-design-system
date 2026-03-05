@@ -46,3 +46,16 @@ export const dropdownItems = [
   { id: 'd3', title: 'Archive', onPress: () => {} },
   { id: 'd4', title: 'Delete', onPress: () => {} },
 ];
+
+export const featureLegendItems = [
+  { key: 'payment', name: 'Payment', icon: null, state: 'supported' as const },
+  { key: 'access', name: 'Access', icon: null, state: 'supported' as const },
+  { key: 'clone', name: 'Clone', icon: null, state: 'disabled' as const },
+  { key: 'crypto', name: 'Crypto', icon: null, state: 'unsupported' as const },
+  { key: 'sensing', name: 'Sensing', icon: null, state: 'supported' as const },
+  { key: 'temp', name: 'Temp', icon: null, state: 'supported' as const },
+  { key: 'fitness', name: 'Fitness', icon: null, state: 'disabled' as const },
+  { key: 'explore', name: 'Explore', icon: null, state: 'supported' as const },
+  { key: 'vibration', name: 'Vibration', icon: null, state: 'unsupported' as const },
+  { key: 'sharing', name: 'Sharing', icon: null, state: 'supported' as const },
+];

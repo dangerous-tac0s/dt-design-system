@@ -1,3 +1,6 @@
+@tailwind components;
+@tailwind utilities;
+
 /* Showcase App Layout */
 
 * {
@@ -228,10 +231,14 @@ body {
   opacity: 0.9;
 }
 
-/* Cards */
+/* Cards — DT brand padding is set in bevels.css via --_card-pad */
 .card {
-  padding: var(--space-6);
   margin-bottom: var(--space-4);
+}
+
+/* Classic brand: cards need explicit padding (no bevel CSS provides it) */
+[data-brand="classic"] .card {
+  padding: var(--space-6);
 }
 
 .card-title {

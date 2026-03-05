@@ -6,7 +6,10 @@ export type {
   TypographyTokens,
   ShapeTokens,
   BrandTokens,
+  DTVariant,
 } from "./types.js";
+
+export { variantToCSSProperty, variantToClassName } from "./types.js";
 
 export { dt } from "./brands/dt.js";
 export { classic } from "./brands/classic.js";

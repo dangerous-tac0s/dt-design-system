@@ -1,0 +1,39 @@
+/* dt-web-theme: Scrollbar Styling */
+/* Source: dt-shopify-storefront cyberpunk scrollbar pattern */
+
+[data-brand="dt"] .dt-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+[data-brand="dt"] .dt-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+[data-brand="dt"] .dt-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-brand="dt"] .dt-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* Mode-aware scrollbar: uses local --dt-card-color if set */
+[data-brand="dt"] .dt-scrollbar-mode {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dt-card-color, var(--color-primary)) transparent;
+}
+
+[data-brand="dt"] .dt-scrollbar-mode::-webkit-scrollbar {
+  width: 6px;
+}
+
+[data-brand="dt"] .dt-scrollbar-mode::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-brand="dt"] .dt-scrollbar-mode::-webkit-scrollbar-thumb {
+  background: var(--dt-card-color, var(--color-primary));
+  border-radius: 3px;
+}

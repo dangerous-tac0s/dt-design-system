@@ -6,8 +6,10 @@
  */
 
 import type {DTExtendedTheme} from '../theme/paperTheme';
+import type {DTVariant} from '@dangerousthings/tokens';
 
-export type DTVariant = 'normal' | 'emphasis' | 'warning' | 'success' | 'other';
+// Re-export DTVariant from the canonical source (tokens package)
+export type {DTVariant} from '@dangerousthings/tokens';
 
 /** String-typed keys in DTExtendedTheme['custom'] that map to mode colors */
 type ModeColorKey = 'modeNormal' | 'modeEmphasis' | 'modeWarning' | 'modeSuccess' | 'modeOther';

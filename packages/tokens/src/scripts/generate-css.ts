@@ -56,7 +56,24 @@ function colorVars(colors: ColorTokens): string {
   --color-error: ${colors.error};
   --color-error-rgb: ${hexToRgb(colors.error)};
   --color-info: ${colors.info};
-  --color-info-rgb: ${hexToRgb(colors.info)};`;
+  --color-info-rgb: ${hexToRgb(colors.info)};
+
+  /* Mode Aliases — per-component color overrides (cards, badges, buttons) */
+  --mode-normal: var(--color-primary);
+  --mode-normal-rgb: var(--color-primary-rgb);
+  --mode-normal-selected: rgba(var(--color-primary-rgb), 0.7);
+  --mode-emphasis: var(--color-secondary);
+  --mode-emphasis-rgb: var(--color-secondary-rgb);
+  --mode-emphasis-selected: rgba(var(--color-secondary-rgb), 0.7);
+  --mode-warning: var(--color-error);
+  --mode-warning-rgb: var(--color-error-rgb);
+  --mode-warning-selected: rgba(var(--color-error-rgb), 0.7);
+  --mode-success: var(--color-accent);
+  --mode-success-rgb: var(--color-accent-rgb);
+  --mode-success-selected: rgba(var(--color-accent-rgb), 0.7);
+  --mode-other: var(--color-other);
+  --mode-other-rgb: var(--color-other-rgb);
+  --mode-other-selected: rgba(var(--color-other-rgb), 0.7);`;
 }
 
 /** Generate a full brand CSS file */

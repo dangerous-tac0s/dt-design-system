@@ -53,6 +53,27 @@ export interface ShapeTokens {
   radiusLg: string;
 }
 
+/** Color variant for component accent colors (shared across web + React Native) */
+export type DTVariant = 'normal' | 'emphasis' | 'warning' | 'success' | 'other';
+
+/** Maps DTVariant to CSS custom property names */
+export const variantToCSSProperty: Record<DTVariant, string> = {
+  normal: '--mode-normal',
+  emphasis: '--mode-emphasis',
+  warning: '--mode-warning',
+  success: '--mode-success',
+  other: '--mode-other',
+};
+
+/** Maps DTVariant to CSS class names */
+export const variantToClassName: Record<DTVariant, string> = {
+  normal: 'mode-normal',
+  emphasis: 'mode-emphasis',
+  warning: 'mode-warning',
+  success: 'mode-success',
+  other: 'mode-other',
+};
+
 /** Complete brand definition */
 export interface BrandTokens {
   id: ThemeBrand;

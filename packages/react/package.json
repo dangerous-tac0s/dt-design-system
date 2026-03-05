@@ -1,0 +1,42 @@
+{
+  "name": "@dangerousthings/react",
+  "version": "0.1.0",
+  "description": "React web components for the Dangerous Things design system",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "@dangerousthings/tokens": "*",
+    "@dangerousthings/web": "*"
+  },
+  "devDependencies": {
+    "@dangerousthings/tokens": "*",
+    "@dangerousthings/web": "*",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -61,6 +61,7 @@ export function DTChip({
     <Chip
       {...props}
       mode="outlined"
+      showSelectedCheck={false}
       textStyle={[
         styles.text,
         { color: selected ? theme.colors.onPrimary : color },

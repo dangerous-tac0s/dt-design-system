@@ -17,19 +17,22 @@
    ============================================================================ */
 [data-brand="dt"] .dt-bevel-card,
 [data-brand="dt"] .card {
+  --dt-card-progress: 0;
+  --_card-pad: var(--space-6);
   position: relative;
   isolation: isolate;
-  background: var(--color-primary);
+  background: var(--dt-card-color, var(--color-primary));
   border: none;
   border-radius: 0;
-  clip-path: polygon(
-    0% 0%,
-    100% 0%,
-    100% calc(100% - var(--bevel-md)),
-    calc(100% - var(--bevel-md)) 100%,
-    var(--bevel-sm) 100%,
-    0% calc(100% - var(--bevel-sm))
-  );
+  padding: var(--_card-pad);
+  padding-left: calc(var(--bevel-sm) + var(--_card-pad));
+  overflow: clip;
+  clip-path: polygon(0% 0%,
+      100% 0%,
+      100% calc(100% - var(--bevel-md)),
+      calc(100% - var(--bevel-md)) 100%,
+      var(--bevel-sm) 100%,
+      0% calc(100% - var(--bevel-sm)));
 }
 
 [data-brand="dt"] .dt-bevel-card::before,
@@ -39,39 +42,107 @@
   inset: 0;
   background: var(--color-surface);
   z-index: -1;
-  /* Inner clip-path mirrors outer shape, inset 3px on all edges.
-     This creates a uniform cyan border along both straight edges AND bevel diagonals. */
-  clip-path: polygon(
-    3px 3px,
-    calc(100% - 3px) 3px,
-    calc(100% - 3px) calc(100% - var(--bevel-md)),
-    calc(100% - var(--bevel-md)) calc(100% - 3px),
-    var(--bevel-sm) calc(100% - 3px),
-    3px calc(100% - var(--bevel-sm))
-  );
+  /* Inner clip-path: left edge at bevel-sm to create progress bar zone.
+     The progress bar occupies x=0 to x=bevel-sm with its own borders.
+     Inner surface starts at bevel-sm, so the left frame is wider than 3px. */
+  clip-path: polygon(var(--bevel-sm) 3px,
+      calc(100% - 3px) 3px,
+      calc(100% - 3px) calc(100% - var(--bevel-md)),
+      calc(100% - var(--bevel-md)) calc(100% - 3px),
+      var(--bevel-sm) calc(100% - 3px));
+}
+
+/* Card Progress Bar — structural fill area on the left edge
+   Sits between the 3px frame borders, follows bottom-left bevel diagonal.
+   Gradient fills from bottom (accent) to top (surface) based on --dt-card-progress.
+   Filled portion: fully opaque accent color. Unfilled portion: semi-transparent surface.
+   At 0%: all semi-transparent surface. At 100%: all opaque accent.
+   Override --dt-progress-empty-opacity to control unfilled portion transparency. */
+[data-brand="dt"] .dt-bevel-card::after,
+[data-brand="dt"] .card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  clip-path: polygon(3px 3px,
+      calc(var(--bevel-sm) - 3px) 3px,
+      calc(var(--bevel-sm) - 3px) calc(100% - 6px),
+      3px calc(100% - var(--bevel-sm)));
+
+  background: linear-gradient(to top,
+      rgba(var(--dt-card-color-rgb, var(--color-primary-rgb)), 1) calc(var(--dt-card-progress, 0) * 1%),
+      rgba(var(--color-surface-rgb),
+        var(--dt-progress-empty-opacity, 0.6)) calc(var(--dt-card-progress, 0) * 1%));
+
+  pointer-events: none;
+}
+
+/* Card children — ensure body content renders above the progress bar (::after z-index:1) */
+[data-brand="dt"] .dt-bevel-card > *:not(.dt-card-badge),
+[data-brand="dt"] .card > *:not(.dt-card-badge) {
+  position: relative;
+  z-index: 2;
 }
 
 /* Card Header — storefront .card-header pattern
-   Title extends edge-to-edge on the card's primary bg (cyan).
+   Title starts at bevel-sm (past the progress bar zone) and extends to the right edge.
    Below it, the ::before dark surface shows through for the body area. */
-[data-brand="dt"] .card > .card-title,
-[data-brand="dt"] .dt-bevel-card > .card-title {
-  /* Pull title to card edges, canceling card padding */
-  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-4) calc(-1 * var(--space-6));
-  padding: 1rem var(--space-6);
+[data-brand="dt"] .card>.card-title,
+[data-brand="dt"] .dt-bevel-card>.card-title {
+  /* Pull title toward card edges to sit flush inside the 3px frame border.
+     Uses 2px inset (1px overlap into the frame border) on top/right/left
+     to prevent sub-pixel anti-aliasing gaps. The overlap is invisible
+     because the header and frame border share the same accent color.
+     Left edge lands at bevel-sm - 1px, keeping the progress bar column
+     visible alongside the header (the progress bar spans full card height). */
+  margin: calc(2px - var(--_card-pad)) calc(2px - var(--_card-pad)) var(--space-4) calc(-1px - var(--_card-pad));
+  padding: 1rem calc(var(--_card-pad) + 1px) 1rem calc(var(--_card-pad) + 1px);
   /* Sits above ::before so its own bg covers the dark surface */
-  background: var(--color-primary);
+  background: var(--dt-card-color, var(--color-primary));
   color: var(--color-bg);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 1rem;
   position: relative;
+  z-index: 2;
 }
 
 /* Force icon spans to inherit header color (overrides inline styles) */
-[data-brand="dt"] .card > .card-title > * {
+[data-brand="dt"] .card>.card-title>* {
   color: inherit !important;
+}
+
+/* Full-bleed card body — pulls content flush against the inner frame border.
+   Use for images/media that should fill the card body edge-to-edge.
+   Margins align with the card's inner surface edges so the card's structural
+   3px border is the only visible border (no double-border). */
+[data-brand="dt"] .card>.card-body-flush,
+[data-brand="dt"] .dt-bevel-card>.card-body-flush {
+  margin: 0 calc(3px - var(--_card-pad)) calc(3px - var(--_card-pad)) calc(-1 * var(--_card-pad));
+  overflow: hidden;
+  background: var(--dt-card-color, var(--color-primary));
+}
+
+/* Bottom-right bevel on card body content (img/video). Clip-path matches
+   the card's inner surface bevel so the 3px structural border is visible
+   at the diagonal corner. Badge is not clipped (it's a sibling, not img). */
+[data-brand="dt"] .card-body-flush > img,
+[data-brand="dt"] .card-body-flush > video {
+  display: block;
+  clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% calc(100% - var(--bevel-md) + 3px),
+      calc(100% - var(--bevel-md) + 3px) 100%,
+      0% 100%);
+}
+
+/* Remove gap between card title and full-bleed body */
+[data-brand="dt"] .card>.card-title + .card-body-flush,
+[data-brand="dt"] .dt-bevel-card>.card-title + .card-body-flush {
+  margin-top: calc(-1 * var(--space-4));
 }
 
 /* ============================================================================
@@ -83,13 +154,11 @@
 [data-brand="dt"] .btn-primary,
 [data-brand="dt"] .btn-danger {
   border: none;
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-sm)) 0%,
-    100% var(--bevel-sm),
-    100% 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-sm)) 0%,
+      100% var(--bevel-sm),
+      100% 100%,
+      0% 100%);
 }
 
 [data-brand="dt"] .btn-secondary {
@@ -97,13 +166,11 @@
   isolation: isolate;
   background: var(--color-primary);
   border: none;
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-sm)) 0%,
-    100% var(--bevel-sm),
-    100% 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-sm)) 0%,
+      100% var(--bevel-sm),
+      100% 100%,
+      0% 100%);
 }
 
 [data-brand="dt"] .btn-secondary::before {
@@ -112,13 +179,11 @@
   inset: 0;
   background: var(--color-bg);
   z-index: -1;
-  clip-path: polygon(
-    2px 2px,
-    calc(100% - var(--bevel-sm)) 2px,
-    calc(100% - 2px) var(--bevel-sm),
-    calc(100% - 2px) calc(100% - 2px),
-    2px calc(100% - 2px)
-  );
+  clip-path: polygon(2px 2px,
+      calc(100% - var(--bevel-sm)) 2px,
+      calc(100% - 2px) var(--bevel-sm),
+      calc(100% - 2px) calc(100% - 2px),
+      2px calc(100% - 2px));
 }
 
 [data-brand="dt"] .btn-secondary:hover {
@@ -141,13 +206,11 @@
   isolation: isolate;
   background: var(--badge-border-color);
   color: var(--color-text-primary);
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-sm)) 0%,
-    100% var(--bevel-sm),
-    100% 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-sm)) 0%,
+      100% var(--bevel-sm),
+      100% 100%,
+      0% 100%);
   border: none;
   border-radius: 0;
 }
@@ -158,13 +221,11 @@
   inset: 0;
   background: var(--badge-fill);
   z-index: -1;
-  clip-path: polygon(
-    2px 2px,
-    calc(100% - var(--bevel-sm)) 2px,
-    calc(100% - 2px) var(--bevel-sm),
-    calc(100% - 2px) calc(100% - 2px),
-    2px calc(100% - 2px)
-  );
+  clip-path: polygon(2px 2px,
+      calc(100% - var(--bevel-sm)) 2px,
+      calc(100% - 2px) var(--bevel-sm),
+      calc(100% - 2px) calc(100% - 2px),
+      2px calc(100% - 2px));
 }
 
 [data-brand="dt"] .badge-success {
@@ -204,23 +265,19 @@
    Use these for custom elements that need bevel shapes
    ============================================================================ */
 [data-brand="dt"] .dt-bevel-btn {
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-sm)) 0%,
-    100% var(--bevel-sm),
-    100% 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-sm)) 0%,
+      100% var(--bevel-sm),
+      100% 100%,
+      0% 100%);
 }
 
 [data-brand="dt"] .dt-bevel-label {
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-sm)) 0%,
-    100% var(--bevel-sm),
-    100% 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-sm)) 0%,
+      100% var(--bevel-sm),
+      100% 100%,
+      0% 100%);
   border-radius: 0;
 }
 
@@ -229,28 +286,91 @@
    Source: storefront .media-frame-clipped pattern
    ============================================================================ */
 .dt-bevel-media {
+  position: relative;
+  isolation: isolate;
+  background: var(--dt-card-color, var(--color-primary));
+  clip-path: polygon(var(--bevel-md) 0%,
+      100% 0%,
+      100% calc(100% - var(--bevel-md)),
+      calc(100% - var(--bevel-md)) 100%,
+      0% 100%,
+      0% var(--bevel-md));
+}
+
+/* Inner surface fill — shows as background when no image is loaded */
+.dt-bevel-media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface);
+  z-index: -1;
   clip-path: polygon(
-    var(--bevel-md) 0%,
-    100% 0%,
-    100% calc(100% - var(--bevel-md)),
-    calc(100% - var(--bevel-md)) 100%,
-    0% 100%,
-    0% var(--bevel-md)
-  );
+      calc(var(--bevel-md) + 1px) 3px,
+      calc(100% - 3px) 3px,
+      calc(100% - 3px) calc(100% - var(--bevel-md) - 1px),
+      calc(100% - var(--bevel-md) - 1px) calc(100% - 3px),
+      3px calc(100% - 3px),
+      3px calc(var(--bevel-md) + 1px));
+}
+
+.dt-bevel-media > img,
+.dt-bevel-media > video {
+  display: block;
+  clip-path: polygon(
+      calc(var(--bevel-md) + 1px) 3px,
+      calc(100% - 3px) 3px,
+      calc(100% - 3px) calc(100% - var(--bevel-md) - 1px),
+      calc(100% - var(--bevel-md) - 1px) calc(100% - 3px),
+      3px calc(100% - 3px),
+      3px calc(var(--bevel-md) + 1px));
+}
+
+/* Media frame placeholder — shows when no image/video is present.
+   Surface-colored background is already provided by ::before.
+   This adds centered "MISSING MEDIA" text via ::after. */
+.dt-bevel-media::after {
+  content: 'MISSING MEDIA';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+  color: var(--color-text-muted, #888);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Card body placeholder — shows when image container is empty or image fails.
+   Uses surface background and centered placeholder text. */
+.dt-badge-parent:empty::after,
+.card-body-flush:empty::after {
+  content: 'MISSING MEDIA';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  color: var(--color-text-muted, #888);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--color-surface);
 }
 
 /* ============================================================================
    Modal/Drawer Bevels — dual bottom bevels (bottom-right + bottom-left)
    ============================================================================ */
 .dt-bevel-modal {
-  clip-path: polygon(
-    0% 0%,
-    100% 0%,
-    100% calc(100% - var(--bevel-lg)),
-    calc(100% - var(--bevel-lg)) 100%,
-    var(--bevel-lg) 100%,
-    0% calc(100% - var(--bevel-lg))
-  );
+  clip-path: polygon(0% 0%,
+      100% 0%,
+      100% calc(100% - var(--bevel-lg)),
+      calc(100% - var(--bevel-lg)) 100%,
+      var(--bevel-lg) 100%,
+      0% calc(100% - var(--bevel-lg)));
 }
 
 /* ============================================================================
@@ -258,39 +378,33 @@
    Source: storefront aside clip-path pattern
    ============================================================================ */
 .dt-bevel-drawer-right {
-  clip-path: polygon(
-    0% var(--bevel-lg),
-    var(--bevel-lg) 0%,
-    100% 0%,
-    100% 100%,
-    var(--bevel-lg) 100%,
-    0% calc(100% - var(--bevel-lg))
-  );
+  clip-path: polygon(0% var(--bevel-lg),
+      var(--bevel-lg) 0%,
+      100% 0%,
+      100% 100%,
+      var(--bevel-lg) 100%,
+      0% calc(100% - var(--bevel-lg)));
 }
 
 .dt-bevel-drawer-left {
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - var(--bevel-lg)) 0%,
-    100% var(--bevel-lg),
-    100% calc(100% - var(--bevel-lg)),
-    calc(100% - var(--bevel-lg)) 100%,
-    0% 100%
-  );
+  clip-path: polygon(0% 0%,
+      calc(100% - var(--bevel-lg)) 0%,
+      100% var(--bevel-lg),
+      100% calc(100% - var(--bevel-lg)),
+      calc(100% - var(--bevel-lg)) 100%,
+      0% 100%);
 }
 
 /* ============================================================================
    Small Bevels — for compact elements (arrows, stepper buttons)
    ============================================================================ */
 .dt-bevel-sm {
-  clip-path: polygon(
-    var(--bevel-sm) 0%,
-    100% 0%,
-    100% calc(100% - var(--bevel-sm)),
-    calc(100% - var(--bevel-sm)) 100%,
-    0% 100%,
-    0% var(--bevel-sm)
-  );
+  clip-path: polygon(var(--bevel-sm) 0%,
+      100% 0%,
+      100% calc(100% - var(--bevel-sm)),
+      calc(100% - var(--bevel-sm)) 100%,
+      0% 100%,
+      0% var(--bevel-sm));
 }
 
 /* ============================================================================
@@ -299,4 +413,157 @@
 [data-brand="dt"] .dt-accent-top,
 [data-brand="dt"] .terminal {
   border-top: 3px solid var(--color-primary);
+}
+
+/* ============================================================================
+   Card Color Modes — per-instance color overrides
+   Sets --dt-card-color, --dt-card-color-selected, --dt-card-color-rgb,
+   --dt-glow-color, and --accent-mode for use by all card sub-components.
+   Source: dt-shopify-storefront .mode-* classes
+   ============================================================================ */
+[data-brand="dt"] .mode-normal {
+  --dt-card-color: var(--mode-normal);
+  --dt-card-color-rgb: var(--mode-normal-rgb);
+  --dt-card-color-selected: var(--mode-normal-selected);
+  --dt-glow-color: var(--mode-normal);
+  --accent-mode: var(--mode-emphasis);
+}
+
+[data-brand="dt"] .mode-emphasis {
+  --dt-card-color: var(--mode-emphasis);
+  --dt-card-color-rgb: var(--mode-emphasis-rgb);
+  --dt-card-color-selected: var(--mode-emphasis-selected);
+  --dt-glow-color: var(--mode-emphasis);
+  --accent-mode: var(--mode-normal);
+}
+
+[data-brand="dt"] .mode-warning {
+  --dt-card-color: var(--mode-warning);
+  --dt-card-color-rgb: var(--mode-warning-rgb);
+  --dt-card-color-selected: var(--mode-warning-selected);
+  --dt-glow-color: var(--mode-warning);
+  --accent-mode: var(--mode-emphasis);
+}
+
+[data-brand="dt"] .mode-success {
+  --dt-card-color: var(--mode-success);
+  --dt-card-color-rgb: var(--mode-success-rgb);
+  --dt-card-color-selected: var(--mode-success-selected);
+  --dt-glow-color: var(--mode-success);
+  --accent-mode: var(--mode-emphasis);
+}
+
+[data-brand="dt"] .mode-other {
+  --dt-card-color: var(--mode-other);
+  --dt-card-color-rgb: var(--mode-other-rgb);
+  --dt-card-color-selected: var(--mode-other-selected);
+  --dt-glow-color: var(--mode-other);
+  --accent-mode: var(--mode-normal);
+}
+
+
+/* ============================================================================
+   Card Badge — bottom-right product type chip (LAB, BUNDLE, etc.)
+   Source: dt-shopify-storefront CyberProductCard LabChip / BundleChip
+   Plain flat rectangle. Inherits card color via --dt-card-color.
+   ============================================================================ */
+/* Badge parent — provides position context for absolutely-positioned badges.
+   Use on the image container inside a card, or on any element that wraps content + badge. */
+.dt-badge-parent {
+  position: relative;
+}
+
+.dt-card-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 4;
+  padding: 2px calc(8px + 0.2rem) 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background-color: var(--dt-card-color, var(--color-primary));
+  color: var(--color-bg);
+}
+
+/* Inside card body-flush, offset badge position to compensate for the
+   3px margin from the card edge. This makes the badge position relative
+   to the card's bevel corner match the media frame's placement exactly
+   (8px from card edge in both cases). */
+.card-body-flush > .dt-card-badge {
+  bottom: 5px;
+  right: 5px;
+}
+
+/* ============================================================================
+   Interactive Bevel Button — storefront .menu-item-clipped pattern
+   Default: outlined rectangle, no clip-path, 5px top border
+   Hover: bottom-right bevel appears, fills with mode color, pulse animation
+   Selected: bevel persists, fills with 70% opacity mode color
+   ============================================================================ */
+[data-brand="dt"] .dt-btn {
+  color: var(--accent-mode, var(--color-primary));
+  background-color: var(--color-bg);
+  border: 1px solid var(--dt-card-color, var(--color-primary));
+  border-top: 5px solid var(--dt-card-color, var(--color-primary));
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast),
+    clip-path var(--transition-fast);
+}
+
+[data-brand="dt"] .dt-btn:hover {
+  clip-path: polygon(0% 0%,
+      100% 0%,
+      100% calc(100% - var(--menu-item-corner)),
+      calc(100% - var(--menu-item-corner)) 100%,
+      0% 100%);
+  color: var(--color-bg);
+  background-color: var(--dt-card-color, var(--color-primary));
+  animation: dt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+[data-brand="dt"] .dt-btn.selected {
+  clip-path: polygon(0% 0%,
+      100% 0%,
+      100% calc(100% - var(--menu-item-corner)),
+      calc(100% - var(--menu-item-corner)) 100%,
+      0% 100%);
+  background-color: var(--dt-card-color-selected, rgba(var(--color-primary-rgb), 0.7));
+  color: var(--color-bg);
+  animation: none;
+}
+
+[data-brand="dt"] .dt-btn.selected:hover {
+  animation: dt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Classic brand: no clip-path, uses border-radius instead */
+[data-brand="classic"] .dt-btn {
+  border-radius: var(--radius);
+  border-top-width: 2px;
+}
+
+[data-brand="classic"] .dt-btn:hover {
+  clip-path: none;
+  background-color: var(--dt-card-color, var(--color-primary));
+  color: var(--color-bg);
+  border-radius: var(--radius);
+}
+
+[data-brand="classic"] .dt-btn.selected {
+  clip-path: none;
+  background-color: var(--dt-card-color-selected, rgba(var(--color-primary-rgb), 0.7));
+  color: var(--color-bg);
+  border-radius: var(--radius);
 }
