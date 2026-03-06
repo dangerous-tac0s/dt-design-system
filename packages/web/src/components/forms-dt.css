@@ -18,6 +18,7 @@
 [data-brand="dt"] .input {
   border: 2px solid var(--color-primary);
   border-radius: 0;
+  padding: 8px 12px;
   background: var(--color-bg);
   color: var(--color-text-primary);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
@@ -141,27 +142,43 @@
 
 /* ============================================================================
    Radio Button — Hexagonal indicator
-   Source: DTRadioGroup.tsx — flat-top hexagon, 22px default
-   Uses drop-shadow instead of border (clip-path clips CSS borders)
+   Matches RN DTRadioGroup: outlined hexagon with inner filled dot on check.
+   Outer hexagon is always stroked (accent border); inner dot appears on check.
    ============================================================================ */
 [data-brand="dt"] input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
+  display: grid;
+  place-content: center;
   width: 22px;
   height: 22px;
+  flex-shrink: 0;
+  margin: 0;
   border: none;
-  background: rgba(var(--color-primary-rgb), 0.1);
+  background: var(--color-primary);
   cursor: pointer;
   clip-path: polygon(
     50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%
   );
-  filter: drop-shadow(0 0 1px var(--color-primary));
-  transition: background var(--transition-fast), filter var(--transition-fast);
+  transition: background var(--transition-fast);
 }
 
-[data-brand="dt"] input[type="radio"]:checked {
+/* Inner surface — creates the outlined hexagon look (accent border + transparent center) */
+[data-brand="dt"] input[type="radio"]::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--color-bg);
+  clip-path: polygon(
+    50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%
+  );
+  transition: background var(--transition-fast);
+}
+
+/* Checked: inner dot fills with accent color (smaller inset for the dot effect) */
+[data-brand="dt"] input[type="radio"]:checked::before {
+  inset: 5px;
   background: var(--color-primary);
-  filter: drop-shadow(0 0 2px var(--color-primary));
 }
 
 [data-brand="dt"] input[type="radio"]:disabled {
@@ -181,8 +198,9 @@
 }
 
 .dt-radio-option.selected {
-  background: rgba(var(--color-primary-rgb), 0.15);
+  background: rgba(var(--color-primary-rgb), 0.7);
   border-color: var(--color-primary);
+  color: var(--color-bg);
 }
 
 /* ============================================================================
