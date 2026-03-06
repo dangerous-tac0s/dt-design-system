@@ -102,7 +102,7 @@ export function FormsPage() {
         <CodeLabel text=".dt-filter-header | .dt-filter-header.active" />
       </Section>
 
-      <Section title="Menu Items" description="Beveled filter menu items with active state and level indentation.">
+      <Section title="Buttons" description="Beveled buttons with active state, mode colors, and level indentation.">
         <div style={{ maxWidth: 300 }}>
           {['All Products', 'NFC Implants', 'RFID Tags', 'Accessories', 'Lab Products'].map((name, i) => (
             <button

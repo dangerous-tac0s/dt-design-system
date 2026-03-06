@@ -1,13 +1,12 @@
 import { createElement, useState, type CSSProperties } from 'react';
 import {
   DTCard,
-  DTButton,
   DTStaggerContainer,
   DTFeatureLegend,
 } from '@dangerousthings/react';
 import type { DTFeatureItem } from '@dangerousthings/react';
 import type { DTVariant } from '@dangerousthings/tokens';
-import { Section, Row, CodeLabel } from '../components/Section';
+import { Section, CodeLabel } from '../components/Section';
 
 // Feature icons from dt-shopify-storefront
 import {
@@ -91,7 +90,7 @@ export function CardsAdvancedPage() {
         <CodeLabel text="<DTCard progress={50} /> — height driven by --dt-card-progress" />
       </Section>
 
-      <Section title="Card Badges" description="Bottom-right chip badge on product image area. Inherits card mode color.">
+      <Section title="Card Badges" description="Bottom-right chip badge on card product image area. Inherits card mode color.">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-dt-4">
           {[
             { label: 'LAB', mode: 'warning' as DTVariant, img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=400&fit=crop' },
@@ -106,52 +105,10 @@ export function CardsAdvancedPage() {
             </DTCard>
           ))}
         </div>
-        <CodeLabel text=".dt-badge-parent > .dt-card-badge — badge positioned on image container" />
-
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', margin: 'var(--space-4) 0 var(--space-2)' }}>
-          Also works on beveled media frames:
-        </p>
-        <div className="grid grid-cols-3 gap-dt-4">
-          {[
-            { label: 'LAB', mode: 'warning' as DTVariant, img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=400&fit=crop' },
-            { label: 'BUNDLE', mode: 'other' as DTVariant, img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=400&fit=crop' },
-            { label: 'NFC', mode: 'normal' as DTVariant, img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=400&fit=crop' },
-          ].map(badge => (
-            <div key={badge.label} className={`dt-bevel-media mode-${badge.mode}`} style={{ aspectRatio: '1', overflow: 'hidden' }}>
-              <img src={badge.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <span className="dt-card-badge">{badge.label}</span>
-            </div>
-          ))}
-        </div>
-        <CodeLabel text=".dt-bevel-media.mode-warning > .dt-card-badge" />
-
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', margin: 'var(--space-4) 0 var(--space-2)' }}>
-          Missing image placeholder (no img element):
-        </p>
-        <div className="grid grid-cols-3 gap-dt-4">
-          {(['warning', 'other', 'normal'] as DTVariant[]).map(mode => (
-            <div key={mode} className={`dt-bevel-media mode-${mode}`} style={{ aspectRatio: '1' }} />
-          ))}
-        </div>
-        <CodeLabel text=".dt-bevel-media without child img — shows 'MISSING MEDIA' placeholder" />
+        <CodeLabel text=".dt-badge-parent > .dt-card-badge — badge positioned on card image container" />
       </Section>
 
-      <Section title="Interactive Bevel Buttons" description="Outlined rectangle by default. Bottom-right bevel appears on hover/select, fills with mode color.">
-        <Row>
-          {modes.map(mode => (
-            <DTButton key={mode} variant={mode}>{mode.toUpperCase()}</DTButton>
-          ))}
-        </Row>
-        <CodeLabel text="<DTButton variant='normal'> — hover for bevel + fill" />
-        <Row style={{ marginTop: 'var(--space-4)' }}>
-          {modes.map(mode => (
-            <DTButton key={mode} variant={mode} selected>{mode.toUpperCase()} SEL</DTButton>
-          ))}
-        </Row>
-        <CodeLabel text="<DTButton variant='emphasis' selected /> — persistent bevel + fill" />
-      </Section>
-
-      <Section title="Menu Items" description="Filter-style beveled menu items with active/selected states and level indentation.">
+<Section title="Buttons" description="Beveled buttons with active/selected states, mode colors, and level indentation.">
         <div style={{ maxWidth: 300 }}>
           {['All Products', 'NFC Implants', 'RFID Tags', 'Accessories', 'Lab Products'].map((item, i) => (
             <button

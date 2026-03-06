@@ -1,14 +1,23 @@
 /**
  * DTDrawer — Sliding side panel with beveled edges.
  *
+ * Matches the dt-shopify-storefront Aside pattern:
+ * - Outer colored shell (mode color) with beveled clip-path
+ * - Inner dark surface with inset bevel clip-path (creates colored border)
+ * - Colored header bar with bold heading + close button
+ * - Scrollable content area
+ * - Slides in and out from the correct edge
+ *
  * CSS reference: bevels.css .dt-bevel-drawer-right, .dt-bevel-drawer-left
  */
 
-import { useEffect, useCallback, type ReactNode, type CSSProperties } from 'react';
+import { useEffect, useState, useCallback, useRef, type ReactNode, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { DTVariant } from '@dangerousthings/tokens';
 import { cx } from '../utils/cx';
 import { getVariantClass } from '../utils/variantClasses';
+
+const DURATION = 200;
 
 interface DTDrawerProps {
   visible: boolean;
@@ -36,6 +45,30 @@ export function DTDrawer({
   className,
   style,
 }: DTDrawerProps) {
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // Open: mount immediately
+  useEffect(() => {
+    if (visible) {
+      setClosing(false);
+      setMounted(true);
+    }
+  }, [visible]);
+
+  // Close: play exit animation, then unmount
+  useEffect(() => {
+    if (!visible && mounted && !closing) {
+      setClosing(true);
+      timerRef.current = setTimeout(() => {
+        setMounted(false);
+        setClosing(false);
+      }, DURATION);
+    }
+    return () => clearTimeout(timerRef.current);
+  }, [visible, mounted, closing]);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onDismiss();
@@ -44,16 +77,21 @@ export function DTDrawer({
   );
 
   useEffect(() => {
-    if (visible) {
+    if (mounted && !closing) {
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
     }
-  }, [visible, handleKeyDown]);
+  }, [mounted, closing, handleKeyDown]);
 
-  if (!visible) return null;
+  if (!mounted) return null;
 
   const bevelClass = position === 'right' ? 'dt-bevel-drawer-right' : 'dt-bevel-drawer-left';
+  const innerBevelClass = position === 'right' ? 'dt-bevel-drawer-right-inner' : 'dt-bevel-drawer-left-inner';
   const widthValue = typeof width === 'number' ? `${width}px` : width;
+  const varCSSVar = getVariantCSSVar(headingVariant);
+
+  // Slide direction for exit: reverse of entry
+  const slideOut = position === 'right' ? 'translateX(100%)' : 'translateX(-100%)';
 
   return createPortal(
     <div
@@ -61,19 +99,22 @@ export function DTDrawer({
         position: 'fixed',
         inset: 0,
         zIndex: 1000,
+        pointerEvents: closing ? 'none' : undefined,
       }}>
       {/* Backdrop */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: 'rgba(0, 0, 0, 0.2)',
           backdropFilter: 'blur(4px)',
-          animation: 'dt-fade-in 0.2s ease-in-out both',
+          animation: closing ? undefined : `dt-fade-in 0.4s ease-in-out both`,
+          opacity: closing ? 0 : undefined,
+          transition: closing ? `opacity ${DURATION}ms ease-in-out` : undefined,
         }}
-        onClick={onDismiss}
+        onClick={closing ? undefined : onDismiss}
       />
-      {/* Panel */}
+      {/* Outer shell */}
       <div
         className={cx(
           bevelClass,
@@ -83,48 +124,66 @@ export function DTDrawer({
         style={{
           position: 'absolute',
           top: 0,
-          bottom: 0,
           [position]: 0,
+          height: '99vh',
           width: widthValue,
           maxWidth: '100vw',
-          background: 'var(--color-bg)',
-          display: 'flex',
-          flexDirection: 'column',
-          animation: `dt-slide-${position === 'right' ? 'up' : 'up'} 0.2s ease-in-out both`,
+          background: `var(${varCSSVar}, var(--color-primary))`,
+          padding: '3px',
+          paddingRight: position === 'right' ? 0 : '3px',
+          paddingLeft: position === 'left' ? 0 : '3px',
+          boxShadow: '0 0 50px rgba(0, 0, 0, 0.3)',
+          animation: closing ? undefined : `dt-slide-${position} ${DURATION}ms ease-in-out both`,
+          transform: closing ? slideOut : undefined,
+          transition: closing ? `transform ${DURATION}ms ease-in-out` : undefined,
           ...style,
         }}>
-        {/* Header */}
+        {/* Inner surface */}
         <div
+          className={innerBevelClass}
           style={{
-            padding: '16px',
-            background: `var(${getVariantCSSVar(headingVariant)}, var(--color-primary))`,
-            color: 'var(--color-bg)',
+            height: '100%',
+            background: 'var(--color-bg)',
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontWeight: 700,
-            fontSize: '18px',
-            letterSpacing: '0.5px',
+            flexDirection: 'column',
           }}>
-          <span>{heading}</span>
-          <button
-            onClick={onDismiss}
+          {/* Header */}
+          <div
             style={{
-              background: 'none',
-              border: 'none',
-              color: 'inherit',
-              fontSize: '20px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              padding: '0 8px',
-            }}
-            type="button">
-            ✕
-          </button>
-        </div>
-        {/* Content */}
-        <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
-          {children}
+              height: 64,
+              padding: '0 1em',
+              background: `var(${varCSSVar}, var(--color-primary))`,
+              color: 'var(--color-bg)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontWeight: 900,
+              fontSize: '2em',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              borderBottom: '1px solid var(--color-bg)',
+            }}>
+            <span>{heading}</span>
+            <button
+              onClick={onDismiss}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'inherit',
+                fontSize: '0.6em',
+                fontWeight: 700,
+                cursor: 'pointer',
+                padding: '0 8px',
+                opacity: 0.8,
+              }}
+              type="button">
+              ✕
+            </button>
+          </div>
+          {/* Content */}
+          <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
+            {children}
+          </div>
         </div>
       </div>
     </div>,

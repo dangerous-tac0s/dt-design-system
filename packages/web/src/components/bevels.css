@@ -228,36 +228,48 @@
       2px calc(100% - 2px));
 }
 
+/* Colored badge variants — solid color fill with contrasting text.
+   Dark mode: black text on bright neon fill.
+   Light mode: white text on bright fill (via --color-bg which flips per theme). */
 [data-brand="dt"] .badge-success {
   --badge-border-color: var(--color-success);
-  --badge-fill: rgba(var(--color-success-rgb), 0.25);
+  --badge-fill: var(--color-success);
+  color: var(--color-bg);
 }
 
 [data-brand="dt"] .badge-error {
   --badge-border-color: var(--color-error);
-  --badge-fill: rgba(var(--color-error-rgb), 0.25);
+  --badge-fill: var(--color-error);
+  color: var(--color-bg);
 }
 
 [data-brand="dt"] .badge-warning {
   --badge-border-color: var(--color-warning);
-  --badge-fill: rgba(var(--color-warning-rgb), 0.25);
+  --badge-fill: var(--color-warning);
+  color: var(--color-bg);
 }
 
 [data-brand="dt"] .badge-info {
   --badge-border-color: var(--color-info);
-  --badge-fill: rgba(var(--color-info-rgb), 0.25);
+  --badge-fill: var(--color-info);
+  color: var(--color-bg);
 }
 
-/* ============================================================================
-   Badge text override for Classic — ensure readable text in light mode
-   Status-color text on 25% opacity backgrounds fails WCAG AA on light bg.
-   Use primary text color instead (same approach as DT badges above).
-   ============================================================================ */
-[data-brand="classic"] .badge-success,
-[data-brand="classic"] .badge-error,
-[data-brand="classic"] .badge-warning,
+/* Classic brand colored badges — same solid fill approach */
+[data-brand="classic"] .badge-success {
+  color: var(--color-bg);
+}
+
+[data-brand="classic"] .badge-error {
+  color: var(--color-bg);
+}
+
+[data-brand="classic"] .badge-warning {
+  color: var(--color-bg);
+}
+
 [data-brand="classic"] .badge-info {
-  color: var(--color-text-primary);
+  color: var(--color-bg);
 }
 
 /* ============================================================================
@@ -386,6 +398,16 @@
       0% calc(100% - var(--bevel-lg)));
 }
 
+/* Inner surface clip — inset from outer to create colored border frame */
+.dt-bevel-drawer-right-inner {
+  clip-path: polygon(3px calc(var(--bevel-lg) + 1px),
+      calc(var(--bevel-lg) + 1px) 3px,
+      100% 3px,
+      100% calc(100% - 3px),
+      calc(var(--bevel-lg) + 1px) calc(100% - 3px),
+      3px calc(100% - var(--bevel-lg) - 1px));
+}
+
 .dt-bevel-drawer-left {
   clip-path: polygon(0% 0%,
       calc(100% - var(--bevel-lg)) 0%,
@@ -393,6 +415,16 @@
       100% calc(100% - var(--bevel-lg)),
       calc(100% - var(--bevel-lg)) 100%,
       0% 100%);
+}
+
+/* Inner surface clip — inset from outer to create colored border frame */
+.dt-bevel-drawer-left-inner {
+  clip-path: polygon(0% 3px,
+      calc(100% - var(--bevel-lg) - 1px) 3px,
+      calc(100% - 3px) calc(var(--bevel-lg) + 1px),
+      calc(100% - 3px) calc(100% - var(--bevel-lg) - 1px),
+      calc(100% - var(--bevel-lg) - 1px) calc(100% - 3px),
+      0% calc(100% - 3px));
 }
 
 /* ============================================================================
