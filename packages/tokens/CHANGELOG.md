@@ -1,5 +1,15 @@
 # @dangerousthings/tokens
 
+## 0.3.0
+
+### Minor Changes
+
+- e74c285: Add mode CSS custom properties (--mode-normal, --mode-emphasis, --mode-warning, --mode-success, --mode-other) with RGB and selected variants for per-component color overrides
+
+### Patch Changes
+
+- e74c285: New package: @dangerousthings/react — React web components wrapping @dangerousthings/web CSS. 22 components matching the React Native package API (DTCard, DTButton, DTLabel, DTChip, DTModal, DTDrawer, DTAccordion, DTMenu, DTStaggerContainer, DTFeatureLegend, DTMobileFilterOverlay, DTGallery, DTHexagon, form primitives). Includes DTWebThemeProvider, animation hooks (useScaleIn, usePulse), and variant utility functions. DTVariant type moved to @dangerousthings/tokens as shared canonical source.
+
 ## 0.2.1
 
 ### Patch Changes
