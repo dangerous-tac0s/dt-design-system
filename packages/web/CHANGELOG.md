@@ -1,5 +1,17 @@
 # @dangerousthings/web
 
+## 0.3.0
+
+### Minor Changes
+
+- e74c285: Add storefront component features: animations library (entrance, interactive, stagger container), scrollbar styling, card color modes with selected/hover states, card progress bar, badge positioning, interactive bevel buttons, menu items, filter headers/overlays, feature legend grid. Fix link hover glow to respect per-element --dt-glow-color.
+
+### Patch Changes
+
+- Updated dependencies [e74c285]
+- Updated dependencies [e74c285]
+  - @dangerousthings/tokens@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

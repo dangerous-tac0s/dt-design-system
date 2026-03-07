@@ -1,5 +1,17 @@
 # @dangerousthings/react-native
 
+## 0.3.0
+
+### Minor Changes
+
+- e74c285: Add storefront component features: DTCard selected state and progress bar, DTBadgeOverlay positioning wrapper, DTStaggerContainer with staggered scale-in animation, DTFeatureLegend product feature grid, DTMobileFilterOverlay slide-up filter panel, useScaleIn and usePulse animation hooks. Rewrite DTButton with interactive bevel pattern (outlined rectangle, bevels on hover/select).
+
+### Patch Changes
+
+- Updated dependencies [e74c285]
+- Updated dependencies [e74c285]
+  - @dangerousthings/tokens@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes
