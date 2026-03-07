@@ -3,6 +3,27 @@
   "version": "0.1.0",
   "description": "Tailwind CSS v3 preset mapping DT design tokens to Tailwind theme",
   "license": "MIT",
+  "author": {
+    "name": "Dangerous Things",
+    "email": "info@dangerousthings.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangerous-tac0s/dt-design-system.git",
+    "directory": "packages/tailwind-preset"
+  },
+  "homepage": "https://github.com/dangerous-tac0s/dt-design-system#readme",
+  "keywords": [
+    "dangerousthings",
+    "design-system",
+    "tailwind",
+    "tailwindcss",
+    "preset",
+    "design-tokens"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "type": "module",
   "exports": {
     ".": {

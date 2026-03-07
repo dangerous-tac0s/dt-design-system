@@ -3,6 +3,28 @@
   "version": "0.2.1",
   "description": "Web CSS theme for the Dangerous Things design system — bevels, glows, form styles",
   "license": "MIT",
+  "author": {
+    "name": "Dangerous Things",
+    "email": "info@dangerousthings.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangerous-tac0s/dt-design-system.git",
+    "directory": "packages/web"
+  },
+  "homepage": "https://github.com/dangerous-tac0s/dt-design-system#readme",
+  "keywords": [
+    "dangerousthings",
+    "design-system",
+    "css",
+    "theming",
+    "bevels",
+    "cyberpunk"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
   "main": "dist/index.css",
   "exports": {
     ".": "./dist/index.css",
@@ -13,8 +35,7 @@
       "types": "./dist/theme-registry.d.ts",
       "import": "./dist/theme-registry.js",
       "default": "./dist/theme-registry.js"
-    },
-    "./dist/*": "./dist/*"
+    }
   },
   "publishConfig": {
     "access": "public"
@@ -23,7 +44,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "node scripts/build.cjs",
     "clean": "rm -rf dist"
   },
   "dependencies": {

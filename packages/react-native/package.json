@@ -3,6 +3,27 @@
   "version": "0.2.1",
   "description": "React Native themed components for the Dangerous Things design system",
   "license": "MIT",
+  "author": {
+    "name": "Dangerous Things",
+    "email": "info@dangerousthings.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangerous-tac0s/dt-design-system.git",
+    "directory": "packages/react-native"
+  },
+  "homepage": "https://github.com/dangerous-tac0s/dt-design-system#readme",
+  "keywords": [
+    "dangerousthings",
+    "design-system",
+    "react-native",
+    "components",
+    "theming"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
