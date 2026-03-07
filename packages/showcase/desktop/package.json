@@ -2,6 +2,7 @@
   "name": "@dangerousthings/showcase-desktop",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
   "description": "Desktop showcase for the Dangerous Things design system",
   "author": {
     "name": "Dangerous Things",
