@@ -33,31 +33,32 @@ const modes: DTVariant[] = ['normal', 'emphasis', 'warning', 'success', 'other']
 const ico = (C: any) => createElement(C, { style: { fontSize: '2rem' } });
 
 // Full chip feature legend (9 features — from storefront UseCaseLegend)
-// detail text simulates what the storefront shows for an NExT implant
+// NExT v2: NTAGI2C (HF) + T5577 (LF) with power-harvesting LED
 const chipFeatures: DTFeatureItem[] = [
   { key: 'smartphone', name: 'Smartphone', icon: ico(MdOutlinePhonelinkRing), state: 'supported', detail: 'Full NFC smartphone support' },
-  { key: 'access_control', name: 'Access Control', icon: ico(MdOutlineVpnKey), state: 'supported', detail: 'DESFire, MIFARE Classic, iCLASS' },
-  { key: 'digital_security', name: 'Digital Security', icon: ico(FaUserShield), state: 'supported', detail: 'FIDO2 / WebAuthn' },
+  { key: 'access_control', name: 'Access Control', icon: ico(MdOutlineVpnKey), state: 'supported', detail: 'Legacy' },
+  { key: 'digital_security', name: 'Digital Security', icon: ico(FaUserShield), state: 'unsupported', detail: 'Not Supported' },
   { key: 'cryptography', name: 'Cryptography', icon: ico(LuBinary), state: 'unsupported', detail: 'Not Supported' },
-  { key: 'data_sharing', name: 'Data Sharing', icon: ico(MdOutlineMobileScreenShare), state: 'supported', detail: 'NDEF records, vCard, URL' },
-  { key: 'payment', name: 'Payment', icon: ico(MdOutlineCreditCard), state: 'disabled', detail: 'Apex required' },
-  { key: 'magic', name: 'Magic', icon: ico(MdOutlineCopyAll), state: 'supported', detail: 'Gen2 Magic UID' },
-  { key: 'Illumination', name: 'Illumination', icon: ico(MdOutlineLightbulb), state: 'unsupported', detail: 'None' },
+  { key: 'data_sharing', name: 'Data Sharing', icon: ico(MdOutlineMobileScreenShare), state: 'supported', detail: '1 kB' },
+  { key: 'payment', name: 'Payment', icon: ico(MdOutlineCreditCard), state: 'unsupported', detail: 'Not Supported' },
+  { key: 'magic', name: 'Magic', icon: ico(MdOutlineCopyAll), state: 'supported', detail: 'Yes' },
+  { key: 'Illumination', name: 'Illumination', icon: ico(MdOutlineLightbulb), state: 'supported', detail: 'HF: green, blue, white' },
   { key: 'temperature', name: 'Sensors', icon: ico(MdOutlineThermostat), state: 'unsupported', detail: 'None' },
 ];
 
 // Full biomagnet feature legend (4 features — from storefront MagnetUseCaseLegend)
+// m0422a: axial neodymium disc, bioresin coated
 const magnetFeatures: DTFeatureItem[] = [
-  { key: 'sensing', name: 'Sensing', icon: ico(MdOutlineSensors), state: 'supported', detail: 'Electromagnetic field detection' },
-  { key: 'lifting', name: 'Lifting', icon: ico(MdOutlineFitbit), state: 'supported', detail: '2.1 kg lifting force' },
-  { key: 'haptics', name: 'Haptics', icon: ico(MdOutlineVibration), state: 'supported', detail: 'Tactile vibration feedback' },
-  { key: 'polarity', name: 'Polarity Detection', icon: ico(MdOutlineExplore), state: 'unsupported', detail: 'Not Supported' },
+  { key: 'sensing', name: 'Sensing', icon: ico(MdOutlineSensors), state: 'supported', detail: 'RP 22,860 G/g' },
+  { key: 'lifting', name: 'Lifting', icon: ico(MdOutlineFitbit), state: 'supported', detail: '~20 g' },
+  { key: 'haptics', name: 'Haptics', icon: ico(MdOutlineVibration), state: 'supported', detail: 'Push/Pull' },
+  { key: 'polarity', name: 'Polarity Detection', icon: ico(MdOutlineExplore), state: 'supported', detail: 'Monopole' },
 ];
 
 // Full aesthetic feature legend (2 features — from storefront AestheticUseCaseLegend)
 const aestheticFeatures: DTFeatureItem[] = [
-  { key: 'illumination', name: 'Illumination', icon: ico(MdLightbulbOutline), state: 'supported', detail: 'LED: Red, Green, Blue, White' },
-  { key: 'prominence', name: 'Prominence', icon: ico(MdOutlineVisibility), state: 'supported', detail: 'High visibility under skin' },
+  { key: 'illumination', name: 'Illumination', icon: ico(MdLightbulbOutline), state: 'supported', detail: 'HF: red, green, blue, white' },
+  { key: 'prominence', name: 'Prominence', icon: ico(MdOutlineVisibility), state: 'supported', detail: 'Low' },
 ];
 
 export function CardsAdvancedPage() {
@@ -132,11 +133,11 @@ export function CardsAdvancedPage() {
       </Section>
 
       <Section title="Feature Legends" description="Interactive product feature grids from the storefront. Hover icons for details. Toggle labels with the ? button.">
-        <DTFeatureLegend features={chipFeatures} title="NExT Features" variant="normal" columns={5} />
+        <DTFeatureLegend features={chipFeatures} title="NExT v2 Features" variant="normal" columns={5} />
         <div style={{ height: 'var(--space-6)' }} />
-        <DTFeatureLegend features={magnetFeatures} title="Titan Features" variant="emphasis" columns={4} />
+        <DTFeatureLegend features={magnetFeatures} title="m0422a Features" variant="emphasis" columns={4} />
         <div style={{ height: 'var(--space-6)' }} />
-        <DTFeatureLegend features={aestheticFeatures} title="xLED Features" variant="other" columns={2} />
+        <DTFeatureLegend features={aestheticFeatures} title="xLED HF Features" variant="other" columns={2} />
         <div style={{ height: 'var(--space-4)' }} />
         <CodeLabel text="<DTFeatureLegend features={chipFeatures} title='NExT Features' variant='normal' />" />
         <CodeLabel text="<DTFeatureLegend features={magnetFeatures} variant='emphasis' columns={4} />" />
