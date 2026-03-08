@@ -450,14 +450,13 @@
 /* ============================================================================
    Card Color Modes — per-instance color overrides
    Sets --dt-card-color, --dt-card-color-selected, --dt-card-color-rgb,
-   --dt-glow-color, and --accent-mode for use by all card sub-components.
+   and --accent-mode for use by all card sub-components.
    Source: dt-shopify-storefront .mode-* classes
    ============================================================================ */
 [data-brand="dt"] .mode-normal {
   --dt-card-color: var(--mode-normal);
   --dt-card-color-rgb: var(--mode-normal-rgb);
   --dt-card-color-selected: var(--mode-normal-selected);
-  --dt-glow-color: var(--mode-normal);
   --accent-mode: var(--mode-emphasis);
 }
 
@@ -465,7 +464,6 @@
   --dt-card-color: var(--mode-emphasis);
   --dt-card-color-rgb: var(--mode-emphasis-rgb);
   --dt-card-color-selected: var(--mode-emphasis-selected);
-  --dt-glow-color: var(--mode-emphasis);
   --accent-mode: var(--mode-normal);
 }
 
@@ -473,7 +471,6 @@
   --dt-card-color: var(--mode-warning);
   --dt-card-color-rgb: var(--mode-warning-rgb);
   --dt-card-color-selected: var(--mode-warning-selected);
-  --dt-glow-color: var(--mode-warning);
   --accent-mode: var(--mode-emphasis);
 }
 
@@ -481,7 +478,6 @@
   --dt-card-color: var(--mode-success);
   --dt-card-color-rgb: var(--mode-success-rgb);
   --dt-card-color-selected: var(--mode-success-selected);
-  --dt-glow-color: var(--mode-success);
   --accent-mode: var(--mode-emphasis);
 }
 
@@ -489,7 +485,6 @@
   --dt-card-color: var(--mode-other);
   --dt-card-color-rgb: var(--mode-other-rgb);
   --dt-card-color-selected: var(--mode-other-selected);
-  --dt-glow-color: var(--mode-other);
   --accent-mode: var(--mode-normal);
 }
 

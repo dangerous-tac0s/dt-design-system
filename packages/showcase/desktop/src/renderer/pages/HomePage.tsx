@@ -4,7 +4,6 @@ import { Section, CodeLabel } from '../components/Section';
 
 const categories: { hash: string; title: string; desc: string; mode: DTVariant; count: number }[] = [
   { hash: 'bevels', title: 'Bevels', desc: 'Angular clip-path patterns — cards, buttons, badges, media frames, modals, drawers', mode: 'normal', count: 8 },
-  { hash: 'glows', title: 'Glows', desc: 'Neon drop-shadow and text-shadow effects for the DT brand', mode: 'emphasis', count: 6 },
   { hash: 'forms', title: 'Forms', desc: 'Text inputs, checkboxes, switches, radios, progress bars, accordions, steppers', mode: 'success', count: 7 },
   { hash: 'animations', title: 'Animations', desc: 'Entrance animations, stagger containers, transition utilities, scrollbar styling', mode: 'other', count: 5 },
   { hash: 'cards-advanced', title: 'Advanced Cards', desc: 'Card color modes, progress bars, badge overlays, interactive bevel buttons, feature legend', mode: 'warning', count: 6 },

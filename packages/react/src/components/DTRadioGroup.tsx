@@ -1,7 +1,10 @@
 /**
  * DTRadioGroup — Hexagonal radio buttons.
  *
- * CSS reference: forms-dt.css input[type="radio"], .dt-radio-option
+ * Uses a custom span for the hexagon indicator since ::before pseudo-elements
+ * on <input> are unreliable in Chromium/Electron.
+ *
+ * CSS reference: forms-dt.css .dt-radio-hex, .dt-radio-option
  */
 
 import { useId, type CSSProperties } from 'react';
@@ -39,20 +42,27 @@ export function DTRadioGroup({
       className={cx('dt-radio-group', className)}
       style={{ display: 'flex', flexDirection: 'column', gap: '4px', ...style }}
       role="radiogroup">
-      {options.map(option => (
-        <label
-          key={option.value}
-          className={cx('dt-radio-option', value === option.value && 'selected')}>
-          <input
-            type="radio"
-            name={groupName}
-            value={option.value}
-            checked={value === option.value}
-            onChange={() => onChange(option.value)}
-          />
-          <span>{option.label}</span>
-        </label>
-      ))}
+      {options.map(option => {
+        const checked = value === option.value;
+        return (
+          <label
+            key={option.value}
+            className={cx('dt-radio-option', checked && 'selected')}>
+            <input
+              type="radio"
+              name={groupName}
+              value={option.value}
+              checked={checked}
+              onChange={() => onChange(option.value)}
+              style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+            />
+            <span className={cx('dt-radio-hex', checked && 'checked')}>
+              <span className="dt-radio-hex-inner" />
+            </span>
+            <span>{option.label}</span>
+          </label>
+        );
+      })}
     </div>
   );
 }

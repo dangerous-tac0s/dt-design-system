@@ -102,20 +102,26 @@ export function FormsPage() {
         <CodeLabel text=".dt-filter-header | .dt-filter-header.active" />
       </Section>
 
-      <Section title="Buttons" description="Beveled buttons with active state, mode colors, and level indentation.">
+      <Section title="Buttons" description="Beveled buttons with active state and mode colors. Nested levels use inline paddingLeft.">
         <div style={{ maxWidth: 300 }}>
-          {['All Products', 'NFC Implants', 'RFID Tags', 'Accessories', 'Lab Products'].map((name, i) => (
+          {[
+            { name: 'All Products', cls: ' active', pad: 0 },
+            { name: 'NFC Implants', cls: '', pad: 0 },
+            { name: 'RFID Tags', cls: '', pad: 32 },
+            { name: 'Accessories', cls: '', pad: 32 },
+            { name: 'Lab Products', cls: ' mode-warning', pad: 0 },
+          ].map(item => (
             <button
-              key={name}
-              className={`dt-menu-item${i === 0 ? ' active' : ''}${i === 4 ? ' mode-warning' : ''}`}
-              style={(i === 2 || i === 3) ? { '--dt-menu-level': '1' } as React.CSSProperties : undefined}
+              key={item.name}
+              className={`dt-menu-item${item.cls}`}
+              style={item.pad ? { paddingLeft: item.pad } : undefined}
               type="button"
             >
-              {name}
+              {item.name}
             </button>
           ))}
         </div>
-        <CodeLabel text=".dt-menu-item | .active | --dt-menu-level: 1" />
+        <CodeLabel text=".dt-menu-item | .active | paddingLeft for nesting" />
       </Section>
     </>
   );

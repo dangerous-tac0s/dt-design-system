@@ -33,30 +33,31 @@ const modes: DTVariant[] = ['normal', 'emphasis', 'warning', 'success', 'other']
 const ico = (C: any) => createElement(C, { style: { fontSize: '2rem' } });
 
 // Full chip feature legend (9 features — from storefront UseCaseLegend)
+// detail text simulates what the storefront shows for an NExT implant
 const chipFeatures: DTFeatureItem[] = [
-  { key: 'smartphone', name: 'Smartphone', icon: ico(MdOutlinePhonelinkRing), state: 'supported' },
-  { key: 'access_control', name: 'Access Control', icon: ico(MdOutlineVpnKey), state: 'supported' },
-  { key: 'digital_security', name: 'Digital Security', icon: ico(FaUserShield), state: 'supported' },
-  { key: 'cryptography', name: 'Cryptography', icon: ico(LuBinary), state: 'unsupported' },
-  { key: 'data_sharing', name: 'Data Sharing', icon: ico(MdOutlineMobileScreenShare), state: 'supported' },
-  { key: 'payment', name: 'Payment', icon: ico(MdOutlineCreditCard), state: 'disabled' },
-  { key: 'magic', name: 'UID Magic', icon: ico(MdOutlineCopyAll), state: 'supported' },
-  { key: 'illumination', name: 'Illumination', icon: ico(MdOutlineLightbulb), state: 'unsupported' },
-  { key: 'temperature', name: 'Temperature', icon: ico(MdOutlineThermostat), state: 'unsupported' },
+  { key: 'smartphone', name: 'Smartphone', icon: ico(MdOutlinePhonelinkRing), state: 'supported', detail: 'Full NFC smartphone support' },
+  { key: 'access_control', name: 'Access Control', icon: ico(MdOutlineVpnKey), state: 'supported', detail: 'DESFire, MIFARE Classic, iCLASS' },
+  { key: 'digital_security', name: 'Digital Security', icon: ico(FaUserShield), state: 'supported', detail: 'FIDO2 / WebAuthn' },
+  { key: 'cryptography', name: 'Cryptography', icon: ico(LuBinary), state: 'unsupported', detail: 'Not Supported' },
+  { key: 'data_sharing', name: 'Data Sharing', icon: ico(MdOutlineMobileScreenShare), state: 'supported', detail: 'NDEF records, vCard, URL' },
+  { key: 'payment', name: 'Payment', icon: ico(MdOutlineCreditCard), state: 'disabled', detail: 'Apex required' },
+  { key: 'magic', name: 'Magic', icon: ico(MdOutlineCopyAll), state: 'supported', detail: 'Gen2 Magic UID' },
+  { key: 'Illumination', name: 'Illumination', icon: ico(MdOutlineLightbulb), state: 'unsupported', detail: 'None' },
+  { key: 'temperature', name: 'Sensors', icon: ico(MdOutlineThermostat), state: 'unsupported', detail: 'None' },
 ];
 
 // Full biomagnet feature legend (4 features — from storefront MagnetUseCaseLegend)
 const magnetFeatures: DTFeatureItem[] = [
-  { key: 'sensing', name: 'Sensing', icon: ico(MdOutlineSensors), state: 'supported' },
-  { key: 'lifting', name: 'Lifting', icon: ico(MdOutlineFitbit), state: 'supported' },
-  { key: 'haptics', name: 'Haptics', icon: ico(MdOutlineVibration), state: 'supported' },
-  { key: 'polarity', name: 'Polarity Detection', icon: ico(MdOutlineExplore), state: 'unsupported' },
+  { key: 'sensing', name: 'Sensing', icon: ico(MdOutlineSensors), state: 'supported', detail: 'Electromagnetic field detection' },
+  { key: 'lifting', name: 'Lifting', icon: ico(MdOutlineFitbit), state: 'supported', detail: '2.1 kg lifting force' },
+  { key: 'haptics', name: 'Haptics', icon: ico(MdOutlineVibration), state: 'supported', detail: 'Tactile vibration feedback' },
+  { key: 'polarity', name: 'Polarity Detection', icon: ico(MdOutlineExplore), state: 'unsupported', detail: 'Not Supported' },
 ];
 
 // Full aesthetic feature legend (2 features — from storefront AestheticUseCaseLegend)
 const aestheticFeatures: DTFeatureItem[] = [
-  { key: 'illumination', name: 'Illumination', icon: ico(MdLightbulbOutline), state: 'supported' },
-  { key: 'prominence', name: 'Prominence', icon: ico(MdOutlineVisibility), state: 'supported' },
+  { key: 'illumination', name: 'Illumination', icon: ico(MdLightbulbOutline), state: 'supported', detail: 'LED: Red, Green, Blue, White' },
+  { key: 'prominence', name: 'Prominence', icon: ico(MdOutlineVisibility), state: 'supported', detail: 'High visibility under skin' },
 ];
 
 export function CardsAdvancedPage() {
@@ -108,30 +109,36 @@ export function CardsAdvancedPage() {
         <CodeLabel text=".dt-badge-parent > .dt-card-badge — badge positioned on card image container" />
       </Section>
 
-<Section title="Buttons" description="Beveled buttons with active/selected states, mode colors, and level indentation.">
+<Section title="Buttons" description="Beveled buttons with active/selected states and mode colors. Nested levels use inline paddingLeft.">
         <div style={{ maxWidth: 300 }}>
-          {['All Products', 'NFC Implants', 'RFID Tags', 'Accessories', 'Lab Products'].map((item, i) => (
+          {[
+            { name: 'All Products', cls: ' active', pad: 0 },
+            { name: 'NFC Implants', cls: '', pad: 0 },
+            { name: 'RFID Tags', cls: '', pad: 32 },
+            { name: 'Accessories', cls: '', pad: 32 },
+            { name: 'Lab Products', cls: ' mode-warning', pad: 0 },
+          ].map(item => (
             <button
-              key={item}
-              className={`dt-menu-item${i === 0 ? ' active' : ''}${i === 4 ? ' mode-warning' : ''}`}
-              style={i > 1 && i < 4 ? { '--dt-menu-level': '1' } as CSSProperties : undefined}
+              key={item.name}
+              className={`dt-menu-item${item.cls}`}
+              style={item.pad ? { paddingLeft: item.pad } : undefined}
               type="button"
             >
-              {item}
+              {item.name}
             </button>
           ))}
         </div>
-        <CodeLabel text=".dt-menu-item | .dt-menu-item.active | --dt-menu-level: 1" />
+        <CodeLabel text=".dt-menu-item | .active | paddingLeft for nesting" />
       </Section>
 
-      <Section title="Feature Legends" description="Product feature grids from the storefront. Icons indicate feature capabilities; color indicates state.">
-        <DTFeatureLegend features={chipFeatures} title="NFC CHIP FEATURES" variant="normal" columns={5} />
+      <Section title="Feature Legends" description="Interactive product feature grids from the storefront. Hover icons for details. Toggle labels with the ? button.">
+        <DTFeatureLegend features={chipFeatures} title="NExT Features" variant="normal" columns={5} />
         <div style={{ height: 'var(--space-6)' }} />
-        <DTFeatureLegend features={magnetFeatures} title="BIOMAGNET FEATURES" variant="emphasis" columns={4} />
+        <DTFeatureLegend features={magnetFeatures} title="Titan Features" variant="emphasis" columns={4} />
         <div style={{ height: 'var(--space-6)' }} />
-        <DTFeatureLegend features={aestheticFeatures} title="AESTHETIC FEATURES" variant="other" columns={2} />
+        <DTFeatureLegend features={aestheticFeatures} title="xLED Features" variant="other" columns={2} />
         <div style={{ height: 'var(--space-4)' }} />
-        <CodeLabel text="<DTFeatureLegend features={chipFeatures} title='NFC CHIP FEATURES' variant='normal' />" />
+        <CodeLabel text="<DTFeatureLegend features={chipFeatures} title='NExT Features' variant='normal' />" />
         <CodeLabel text="<DTFeatureLegend features={magnetFeatures} variant='emphasis' columns={4} />" />
         <CodeLabel text="<DTFeatureLegend features={aestheticFeatures} variant='other' columns={2} />" />
         <div style={{ marginTop: 'var(--space-3)', display: 'flex', gap: 'var(--space-4)', fontSize: '0.75rem' }}>

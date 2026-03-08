@@ -28,6 +28,7 @@
   "main": "dist/index.css",
   "exports": {
     ".": "./dist/index.css",
+    "./dist/index.css": "./dist/index.css",
     "./tokens/*": "./dist/tokens/*",
     "./components/*": "./dist/components/*",
     "./fonts/*": "./dist/fonts/*",

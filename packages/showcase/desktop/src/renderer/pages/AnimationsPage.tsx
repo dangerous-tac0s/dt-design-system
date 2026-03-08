@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DTCard, DTStaggerContainer } from '@dangerousthings/react';
 import { Section, Row, CodeLabel } from '../components/Section';
 
@@ -21,6 +21,69 @@ function AnimBox({ className, label }: { className: string; label: string }) {
       >
         {label}
       </div>
+    </div>
+  );
+}
+
+const VARIANTS = ['normal', 'emphasis', 'warning', 'success', 'other'] as const;
+
+function ProgressBarDemo() {
+  const [progress, setProgress] = useState<number[]>([0, 0, 0, 0, 0]);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [running, setRunning] = useState(false);
+
+  const animate = () => {
+    // Reset then animate up
+    setProgress([0, 0, 0, 0, 0]);
+    setRunning(true);
+    let tick = 0;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      tick++;
+      setProgress(prev =>
+        prev.map((_, i) => Math.min(100, Math.round(tick * (1.5 + i * 0.4))))
+      );
+      if (tick > 80) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        setRunning(false);
+      }
+    }, 40);
+  };
+
+  useEffect(() => {
+    // Auto-run on mount
+    const t = setTimeout(animate, 500);
+    return () => {
+      clearTimeout(t);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
+        {VARIANTS.map((v, i) => (
+          <DTCard
+            key={v}
+            variant={v}
+            title={`${v.toUpperCase()} ${progress[i]}%`}
+            progress={progress[i]}
+            style={{ width: 160, transition: 'all 0.1s ease-out' }}
+          >
+            <div className="card-body" style={{ fontSize: '0.75rem', minHeight: 60, display: 'flex', alignItems: 'center' }}>
+              Progress fills the left edge from bottom to top
+            </div>
+          </DTCard>
+        ))}
+      </div>
+      <button
+        className="btn-secondary"
+        onClick={animate}
+        disabled={running}
+        type="button"
+      >
+        {running ? 'ANIMATING...' : 'REPLAY PROGRESS'}
+      </button>
     </div>
   );
 }
@@ -124,6 +187,11 @@ export function AnimationsPage() {
           </div>
         </div>
         <CodeLabel text=".dt-transition-accordion | .dt-transition-chevron | .dt-transition-progress" />
+      </Section>
+
+      <Section title="Card Progress Bar" description="Cards have a vertical progress bar on the left edge. Animate it by transitioning --dt-card-progress from 0 to 100.">
+        <ProgressBarDemo />
+        <CodeLabel text="<DTCard progress={value} /> — CSS ::after gradient driven by --dt-card-progress" />
       </Section>
 
       <Section title="Scrollbar Styling" description="Thin neon scrollbar scoped under [data-brand='dt'].">
