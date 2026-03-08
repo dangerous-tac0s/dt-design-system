@@ -8,6 +8,11 @@
     "name": "Dangerous Things",
     "email": "info@dangerousthings.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangerous-tac0s/dt-design-system.git",
+    "directory": "packages/showcase/desktop"
+  },
   "homepage": "https://github.com/dangerous-tac0s/dt-design-system",
   "main": "dist/main/main.js",
   "scripts": {
