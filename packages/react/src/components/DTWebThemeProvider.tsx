@@ -1,11 +1,12 @@
 /**
  * DTWebThemeProvider
  *
- * Sets data-brand and data-theme attributes on a wrapper div.
+ * Sets data-brand and data-theme attributes on a wrapper div (default)
+ * or on document.documentElement (documentLevel mode).
  * Provides React context for child components to read the active brand/theme.
  */
 
-import { createContext, type ReactNode } from 'react';
+import { createContext, useEffect, type ReactNode } from 'react';
 import type { ThemeBrand, ThemeMode } from '@dangerousthings/tokens';
 import { cx } from '../utils/cx';
 
@@ -21,7 +22,9 @@ interface DTWebThemeProviderProps {
   brand?: ThemeBrand;
   /** Theme mode @default 'dark' */
   theme?: ThemeMode;
-  /** Additional className for the wrapper div */
+  /** When true, sets data-brand/data-theme on document.documentElement instead of a wrapper div */
+  documentLevel?: boolean;
+  /** Additional className for the wrapper div (ignored when documentLevel is true) */
   className?: string;
   children: ReactNode;
 }
@@ -29,14 +32,26 @@ interface DTWebThemeProviderProps {
 export function DTWebThemeProvider({
   brand = 'dt',
   theme = 'dark',
+  documentLevel,
   className,
   children,
 }: DTWebThemeProviderProps) {
+  useEffect(() => {
+    if (documentLevel) {
+      document.documentElement.dataset.brand = brand;
+      document.documentElement.dataset.theme = theme;
+    }
+  }, [documentLevel, brand, theme]);
+
   return (
     <DTWebThemeContext.Provider value={{ brand, theme }}>
-      <div data-brand={brand} data-theme={theme} className={cx('dt-theme-root', className)}>
-        {children}
-      </div>
+      {documentLevel ? (
+        children
+      ) : (
+        <div data-brand={brand} data-theme={theme} className={cx('dt-theme-root', className)}>
+          {children}
+        </div>
+      )}
     </DTWebThemeContext.Provider>
   );
 }
