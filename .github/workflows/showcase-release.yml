@@ -39,7 +39,7 @@ jobs:
         run: npm ci
 
       - name: Build design system packages
-        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web' --filter='@dangerousthings/tailwind-preset'
 
       - name: Build desktop showcase
         working-directory: packages/showcase/desktop
@@ -76,7 +76,7 @@ jobs:
         run: npm ci
 
       - name: Build design system packages
-        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web' --filter='@dangerousthings/tailwind-preset'
 
       - name: Build desktop showcase
         working-directory: packages/showcase/desktop
@@ -112,7 +112,7 @@ jobs:
         run: npm ci
 
       - name: Build design system packages
-        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web' --filter='@dangerousthings/tailwind-preset'
 
       - name: Build desktop showcase
         working-directory: packages/showcase/desktop
