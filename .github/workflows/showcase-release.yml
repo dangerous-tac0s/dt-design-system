@@ -60,6 +60,81 @@ jobs:
             packages/showcase/desktop/release/*.deb
           retention-days: 30
 
+  # ─── Desktop Windows Build ──────────────────────────────────────
+  desktop-windows:
+    if: inputs.build_desktop
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design system packages
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+
+      - name: Build desktop showcase
+        working-directory: packages/showcase/desktop
+        run: npm run build
+
+      - name: Package desktop (Windows)
+        working-directory: packages/showcase/desktop
+        run: npx electron-builder --win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-windows
+          path: |
+            packages/showcase/desktop/release/*.exe
+          retention-days: 30
+
+  # ─── Desktop macOS Build ────────────────────────────────────────
+  desktop-macos:
+    if: inputs.build_desktop
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design system packages
+        run: npx turbo run build --filter='@dangerousthings/tokens' --filter='@dangerousthings/web'
+
+      - name: Build desktop showcase
+        working-directory: packages/showcase/desktop
+        run: npm run build
+
+      - name: Package desktop (macOS)
+        working-directory: packages/showcase/desktop
+        run: npx electron-builder --mac --x64 --arm64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No CSC_LINK / CSC_KEY_PASSWORD = unsigned build
+          # Users will need to right-click > Open to bypass Gatekeeper
+
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-macos
+          path: |
+            packages/showcase/desktop/release/*.dmg
+            packages/showcase/desktop/release/*.zip
+          retention-days: 30
+
   # ─── Mobile Android Build ──────────────────────────────────────
   mobile-android:
     if: inputs.build_mobile
@@ -112,8 +187,8 @@ jobs:
 
   # ─── Create GitHub Release ─────────────────────────────────────
   create-release:
-    needs: [desktop-linux, mobile-android]
-    if: always() && (needs.desktop-linux.result == 'success' || needs.mobile-android.result == 'success')
+    needs: [desktop-linux, desktop-windows, desktop-macos, mobile-android]
+    if: always() && (needs.desktop-linux.result == 'success' || needs.desktop-windows.result == 'success' || needs.desktop-macos.result == 'success' || needs.mobile-android.result == 'success')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -131,7 +206,7 @@ jobs:
         run: |
           mkdir -p final-artifacts
 
-          # Desktop artifacts — replace 0.0.0 with release version
+          # Desktop Linux artifacts
           if [ -d release-artifacts/desktop-linux ]; then
             for f in release-artifacts/desktop-linux/*; do
               filename=$(basename "$f")
@@ -140,7 +215,25 @@ jobs:
             done
           fi
 
-          # Mobile APK — give it a descriptive name
+          # Desktop Windows artifacts
+          if [ -d release-artifacts/desktop-windows ]; then
+            for f in release-artifacts/desktop-windows/*; do
+              filename=$(basename "$f")
+              newname=$(echo "$filename" | sed "s/0\.0\.0/${RELEASE_VERSION}/g")
+              cp "$f" "final-artifacts/$newname"
+            done
+          fi
+
+          # Desktop macOS artifacts
+          if [ -d release-artifacts/desktop-macos ]; then
+            for f in release-artifacts/desktop-macos/*; do
+              filename=$(basename "$f")
+              newname=$(echo "$filename" | sed "s/0\.0\.0/${RELEASE_VERSION}/g")
+              cp "$f" "final-artifacts/$newname"
+            done
+          fi
+
+          # Mobile APK
           if [ -f release-artifacts/mobile-android/app-release.apk ]; then
             cp release-artifacts/mobile-android/app-release.apk \
                "final-artifacts/dt-showcase-mobile-${RELEASE_VERSION}.apk"
@@ -160,6 +253,9 @@ jobs:
             ### Desktop (Electron)
             - **AppImage** (Linux, portable) — download and `chmod +x` to run
             - **deb** (Debian/Ubuntu) — install with `sudo dpkg -i <file>.deb`
+            - **exe** (Windows) — NSIS installer + portable exe
+            - **dmg** (macOS) — unsigned, right-click > Open to bypass Gatekeeper
+            - **zip** (macOS) — portable archive
 
             ### Mobile (Android)
             - **APK** — sideload on any Android device (Settings > Install unknown apps)
