@@ -1,6 +1,6 @@
 # @dangerousthings/web
 
-Web CSS themes and components for the Dangerous Things design system — bevels, glows, and form styles powered by CSS custom properties.
+Web CSS themes and components for the Dangerous Things design system — bevels, animations, and form styles powered by CSS custom properties.
 
 ## Install
 
@@ -24,7 +24,6 @@ Or import individual pieces:
 
 /* Individual components */
 @import "@dangerousthings/web/components/bevels.css";
-@import "@dangerousthings/web/components/glows.css";
 @import "@dangerousthings/web/components/forms-dt.css";
 ```
 
@@ -53,7 +52,6 @@ import { themes, brands } from "@dangerousthings/web/theme-registry";
 | File | Description |
 |------|-------------|
 | `bevels.css` | Angular clip-path bevels for cards, buttons, labels, modals, drawers. Card color modes, selected states, progress bars, badge overlays, interactive bevel buttons |
-| `glows.css` | Neon drop-shadow and text-shadow effects — mode-aware via `--dt-glow-color` |
 | `forms-dt.css` | Text inputs, checkboxes, switches, radio buttons, progress bars, accordions, steppers, menu items, filter headers, filter overlays |
 | `animations.css` | Entrance animations (scale-in, fade-in, slide-up), interactive animations (pulse, ping, spin), stagger container, transition utilities |
 | `scrollbar.css` | Thin neon scrollbar styling scoped under `[data-brand="dt"]` |
@@ -66,8 +64,6 @@ import { themes, brands } from "@dangerousthings/web/theme-registry";
 **Card Modes** — `.mode-normal`, `.mode-emphasis`, `.mode-warning`, `.mode-success`, `.mode-other`, `.card.selected`, `.dt-card-progress`, `.dt-badge-overlay`
 
 **Interactive Buttons** — `.dt-btn` (outlined rectangle, bevels on hover/select)
-
-**Glows** — `.dt-glow`, `.dt-glow-strong`, `.dt-glow-inset`, `.dt-text-glow`
 
 **Animations** — `.dt-animate-scale-in`, `.dt-animate-fade-in`, `.dt-animate-slide-up`, `.dt-animate-pulse`, `.dt-animate-ping`, `.dt-animate-spin`, `.dt-stagger-container`
 

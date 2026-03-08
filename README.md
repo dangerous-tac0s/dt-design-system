@@ -7,8 +7,10 @@ Shared design tokens, web CSS, and React Native components for the Dangerous Thi
 | Package                                                  | Description                                                                                                     |
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | [`@dangerousthings/tokens`](packages/tokens)             | Canonical design tokens (colors, typography, shape) defined in TypeScript and exported as CSS custom properties |
-| [`@dangerousthings/web`](packages/web)                   | Web CSS themes — bevels, glows, animations, forms, and filter styles                                            |
+| [`@dangerousthings/web`](packages/web)                   | Web CSS themes — bevels, animations, forms, and component styles                                                |
+| [`@dangerousthings/react`](packages/react)               | React web components wrapping @dangerousthings/web CSS                                                          |
 | [`@dangerousthings/react-native`](packages/react-native) | React Native components built on React Native Paper                                                             |
+| [`@dangerousthings/tailwind-preset`](packages/tailwind-preset) | Tailwind CSS v3 preset mapping DT tokens to Tailwind theme                                                |
 | [`@dangerousthings/hex-background`](packages/hex-background) | 3D hexagon grid background using Three.js + React Three Fiber (web and React Native)                       |
 
 ## Brand Themes
@@ -50,6 +52,25 @@ npm run build:react-native
 @import "@dangerousthings/web/components/bevels.css";
 ```
 
+### React (Web)
+
+```tsx
+import "@dangerousthings/web";
+import { DTWebThemeProvider, DTButton, DTCard } from "@dangerousthings/react";
+
+export default function App() {
+  return (
+    <DTWebThemeProvider brand="dt" theme="dark">
+      <DTCard title="PRODUCT" variant="emphasis" progress={60}>
+        <DTButton variant="normal" onClick={handleClick}>
+          Scan NFC
+        </DTButton>
+      </DTCard>
+    </DTWebThemeProvider>
+  );
+}
+```
+
 ### React Native
 
 ```tsx
@@ -76,6 +97,17 @@ import { dt } from "@dangerousthings/tokens/brands/dt";
 console.log(dt.color.brand.primary); // "#00ffff"
 ```
 
+### Tailwind
+
+```js
+// tailwind.config.js
+import dtPreset from "@dangerousthings/tailwind-preset";
+export default {
+  presets: [dtPreset],
+  content: ["./src/**/*.{tsx,ts,html}"],
+};
+```
+
 ## Development
 
 ### Scripts
@@ -85,7 +117,6 @@ console.log(dt.color.brand.primary); // "#00ffff"
 | `npm run build`     | Build all packages (Turbo)     |
 | `npm run clean`     | Remove all `dist/` directories |
 | `npm run typecheck` | Run TypeScript type checking   |
-| `npm run lint`      | Lint all packages              |
 
 ### Release
 
@@ -97,6 +128,12 @@ npm run version-packages   # bump versions from pending changesets
 npm run release            # build + publish to npm
 ```
 
+## React Web Components
+
+The `@dangerousthings/react` package provides React web components that wrap the CSS from `@dangerousthings/web`. The component API mirrors the React Native package for consistency:
+
+DTAccordion, DTBadgeOverlay, DTButton, DTCard, DTCheckbox, DTChip, DTDrawer, DTFeatureLegend, DTGallery, DTHexagon, DTLabel, DTMediaFrame, DTMenu, DTMobileFilterOverlay, DTModal, DTProgressBar, DTQuantityStepper, DTRadioGroup, DTSearchInput, DTStaggerContainer, DTSwitch, DTTextInput
+
 ## React Native Components
 
 DTAccordion, DTBadgeOverlay, DTButton, DTCard, DTCheckbox, DTChip, DTDrawer, DTFeatureLegend, DTGallery, DTHexagon, DTLabel, DTMediaFrame, DTMenu, DTMobileFilterOverlay, DTModal, DTProgressBar, DTQuantityStepper, DTRadioGroup, DTSearchInput, DTStaggerContainer, DTSwitch, DTTextInput
@@ -106,7 +143,6 @@ DTAccordion, DTBadgeOverlay, DTButton, DTCard, DTCheckbox, DTChip, DTDrawer, DTF
 ## Web CSS Modules
 
 - `bevels.css` — angular clip-path bevels, card modes, selected states, progress bars, badge overlays, interactive bevel buttons
-- `glows.css` — neon drop-shadow and text-shadow effects (mode-aware)
 - `forms-dt.css` — text inputs, checkboxes, radio buttons, switches, menu items, filter headers
 - `animations.css` — entrance animations, stagger containers, transition utilities
 - `scrollbar.css` — thin neon scrollbar styling
@@ -119,7 +155,9 @@ dt-design-system/
 ├── packages/
 │   ├── tokens/          # Design token definitions + CSS generation
 │   ├── web/             # CSS themes and components
+│   ├── react/           # React web components
 │   ├── react-native/    # React Native Paper components
+│   ├── tailwind-preset/ # Tailwind CSS v3 preset
 │   ├── hex-background/  # 3D hexagon grid (Three.js)
 │   └── showcase/        # Demo apps (desktop + mobile)
 ├── turbo.json           # Turbo pipeline config

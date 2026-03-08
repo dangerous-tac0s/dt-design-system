@@ -77,7 +77,7 @@ function Background() {
 
 ## Monorepo
 
-Part of the [DT Design System](https://github.com/nicholasgriffintn/dt-design-system) monorepo.
+Part of the [DT Design System](https://github.com/dangerous-tac0s/dt-design-system) monorepo.
 
 ## License
 
