@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
 import { themes } from '@dangerousthings/tokens';
 import type { ThemeBrand, ThemeMode } from '@dangerousthings/tokens';
+import { HexGridBackground } from '@dangerousthings/hex-background';
+import type { HexGridBackgroundProps } from '@dangerousthings/hex-background';
 import { HomePage } from './pages/HomePage';
 import { BevelsPage } from './pages/BevelsPage';
-import { GlowsPage } from './pages/GlowsPage';
 import { FormsPage } from './pages/FormsPage';
 import { AnimationsPage } from './pages/AnimationsPage';
 import { CardsAdvancedPage } from './pages/CardsAdvancedPage';
 import { TokensPage } from './pages/TokensPage';
+import { HexBackgroundPage } from './pages/HexBackgroundPage';
 
 const navPages = [
   { hash: '', label: 'Home' },
   { hash: 'bevels', label: 'Bevels' },
-  { hash: 'glows', label: 'Glows' },
   { hash: 'forms', label: 'Forms' },
   { hash: 'animations', label: 'Animations' },
   { hash: 'cards-advanced', label: 'Advanced Cards' },
+  { hash: 'hex-background', label: 'Hex Background' },
   { hash: 'tokens', label: 'Tokens' },
 ];
 
@@ -23,6 +25,7 @@ export function App() {
   const [brand, setBrand] = useState<ThemeBrand>('dt');
   const [theme, setTheme] = useState<ThemeMode>('dark');
   const [currentHash, setCurrentHash] = useState('');
+  const [hexProps, setHexProps] = useState<HexGridBackgroundProps>({});
 
   // Sync brand/theme to <html> so CSS custom properties cascade everywhere
   useEffect(() => {
@@ -43,10 +46,10 @@ export function App() {
   function renderPage() {
     switch (currentHash) {
       case 'bevels': return <BevelsPage />;
-      case 'glows': return <GlowsPage />;
       case 'forms': return <FormsPage />;
       case 'animations': return <AnimationsPage />;
       case 'cards-advanced': return <CardsAdvancedPage />;
+      case 'hex-background': return <HexBackgroundPage hexProps={hexProps} onHexPropsChange={setHexProps} />;
       case 'tokens': return <TokensPage brand={brand} />;
       default: return <HomePage />;
     }
@@ -92,6 +95,7 @@ export function App() {
           ))}
         </div>
       </nav>
+      <HexGridBackground {...hexProps} />
       <main id="content">
         {renderPage()}
       </main>
