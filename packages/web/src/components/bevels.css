@@ -46,11 +46,14 @@
   z-index: -1;
   /* Inner clip-path: left edge at bevel-sm to create progress bar zone.
      The progress bar occupies x=0 to x=bevel-sm with its own borders.
-     Inner surface starts at bevel-sm, so the left frame is wider than 3px. */
+     Inner surface starts at bevel-sm, so the left frame is wider than 3px.
+     Diagonal vertices use bevel-md + 3px (not bevel-md alone) so the
+     perpendicular border width on the 45-degree diagonal visually matches
+     the 3px straight edges despite sub-pixel antialiasing. */
   clip-path: polygon(var(--bevel-sm) 3px,
       calc(100% - 3px) 3px,
-      calc(100% - 3px) calc(100% - var(--bevel-md)),
-      calc(100% - var(--bevel-md)) calc(100% - 3px),
+      calc(100% - 3px) calc(100% - var(--bevel-md) - 3px),
+      calc(100% - var(--bevel-md) - 3px) calc(100% - 3px),
       var(--bevel-sm) calc(100% - 3px));
 }
 
@@ -155,8 +158,8 @@
   clip-path: polygon(
       0% 0%,
       100% 0%,
-      100% calc(100% - var(--bevel-md) + 3px),
-      calc(100% - var(--bevel-md) + 3px) 100%,
+      100% calc(100% - var(--bevel-md)),
+      calc(100% - var(--bevel-md)) 100%,
       0% 100%);
 }
 
