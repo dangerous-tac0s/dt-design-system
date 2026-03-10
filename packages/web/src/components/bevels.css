@@ -19,6 +19,8 @@
 [data-brand="dt"] .card {
   --dt-card-progress: 0;
   --_card-pad: var(--space-6);
+  display: flex;
+  flex-direction: column;
   position: relative;
   isolation: isolate;
   background: var(--dt-card-color, var(--color-primary));
@@ -54,7 +56,8 @@
 
 /* Card Progress Bar — structural fill area on the left edge
    Sits between the 3px frame borders, follows bottom-left bevel diagonal.
-   Gradient fills from bottom (accent) to top (surface) based on --dt-card-progress.
+   Gradient fills top-to-bottom based on --dt-card-progress so the card
+   visually "opens" as the bar descends.
    Filled portion: fully opaque accent color. Unfilled portion: semi-transparent surface.
    At 0%: all semi-transparent surface. At 100%: all opaque accent.
    Override --dt-progress-empty-opacity to control unfilled portion transparency. */
@@ -70,7 +73,7 @@
       calc(var(--bevel-sm) - 3px) calc(100% - 6px),
       3px calc(100% - var(--bevel-sm)));
 
-  background: linear-gradient(to top,
+  background: linear-gradient(to bottom,
       rgba(var(--dt-card-color-rgb, var(--color-primary-rgb)), 1) calc(var(--dt-card-progress, 0) * 1%),
       rgba(var(--color-surface-rgb),
         var(--dt-progress-empty-opacity, 0.6)) calc(var(--dt-card-progress, 0) * 1%));
@@ -83,6 +86,26 @@
 [data-brand="dt"] .card > *:not(.dt-card-badge) {
   position: relative;
   z-index: 2;
+}
+
+/* Card Grow — stretch to fill available space in flex/grid containers.
+   By default the body (content area) grows. Use .dt-card-grow-title to
+   grow the header instead. */
+.dt-card-grow {
+  flex: 1 1 0%;
+  height: 100%;
+}
+
+.dt-card-grow > .card-title {
+  flex: 0 0 auto;
+}
+
+.dt-card-grow:not(.dt-card-grow-title) > :last-child {
+  flex: 1 1 auto;
+}
+
+.dt-card-grow.dt-card-grow-title > .card-title {
+  flex: 1 1 auto;
 }
 
 /* Card Header — storefront .card-header pattern
@@ -102,7 +125,6 @@
   background: var(--dt-card-color, var(--color-primary));
   color: var(--color-bg);
   font-weight: 900;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 1rem;
   position: relative;
@@ -125,11 +147,10 @@
   background: var(--dt-card-color, var(--color-primary));
 }
 
-/* Bottom-right bevel on card body content (img/video). Clip-path matches
+/* Bottom-right bevel on card body content. Clip-path matches
    the card's inner surface bevel so the 3px structural border is visible
-   at the diagonal corner. Badge is not clipped (it's a sibling, not img). */
-[data-brand="dt"] .card-body-flush > img,
-[data-brand="dt"] .card-body-flush > video {
+   at the diagonal corner. Badge overlays are excluded. */
+[data-brand="dt"] .card-body-flush > *:not(.dt-card-badge) {
   display: block;
   clip-path: polygon(
       0% 0%,
@@ -272,6 +293,37 @@
   color: var(--color-bg);
 }
 
+/* Mode-variant badges — bridge .mode-* vars to badge color vars */
+[data-brand="dt"] .badge.mode-normal {
+  --badge-border-color: var(--mode-normal);
+  --badge-fill: var(--mode-normal);
+  color: var(--color-bg);
+}
+
+[data-brand="dt"] .badge.mode-emphasis {
+  --badge-border-color: var(--mode-emphasis);
+  --badge-fill: var(--mode-emphasis);
+  color: var(--color-bg);
+}
+
+[data-brand="dt"] .badge.mode-warning {
+  --badge-border-color: var(--mode-warning);
+  --badge-fill: var(--mode-warning);
+  color: var(--color-bg);
+}
+
+[data-brand="dt"] .badge.mode-success {
+  --badge-border-color: var(--mode-success);
+  --badge-fill: var(--mode-success);
+  color: var(--color-bg);
+}
+
+[data-brand="dt"] .badge.mode-other {
+  --badge-border-color: var(--mode-other);
+  --badge-fill: var(--mode-other);
+  color: var(--color-bg);
+}
+
 /* ============================================================================
    Opt-in Bevel Utility Classes
    Use these for custom elements that need bevel shapes
@@ -352,7 +404,6 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   pointer-events: none;
 }
 
@@ -369,7 +420,6 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   background: var(--color-surface);
 }
 
@@ -508,7 +558,6 @@
   padding: 2px calc(8px + 0.2rem) 2px 8px;
   font-size: 0.75rem;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.1em;
   background-color: var(--dt-card-color, var(--color-primary));
   color: var(--color-bg);
@@ -542,7 +591,6 @@
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
   cursor: pointer;
   transition: background-color var(--transition-fast),
     color var(--transition-fast),
