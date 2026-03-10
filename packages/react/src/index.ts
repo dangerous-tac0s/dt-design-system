@@ -44,7 +44,6 @@ export { DTSearchInput } from './components/DTSearchInput';
 export { DTProgressBar } from './components/DTProgressBar';
 export { DTAccordion } from './components/DTAccordion';
 export type { DTAccordionSection } from './components/DTAccordion';
-export { DTStaggerContainer } from './components/DTStaggerContainer';
 export { DTBadgeOverlay } from './components/DTBadgeOverlay';
 
 // Components — filter & feature
@@ -58,3 +57,6 @@ export { DTMobileFilterOverlay } from './components/DTMobileFilterOverlay';
 export { DTGallery } from './components/DTGallery';
 export type { DTGalleryItem } from './components/DTGallery';
 export { DTHexagon } from './components/DTHexagon';
+
+// Components — animation
+export { DTStaggerContainer } from './components/DTStaggerContainer';

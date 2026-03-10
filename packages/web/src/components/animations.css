@@ -82,47 +82,14 @@
 
 /* ============================================================================
    Stagger Container
-   Source: storefront framer-motion staggered card entrance
-   Usage: <div class="dt-stagger-container">...</div>
-   Customize: --dt-stagger-duration, --dt-stagger-interval
    ============================================================================ */
 
 .dt-stagger-container {
   --dt-stagger-duration: 0.33s;
-  --dt-stagger-interval: 75ms;
 }
 
 .dt-stagger-container > * {
   animation: dt-scale-in var(--dt-stagger-duration) ease-in-out both;
-}
-
-.dt-stagger-container > :nth-child(1)  { animation-delay: calc(0  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(2)  { animation-delay: calc(1  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(3)  { animation-delay: calc(2  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(4)  { animation-delay: calc(3  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(5)  { animation-delay: calc(4  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(6)  { animation-delay: calc(5  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(7)  { animation-delay: calc(6  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(8)  { animation-delay: calc(7  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(9)  { animation-delay: calc(8  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(10) { animation-delay: calc(9  * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(11) { animation-delay: calc(10 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(12) { animation-delay: calc(11 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(13) { animation-delay: calc(12 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(14) { animation-delay: calc(13 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(15) { animation-delay: calc(14 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(16) { animation-delay: calc(15 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(17) { animation-delay: calc(16 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(18) { animation-delay: calc(17 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(19) { animation-delay: calc(18 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(20) { animation-delay: calc(19 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(21) { animation-delay: calc(20 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(22) { animation-delay: calc(21 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(23) { animation-delay: calc(22 * var(--dt-stagger-interval)); }
-.dt-stagger-container > :nth-child(24) { animation-delay: calc(23 * var(--dt-stagger-interval)); }
-
-.dt-stagger-container > :nth-child(n+25) {
-  animation-delay: calc(24 * var(--dt-stagger-interval));
 }
 
 /* ============================================================================
