@@ -381,7 +381,9 @@
 }
 
 .dt-bevel-media > img,
-.dt-bevel-media > video {
+.dt-bevel-media > video,
+.dt-bevel-media > model-viewer,
+.dt-bevel-media > iframe {
   display: block;
   clip-path: polygon(
       calc(var(--bevel-md) + 1px) 3px,
