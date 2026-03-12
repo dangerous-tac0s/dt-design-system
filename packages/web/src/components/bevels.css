@@ -85,8 +85,8 @@
 }
 
 /* Card children — ensure body content renders above the progress bar (::after z-index:1) */
-[data-brand="dt"] .dt-bevel-card > *:not(.dt-card-badge),
-[data-brand="dt"] .card > *:not(.dt-card-badge) {
+[data-brand="dt"] .dt-bevel-card > *:not(.dt-badge-bottom-right):not(.dt-card-badge),
+[data-brand="dt"] .card > *:not(.dt-badge-bottom-right):not(.dt-card-badge) {
   position: relative;
   z-index: 2;
 }
@@ -153,7 +153,7 @@
 /* Bottom-right bevel on card body content. Clip-path matches
    the card's inner surface bevel so the 3px structural border is visible
    at the diagonal corner. Badge overlays are excluded. */
-[data-brand="dt"] .card-body-flush > *:not(.dt-card-badge) {
+[data-brand="dt"] .card-body-flush > *:not(.dt-badge-bottom-right):not(.dt-card-badge) {
   display: block;
   clip-path: polygon(
       0% 0%,
@@ -394,6 +394,14 @@
       3px calc(var(--bevel-md) + 1px));
 }
 
+/* Video letterboxing — respect natural aspect ratio with black bars */
+.dt-bevel-media > video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
 /* Media frame placeholder — shows when no image/video is present.
    Surface-colored background is already provided by ::before.
    This adds centered "MISSING MEDIA" text via ::after. */
@@ -547,15 +555,17 @@
 /* ============================================================================
    Card Badge — bottom-right product type chip (LAB, BUNDLE, etc.)
    Source: dt-shopify-storefront CyberProductCard LabChip / BundleChip
-   Plain flat rectangle. Inherits card color via --dt-card-color.
+   Positioned at card level so the card's clip-path bevels the badge corner.
+   Consumer provides badge content/styling; card handles placement.
    ============================================================================ */
-/* Badge parent — provides position context for absolutely-positioned badges.
-   Use on the image container inside a card, or on any element that wraps content + badge. */
+
+/* Legacy: standalone badge parent for non-card contexts */
 .dt-badge-parent {
   position: relative;
 }
 
-.dt-card-badge {
+/* Legacy: standalone badge positioning for non-card contexts */
+.dt-badge-bottom-right {
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -568,13 +578,16 @@
   color: var(--color-bg);
 }
 
-/* Inside card body-flush, offset badge position to compensate for the
-   3px margin from the card edge. This makes the badge position relative
-   to the card's bevel corner match the media frame's placement exactly
-   (8px from card edge in both cases). */
-.card-body-flush > .dt-card-badge {
-  bottom: 5px;
-  right: 5px;
+/* Card-level badge slot — positioned so the card's bevel clip-path
+   clips the badge's bottom-right corner at 45 degrees.
+   bottom/right: 3px aligns with the inner frame border edge.
+   The badge extends into the bevel zone and gets clipped. */
+.card > .dt-card-badge,
+.dt-bevel-card > .dt-card-badge {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  z-index: 4;
 }
 
 /* ============================================================================
