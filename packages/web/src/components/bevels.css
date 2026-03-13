@@ -580,13 +580,12 @@
 
 /* Card-level badge slot — positioned so the card's bevel clip-path
    clips the badge's bottom-right corner at 45 degrees.
-   bottom/right: 3px aligns with the inner frame border edge.
-   The badge extends into the bevel zone and gets clipped. */
+   Values tuned so the badge is mostly visible with just the corner clipped. */
 .card > .dt-card-badge,
 .dt-bevel-card > .dt-card-badge {
   position: absolute;
-  bottom: 3px;
-  right: 3px;
+  bottom: calc(var(--bevel-md) * 0.25);
+  right: calc(var(--bevel-md) * 0.25);
   z-index: 4;
 }
 
