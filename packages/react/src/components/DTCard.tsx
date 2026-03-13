@@ -33,6 +33,8 @@ interface DTCardProps {
   growArea?: 'body' | 'title';
   className?: string;
   style?: CSSProperties;
+  /** Badge content rendered at bottom-right, clipped by card bevel */
+  badge?: ReactNode;
   onClick?: () => void;
 }
 
@@ -48,6 +50,7 @@ export function DTCard({
   className,
   style,
   onClick,
+  badge,
 }: DTCardProps) {
   const shouldShowHeader = showHeader ?? !!(title || onDismiss);
   const Tag = onClick ? 'button' : 'div';
@@ -90,6 +93,7 @@ export function DTCard({
         </div>
       )}
       {children}
+      {badge && <div className="dt-card-badge">{badge}</div>}
     </Tag>
   );
 }
