@@ -1,7 +1,6 @@
-import { createElement, useState, type CSSProperties } from 'react';
+import { createElement, type CSSProperties } from 'react';
 import {
   DTCard,
-  DTStaggerContainer,
   DTFeatureLegend,
 } from '@dangerousthings/react';
 import type { DTFeatureItem } from '@dangerousthings/react';
@@ -62,8 +61,6 @@ const aestheticFeatures: DTFeatureItem[] = [
 ];
 
 export function CardsAdvancedPage() {
-  const [staggerKey, setStaggerKey] = useState(0);
-
   return (
     <>
       <h1 className="page-title">Advanced Cards</h1>
@@ -72,7 +69,7 @@ export function CardsAdvancedPage() {
       <Section title="Card Color Modes" description="Per-card color via variant prop. Sets --dt-card-color, glow color, and accent.">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-dt-3">
           {modes.map(mode => (
-            <DTCard key={mode} variant={mode} title={mode.toUpperCase()}>
+            <DTCard key={mode} variant={mode} title={mode}>
               <div className="card-body" style={{ fontSize: '0.8rem' }}>mode-{mode}</div>
             </DTCard>
           ))}
@@ -80,6 +77,23 @@ export function CardsAdvancedPage() {
         <CodeLabel text="<DTCard variant='normal'> | 'emphasis' | 'warning' | 'success' | 'other'" />
       </Section>
 
+
+      <Section title="Card Grow" description="Cards stretch to equal height in a row via grow prop. Compare the varying content heights.">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+          <DTCard variant="normal" title="SHORT" grow>
+            <div className="card-body" style={{ fontSize: '0.8rem' }}>One line</div>
+          </DTCard>
+          <DTCard variant="emphasis" title="TALL" grow>
+            <div className="card-body" style={{ fontSize: '0.8rem' }}>
+              Multiple lines of content to demonstrate that the shorter card stretches to match this card's height.
+            </div>
+          </DTCard>
+          <DTCard variant="other" title="MEDIUM" grow>
+            <div className="card-body" style={{ fontSize: '0.8rem' }}>Two lines of content here.</div>
+          </DTCard>
+        </div>
+        <CodeLabel text="<DTCard grow /> — flex-grow: 1 + height: 100% to fill container" />
+      </Section>
 
       <Section title="Card Progress Bar" description="Vertical left-edge bar driven by progress prop (0-100).">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-dt-3">
@@ -99,15 +113,15 @@ export function CardsAdvancedPage() {
             { label: 'BUNDLE', mode: 'other' as DTVariant, img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=400&fit=crop' },
             { label: 'NFC', mode: 'normal' as DTVariant, img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=400&fit=crop' },
           ].map(badge => (
-            <DTCard key={badge.label} variant={badge.mode} title={badge.label + ' PRODUCT'}>
-              <div className="card-body-flush dt-badge-parent" style={{ aspectRatio: '1' }}>
+            <DTCard key={badge.label} variant={badge.mode} title={badge.label + ' PRODUCT'}
+              badge={<span>{badge.label}</span>}>
+              <div className="card-body-flush" style={{ aspectRatio: '1' }}>
                 <img src={badge.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                <span className="dt-card-badge">{badge.label}</span>
               </div>
             </DTCard>
           ))}
         </div>
-        <CodeLabel text=".dt-badge-parent > .dt-card-badge — badge positioned on card image container" />
+        <CodeLabel text="<DTCard badge={<span>LAB</span>}> — badge rendered and positioned by card" />
       </Section>
 
 <Section title="Buttons" description="Beveled buttons with active/selected states and mode colors. Nested levels use inline paddingLeft.">
@@ -149,27 +163,6 @@ export function CardsAdvancedPage() {
         </div>
       </Section>
 
-      <Section title="Stagger + Modes" description="Mode-colored cards in a stagger container.">
-        <DTStaggerContainer
-          key={staggerKey}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-dt-3"
-        >
-          {Array.from({ length: 10 }, (_, i) => (
-            <DTCard key={i} variant={modes[i % modes.length]} title={modes[i % modes.length].toUpperCase()} style={{ textAlign: 'center' }}>
-              {null}
-            </DTCard>
-          ))}
-        </DTStaggerContainer>
-        <button
-          className="btn-secondary"
-          style={{ marginTop: 'var(--space-4)' }}
-          onClick={() => setStaggerKey(k => k + 1)}
-          type="button"
-        >
-          REPLAY
-        </button>
-        <CodeLabel text="<DTStaggerContainer> with <DTCard variant='...' />" />
-      </Section>
     </>
   );
 }
