@@ -1,5 +1,13 @@
 # @dangerousthings/react
 
+## 2.0.1
+
+### Patch Changes
+
+- Video letterboxing for DTMediaFrame, card badge styling with bevel-aware positioning, restored DTStaggerContainer.
+- Updated dependencies
+  - @dangerousthings/web@0.4.1
+
 ## 2.0.0
 
 ### Minor Changes

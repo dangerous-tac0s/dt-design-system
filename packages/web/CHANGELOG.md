@@ -1,5 +1,11 @@
 # @dangerousthings/web
 
+## 0.4.1
+
+### Patch Changes
+
+- Video letterboxing for DTMediaFrame, card badge styling with bevel-aware positioning, restored DTStaggerContainer.
+
 ## 0.4.0
 
 ### Minor Changes
