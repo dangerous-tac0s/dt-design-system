@@ -1,5 +1,11 @@
 # @dangerousthings/react-native
 
+## 0.4.0
+
+### Minor Changes
+
+- Video letterboxing for DTMediaFrame, card badge styling with bevel-aware positioning, restored DTStaggerContainer in react-native, updated DTGallery/DTModal/DTMobileFilterOverlay components.
+
 ## 0.3.0
 
 ### Minor Changes
