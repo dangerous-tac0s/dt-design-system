@@ -1,11 +1,11 @@
-import { DTCard, DTStaggerContainer } from '@dangerousthings/react';
+import { DTCard } from '@dangerousthings/react';
 import type { DTVariant } from '@dangerousthings/tokens';
 import { Section, CodeLabel } from '../components/Section';
 
 const categories: { hash: string; title: string; desc: string; mode: DTVariant; count: number }[] = [
   { hash: 'bevels', title: 'Bevels', desc: 'Angular clip-path patterns — cards, buttons, badges, media frames, modals, drawers', mode: 'normal', count: 8 },
   { hash: 'forms', title: 'Forms', desc: 'Text inputs, checkboxes, switches, radios, progress bars, accordions, steppers', mode: 'success', count: 7 },
-  { hash: 'animations', title: 'Animations', desc: 'Entrance animations, stagger containers, transition utilities, scrollbar styling', mode: 'other', count: 5 },
+  { hash: 'animations', title: 'Animations', desc: 'Entrance animations, transition utilities, scrollbar styling', mode: 'other', count: 5 },
   { hash: 'cards-advanced', title: 'Advanced Cards', desc: 'Card color modes, progress bars, badge overlays, interactive bevel buttons, feature legend', mode: 'warning', count: 6 },
   { hash: 'tokens', title: 'Tokens', desc: 'Color palette, typography, spacing, and shape values for the active brand', mode: 'normal', count: 3 },
 ];
@@ -31,7 +31,6 @@ export function HomePage() {
           fontWeight: 900,
           letterSpacing: '0.15em',
           marginBottom: '0.25rem',
-          textTransform: 'uppercase',
         }}>
           DANGEROUS THINGS
         </h1>
@@ -40,7 +39,6 @@ export function HomePage() {
           fontSize: '1.25rem',
           fontWeight: 700,
           letterSpacing: '0.2em',
-          textTransform: 'uppercase',
           marginTop: 0,
         }}>
           DESIGN SYSTEM
@@ -71,16 +69,15 @@ export function HomePage() {
         color: 'var(--color-text-muted)',
         fontSize: '0.7rem',
         letterSpacing: '0.15em',
-        textTransform: 'uppercase',
         marginBottom: 'var(--space-4)',
       }}>
         COMPONENT CATALOG
       </p>
 
-      <DTStaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-dt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-dt-4">
         {categories.map(cat => (
           <a key={cat.hash} href={`#/${cat.hash}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <DTCard variant={cat.mode} title={cat.title.toUpperCase()}>
+            <DTCard variant={cat.mode} title={cat.title}>
               <div className="card-body">{cat.desc}</div>
               {cat.count > 0 && (
                 <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', marginTop: 'var(--space-2)' }}>
@@ -90,7 +87,7 @@ export function HomePage() {
             </DTCard>
           </a>
         ))}
-      </DTStaggerContainer>
+      </div>
 
       <Section title="Quick Start" description="Import the React components and CSS to get started.">
         <div className="terminal dt-accent-top">

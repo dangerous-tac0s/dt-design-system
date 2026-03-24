@@ -80,6 +80,11 @@ interface DTGalleryProps {
    */
   borderWidth?: number;
   /**
+   * Aspect ratio (width / height) for the display area
+   * @default 1
+   */
+  aspectRatio?: number;
+  /**
    * Additional styles
    */
   style?: StyleProp<ViewStyle>;
@@ -108,6 +113,7 @@ export function DTGallery({
   thumbnailSize = 64,
   bevelSize = 24,
   borderWidth = 3,
+  aspectRatio = 1,
   style,
 }: DTGalleryProps) {
   const theme = useDTTheme();
@@ -276,6 +282,7 @@ export function DTGallery({
       <View
         style={[
           styles.mainImageContainer,
+          { aspectRatio },
           !useBevels && {
             borderWidth,
             borderColor: accentColor,
@@ -355,7 +362,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   mainImageContainer: {
-    aspectRatio: 1,
     position: 'relative',
   },
   mainImageContent: {

@@ -160,7 +160,6 @@ export function DTDrawer({
               fontWeight: 900,
               fontSize: '2em',
               letterSpacing: '0.05em',
-              textTransform: 'uppercase',
               borderBottom: '1px solid var(--color-bg)',
             }}>
             <span>{heading}</span>

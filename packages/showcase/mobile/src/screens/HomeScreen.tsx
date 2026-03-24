@@ -58,14 +58,14 @@ const categories: {
   },
   {
     title: 'ADVANCED CARDS',
-    subtitle: 'Selected state, progress bar, badge overlays, stagger',
+    subtitle: 'Selected state, progress bar, badge overlays',
     mode: 'emphasis',
     route: 'CardsAdvanced',
     count: 4,
   },
   {
     title: 'ANIMATIONS',
-    subtitle: 'DTStaggerContainer, useScaleIn, usePulse',
+    subtitle: 'useScaleIn, usePulse',
     mode: 'success',
     route: 'Animations',
     count: 3,

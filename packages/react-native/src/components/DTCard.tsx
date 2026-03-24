@@ -50,6 +50,11 @@ interface DTCardProps {
    */
   progress?: number;
   /**
+   * Which area expands when the card grows to fill space
+   * @default 'body'
+   */
+  growArea?: 'body' | 'title';
+  /**
    * Additional styles for the card container
    */
   style?: StyleProp<ViewStyle>;
@@ -81,6 +86,10 @@ interface DTCardProps {
    * Background color (defaults to theme background)
    */
   backgroundColor?: string;
+  /**
+   * Element rendered at the right edge of the header
+   */
+  headerRight?: ReactNode;
   /**
    * Press handler
    */
@@ -215,6 +224,7 @@ export function DTCard({
   title,
   showHeader,
   progress = 0,
+  growArea = 'body',
   style,
   contentStyle,
   padding = 16,
@@ -222,6 +232,7 @@ export function DTCard({
   bevelSize = 32,
   bevelSizeSmall = 16,
   backgroundColor,
+  headerRight,
   onPress,
 }: DTCardProps) {
   const theme = useDTTheme();
@@ -327,7 +338,7 @@ export function DTCard({
       )}
       <View style={[styles.innerContainer, useBevels && {paddingLeft: bevelSizeSmall - borderWidth}]}>
         {shouldShowHeader && (
-          <View style={[styles.header, {backgroundColor: accentColor}]}>
+          <View style={[styles.header, {backgroundColor: accentColor}, growArea === 'title' && {flex: 1}, !!(title && headerRight) && styles.headerRow]}>
             {title && (
               <Text
                 variant="titleMedium"
@@ -335,9 +346,10 @@ export function DTCard({
                 {title}
               </Text>
             )}
+            {headerRight}
           </View>
         )}
-        <View style={[styles.content, {padding}, contentStyle]}>{children}</View>
+        <View style={[styles.content, {padding}, growArea === 'body' && {flex: 1}, contentStyle]}>{children}</View>
       </View>
       {/* Frame overlay (above content) — beveled mode only.
            Uses evenodd with 3 sub-paths: outer + inner + progressArea.
@@ -400,11 +412,17 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 1,
     overflow: 'hidden',
+    flex: 1,
   },
   header: {
     paddingLeft: 8,
     paddingRight: 16,
     paddingVertical: 12,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerText: {
     fontWeight: '700',

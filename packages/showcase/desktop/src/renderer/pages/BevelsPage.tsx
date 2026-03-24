@@ -53,12 +53,12 @@ export function BevelsPage() {
         <Row>
           {modes.map(mode => (
             <button key={mode} className={`dt-menu-item mode-${mode}`} type="button" onClick={() => setModalVariant(mode)}>
-              {mode.toUpperCase()} MODAL
+              {mode} Modal
             </button>
           ))}
         </Row>
         <CodeLabel text="<DTModal variant='normal' visible onDismiss title='...'>content</DTModal>" />
-        <DTModal visible={modalVariant !== null} onDismiss={() => setModalVariant(null)} variant={modalVariant ?? 'normal'} title={`${(modalVariant ?? 'normal').toUpperCase()} MODAL`}>
+        <DTModal visible={modalVariant !== null} onDismiss={() => setModalVariant(null)} variant={modalVariant ?? 'normal'} title={`${modalVariant ?? 'normal'} Modal`}>
           <p style={{ marginBottom: 'var(--space-4)' }}>This is a <strong>{modalVariant}</strong> modal with beveled card shape, backdrop blur, and scale-in animation.</p>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Click the backdrop or press Escape to dismiss.</p>
         </DTModal>
@@ -74,7 +74,7 @@ export function BevelsPage() {
           </button>
         </Row>
         <CodeLabel text="<DTDrawer position='right' heading='...' visible onDismiss>content</DTDrawer>" />
-        <DTDrawer visible={drawerSide !== null} onDismiss={() => setDrawerSide(null)} position={drawerSide ?? 'right'} heading={`${(drawerSide ?? 'right').toUpperCase()} DRAWER`} headingVariant={drawerSide === 'left' ? 'other' : 'emphasis'}>
+        <DTDrawer visible={drawerSide !== null} onDismiss={() => setDrawerSide(null)} position={drawerSide ?? 'right'} heading={`${drawerSide ?? 'right'} Drawer`} headingVariant={drawerSide === 'left' ? 'other' : 'emphasis'}>
           <p style={{ marginBottom: 'var(--space-4)' }}>Sliding panel from the <strong>{drawerSide}</strong> edge with beveled corners and backdrop blur.</p>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Click the backdrop, press Escape, or click ✕ to dismiss.</p>
         </DTDrawer>
@@ -91,7 +91,7 @@ export function BevelsPage() {
 
       <Section title="Accent Top" description="Used on accordion headers and menu items.">
         <div className="dt-accent-top" style={{ padding: 'var(--space-4)', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-          <span style={{ fontWeight: 600, textTransform: 'uppercase' }}>Thick Top Border Accent</span>
+          <span style={{ fontWeight: 600 }}>Thick Top Border Accent</span>
         </div>
         <CodeLabel text=".dt-accent-top" />
       </Section>
@@ -99,7 +99,7 @@ export function BevelsPage() {
       <Section title="Card Color Modes" description="Per-card mode coloring — see Advanced Cards page for full demos.">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-dt-3">
           {modes.map(mode => (
-            <DTCard key={mode} variant={mode} title={mode.toUpperCase()}>
+            <DTCard key={mode} variant={mode} title={mode}>
               <div className="card-body" style={{ fontSize: '0.75rem' }}>mode-{mode}</div>
             </DTCard>
           ))}

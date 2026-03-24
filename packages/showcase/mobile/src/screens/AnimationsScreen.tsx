@@ -1,15 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import {
   DTCard,
   DTLabel,
-  DTStaggerContainer,
   useDTTheme,
   useScaleIn,
   usePulse,
 } from '@dangerousthings/react-native';
-import type { DTVariant } from '@dangerousthings/react-native';
 import { ScreenContainer } from '../components/ScreenContainer';
 import { DemoSection } from '../components/DemoSection';
 import { CodeLabel } from '../components/CodeLabel';
@@ -20,44 +17,8 @@ export function AnimationsScreen() {
   const scaleAnim = useScaleIn({ duration: 600 });
   const pulseAnim = usePulse(true);
 
-  const modes: DTVariant[] = ['normal', 'emphasis', 'warning', 'success', 'other'];
-
   return (
     <ScreenContainer>
-      {/* Stagger Container */}
-      <DemoSection
-        title="DTStaggerContainer"
-        variant="normal"
-        description="Staggered scale-in entrance animation for child elements."
-      >
-        <DTStaggerContainer duration={330} interval={75}>
-          {modes.map((mode) => (
-            <DTCard key={mode} mode={mode} title={mode.toUpperCase()} style={{ marginBottom: 12 }}>
-              <Text variant="bodySmall" style={{ color: theme.colors.onSurface }}>
-                Staggered entrance with scale animation
-              </Text>
-            </DTCard>
-          ))}
-        </DTStaggerContainer>
-        <CodeLabel text="<DTStaggerContainer duration={330} interval={75}>" />
-      </DemoSection>
-
-      {/* Stagger with Labels */}
-      <DemoSection
-        title="Staggered Labels"
-        variant="emphasis"
-        description="Labels with staggered entrance animation."
-      >
-        <DTStaggerContainer duration={400} interval={100}>
-          {modes.map((mode) => (
-            <View key={mode} style={{ marginBottom: 8 }}>
-              <DTLabel primaryText={mode.toUpperCase()} mode={mode} />
-            </View>
-          ))}
-        </DTStaggerContainer>
-        <CodeLabel text="DTStaggerContainer > DTLabel — customizable timing" />
-      </DemoSection>
-
       {/* Scale-In Hook */}
       <DemoSection
         title="useScaleIn"

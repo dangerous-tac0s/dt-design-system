@@ -341,7 +341,6 @@ const styles = StyleSheet.create({
   menuItemTitle: {
     fontWeight: '600',
     letterSpacing: 0.5,
-    textTransform: 'uppercase',
     fontSize: 14,
   },
   chevron: {

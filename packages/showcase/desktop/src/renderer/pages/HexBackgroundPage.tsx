@@ -58,7 +58,7 @@ export function HexBackgroundPage({ hexProps, onHexPropsChange }: HexBackgroundP
           {sliders.map(({ key, label, min, max, step }) => (
             <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 'var(--space-4)' }}>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
                   {label}
                 </span>
                 <input

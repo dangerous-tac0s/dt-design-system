@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '700',
     letterSpacing: 0.5,
-    textTransform: 'uppercase',
   },
   grid: {
     flexDirection: 'row',

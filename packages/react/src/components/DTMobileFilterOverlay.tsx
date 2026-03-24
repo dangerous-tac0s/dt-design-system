@@ -5,7 +5,7 @@
  * .dt-filter-overlay-content
  */
 
-import { useEffect, useCallback, type ReactNode, type CSSProperties } from 'react';
+import { useEffect, useCallback, useRef, type ReactNode, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { DTVariant } from '@dangerousthings/tokens';
 import { cx } from '../utils/cx';
@@ -38,6 +38,9 @@ export function DTMobileFilterOverlay({
   className,
   style,
 }: DTMobileFilterOverlayProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onDismiss();
@@ -45,6 +48,7 @@ export function DTMobileFilterOverlay({
     [onDismiss],
   );
 
+  // Escape key
   useEffect(() => {
     if (visible) {
       document.addEventListener('keydown', handleKeyDown);
@@ -52,12 +56,57 @@ export function DTMobileFilterOverlay({
     }
   }, [visible, handleKeyDown]);
 
+  // Body scroll lock
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [visible]);
+
+  // Focus trap
+  useEffect(() => {
+    if (!visible) return;
+    triggerRef.current = document.activeElement as HTMLElement;
+
+    const timer = setTimeout(() => {
+      const first = panelRef.current?.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      first?.focus();
+    }, 100);
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !panelRef.current) return;
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleTab);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('keydown', handleTab);
+      triggerRef.current?.focus();
+    };
+  }, [visible]);
+
   if (!visible) return null;
 
   return createPortal(
     <div className={cx('dt-filter-overlay', getVariantClass(variant), className)} style={style}>
       <div className="dt-filter-overlay-backdrop" onClick={onDismiss} />
-      <div className="dt-filter-overlay-content">
+      <div ref={panelRef} className="dt-filter-overlay-content">
         {/* Header */}
         <div
           style={{
@@ -67,7 +116,7 @@ export function DTMobileFilterOverlay({
             padding: '16px',
             borderBottom: '1px solid rgba(var(--color-primary-rgb), 0.2)',
           }}>
-          <span style={{ fontWeight: 700, fontSize: '1.125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span style={{ fontWeight: 700, fontSize: '1.125rem', letterSpacing: '0.05em' }}>
             {heading}
             {activeFilterCount !== undefined && activeFilterCount > 0 && (
               <span
@@ -88,7 +137,6 @@ export function DTMobileFilterOverlay({
                   color: 'var(--color-primary)',
                   fontSize: '0.875rem',
                   cursor: 'pointer',
-                  textTransform: 'uppercase',
                 }}>
                 Clear All
               </button>

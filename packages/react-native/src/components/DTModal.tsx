@@ -9,8 +9,8 @@
  * - Content in beveled card container
  */
 
-import {StyleSheet, ViewStyle, StyleProp, KeyboardAvoidingView, Platform} from 'react-native';
-import {Portal, Modal} from 'react-native-paper';
+import {StyleSheet, ViewStyle, StyleProp, KeyboardAvoidingView, Platform, Pressable} from 'react-native';
+import {Portal, Modal, Text} from 'react-native-paper';
 import {useDTTheme} from '../theme/DTThemeProvider';
 import {type DTVariant} from '../utils/variantColors';
 import {DTCard} from './DTCard';
@@ -97,6 +97,17 @@ export function DTModal({
             mode={variant}
             title={title}
             showHeader={!!title}
+            headerRight={dismissable ? (
+              <Pressable
+                onPress={onDismiss}
+                hitSlop={8}
+                accessibilityLabel="Close"
+                accessibilityRole="button">
+                <Text style={{ color: theme.colors.onPrimary, fontSize: 18, lineHeight: 18 }}>
+                  {'\u2715'}
+                </Text>
+              </Pressable>
+            ) : undefined}
             contentStyle={contentStyle}>
             {children}
           </DTCard>

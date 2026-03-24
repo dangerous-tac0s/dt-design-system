@@ -82,13 +82,35 @@ export function DTModal({
           position: 'relative',
           maxWidth: '90vw',
           maxHeight: '85vh',
-          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
           ...style,
         }}
         role="dialog"
         aria-modal="true">
-        {title && <div className="card-title">{title}</div>}
-        <div style={{ padding: 'var(--space-6, 24px)' }}>{children}</div>
+        {title && (
+          <div className="card-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+            <span>{title}</span>
+            {dismissable && (
+              <button
+                type="button"
+                onClick={onDismiss}
+                aria-label="Close"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontSize: '1.25rem',
+                  lineHeight: 1,
+                }}>
+                &#x2715;
+              </button>
+            )}
+          </div>
+        )}
+        <div style={{ padding: 'var(--space-6, 24px)', overflow: 'auto', flex: '1 1 auto' }}>{children}</div>
       </div>
     </div>,
     document.body,

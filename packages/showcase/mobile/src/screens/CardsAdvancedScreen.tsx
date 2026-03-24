@@ -5,7 +5,6 @@ import {
   DTCard,
   DTChip,
   DTBadgeOverlay,
-  DTStaggerContainer,
   useDTTheme,
 } from '@dangerousthings/react-native';
 import type { DTVariant } from '@dangerousthings/react-native';
@@ -83,29 +82,6 @@ export function CardsAdvancedScreen() {
         <CodeLabel text="<DTBadgeOverlay position='bottom-right'><DTChip variant='warning'>LAB</DTChip>" />
       </DemoSection>
 
-      {/* Stagger + Progress */}
-      <DemoSection
-        title="Staggered Cards with Progress"
-        variant="success"
-        description="Stagger container with progress bars across all modes."
-      >
-        <DTStaggerContainer>
-          {modes.map((mode) => (
-            <DTCard
-              key={mode}
-              mode={mode}
-              title={mode.toUpperCase()}
-              progress={Math.random()}
-              style={{ marginBottom: 12 }}
-            >
-              <Text variant="bodySmall" style={{ color: theme.colors.onSurface }}>
-                Staggered + progress
-              </Text>
-            </DTCard>
-          ))}
-        </DTStaggerContainer>
-        <CodeLabel text="DTStaggerContainer > DTCard progress" />
-      </DemoSection>
     </ScreenContainer>
   );
 }

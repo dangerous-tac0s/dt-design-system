@@ -243,6 +243,5 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '600',
     letterSpacing: 1,
-    textTransform: 'uppercase',
   },
 });

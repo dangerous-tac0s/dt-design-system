@@ -17,7 +17,7 @@ Shared design tokens, web CSS, and React Native components for the Dangerous Thi
 
 Two brand themes ship out of the box:
 
-- **DT** — neon cyberpunk aesthetic with beveled corners and glow effects (Tektur font)
+- **DT** — neon cyberpunk aesthetic with beveled corners and baked in animations (Tektur font)
 - **Classic** — dark navy palette with magenta accents and standard border radius
 
 ## Getting Started

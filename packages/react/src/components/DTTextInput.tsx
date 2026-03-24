@@ -36,7 +36,6 @@ export function DTTextInput({
             marginBottom: '4px',
             fontSize: '0.875rem',
             fontWeight: 600,
-            textTransform: 'uppercase',
             letterSpacing: '0.05em',
           }}>
           {label}

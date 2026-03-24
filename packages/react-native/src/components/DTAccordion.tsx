@@ -251,7 +251,6 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: '600',
     letterSpacing: 0.5,
-    textTransform: 'uppercase',
     fontSize: 14,
   },
   contentWrapper: {},

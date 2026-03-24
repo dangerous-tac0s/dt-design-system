@@ -585,8 +585,20 @@
 .dt-bevel-card > .dt-card-badge {
   position: absolute;
   bottom: calc(var(--bevel-md) * 0.25);
-  right: calc(var(--bevel-md) * 0.25);
+  right: calc(var(--bevel-md) * -0.15);
   z-index: 4;
+  background: var(--dt-card-color, var(--color-primary));
+  color: var(--color-bg);
+  padding: 0.35em 2em 0.35em 1em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-brand="classic"] .card > .dt-card-badge,
+[data-brand="classic"] .dt-bevel-card > .dt-card-badge {
+  border-radius: 0.375rem;
 }
 
 /* ============================================================================

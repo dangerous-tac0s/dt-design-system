@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { DTCard, DTStaggerContainer } from '@dangerousthings/react';
+import { DTCard } from '@dangerousthings/react';
 import { Section, Row, CodeLabel } from '../components/Section';
 
 function AnimBox({ className, label }: { className: string; label: string }) {
@@ -66,7 +66,7 @@ function ProgressBarDemo() {
           <DTCard
             key={v}
             variant={v}
-            title={`${v.toUpperCase()} ${progress[i]}%`}
+            title={`${v} ${progress[i]}%`}
             progress={progress[i]}
             style={{ width: 160, transition: 'all 0.1s ease-out' }}
           >
@@ -90,13 +90,12 @@ function ProgressBarDemo() {
 
 export function AnimationsPage() {
   const [entranceKey, setEntranceKey] = useState(0);
-  const [staggerKey, setStaggerKey] = useState(0);
   const [accordionExpanded, setAccordionExpanded] = useState(false);
 
   return (
     <>
       <h1 className="page-title">Animations</h1>
-      <p className="page-subtitle">Entrance animations, interactive effects, stagger containers, and transition utilities.</p>
+      <p className="page-subtitle">Entrance animations, interactive effects, and transition utilities.</p>
 
       <Section title="Entrance Animations" description="One-shot animations for elements entering the viewport.">
         <Row key={entranceKey}>
@@ -119,28 +118,6 @@ export function AnimationsPage() {
         <CodeLabel text=".dt-animate-pulse | .dt-animate-ping | .dt-animate-spin" />
       </Section>
 
-      <Section title="Stagger Container" description="Automatic staggered scale-in animation for child elements. Customizable via --dt-stagger-duration and --dt-stagger-interval.">
-        <DTStaggerContainer
-          key={staggerKey}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-dt-3"
-        >
-          {Array.from({ length: 12 }, (_, i) => (
-            <DTCard key={i} title={`CARD ${i + 1}`} style={{ textAlign: 'center' }}>
-              <div className="card-body" style={{ fontSize: '0.75rem' }}>Item #{i + 1}</div>
-            </DTCard>
-          ))}
-        </DTStaggerContainer>
-        <button
-          className="btn-secondary"
-          style={{ marginTop: 'var(--space-4)' }}
-          onClick={() => setStaggerKey(k => k + 1)}
-          type="button"
-        >
-          REPLAY STAGGER
-        </button>
-        <CodeLabel text="<DTStaggerContainer> — nth-child delays up to 24 children" />
-      </Section>
-
       <Section title="Transition Utilities" description="Accordion expand, chevron rotation, and progress bar transitions.">
         <div style={{ maxWidth: 400 }}>
           <button
@@ -156,7 +133,6 @@ export function AnimationsPage() {
               cursor: 'pointer',
               color: 'var(--color-text)',
               fontWeight: 600,
-              textTransform: 'uppercase',
             }}
             aria-expanded={accordionExpanded}
             onClick={() => setAccordionExpanded(!accordionExpanded)}
