@@ -13,7 +13,6 @@ import {
   Shape,
   ExtrudeGeometry,
   MeshStandardMaterial,
-  MathUtils,
 } from 'three';
 
 export interface HexGridProps {
@@ -29,6 +28,13 @@ export interface HexGridProps {
   maxHeight?: number;
   /** Interval (ms) between height target changes @default 1500 */
   animationInterval?: number;
+  /** Duration (ms) for each hex to reach its target @default 1200 */
+  animationDuration?: number;
+}
+
+/** Hermite smoothstep: 3t² - 2t³ */
+function smoothstep(t: number): number {
+  return t * t * (3 - 2 * t);
 }
 
 function computeHexPositions(
@@ -62,6 +68,7 @@ export function HexGrid({
   margin = 0.05,
   maxHeight = 3,
   animationInterval = 1500,
+  animationDuration = 1200,
 }: HexGridProps) {
   const meshRef = useRef<InstancedMesh>(null);
 
@@ -70,11 +77,11 @@ export function HexGrid({
     [rows, cols, hexRadius, extrudeHeight, margin],
   );
 
-  const targetHeightsRef = useRef(
-    positions.map(() => 1 + Math.random() * maxHeight),
-  );
-  const currentHeightsRef = useRef(
-    positions.map(() => 1 + Math.random() * maxHeight),
+  const animStateRef = useRef(
+    positions.map(() => {
+      const h = 1 + Math.random() * maxHeight;
+      return {startHeight: h, targetHeight: h, startTime: 0};
+    }),
   );
 
   // Reuse dummy object for matrix updates — 15-20% FPS improvement
@@ -101,25 +108,41 @@ export function HexGrid({
   // Regenerate target heights at interval
   useEffect(() => {
     const interval = setInterval(() => {
-      targetHeightsRef.current = positions.map(
-        () => 0.5 + Math.random() * maxHeight,
-      );
+      const now = performance.now();
+      animStateRef.current = animStateRef.current.map((state) => {
+        // Compute where the hex currently is (same easing as useFrame)
+        const elapsed = Math.min(
+          (now - state.startTime) / animationDuration,
+          1,
+        );
+        const t = smoothstep(elapsed);
+        const currentHeight =
+          state.startHeight + (state.targetHeight - state.startHeight) * t;
+        return {
+          startHeight: currentHeight,
+          targetHeight: 0.5 + Math.random() * maxHeight,
+          startTime: now,
+        };
+      });
     }, animationInterval);
     return () => clearInterval(interval);
-  }, [positions, maxHeight, animationInterval]);
+  }, [positions.length, maxHeight, animationInterval, animationDuration]);
 
-  // Animate per frame: lerp current heights toward targets
-  useFrame((_state, delta) => {
+  // Animate per frame: time-based smoothstep easing
+  useFrame(() => {
     if (!meshRef.current) return;
     const dummy = dummyRef.current;
+    const now = performance.now();
 
     positions.forEach(({x, z}, i) => {
-      currentHeightsRef.current[i] = MathUtils.lerp(
-        currentHeightsRef.current[i],
-        targetHeightsRef.current[i],
-        delta * 0.5,
+      const state = animStateRef.current[i];
+      const elapsed = Math.min(
+        (now - state.startTime) / animationDuration,
+        1,
       );
-      const height = currentHeightsRef.current[i];
+      const t = smoothstep(elapsed);
+      const height =
+        state.startHeight + (state.targetHeight - state.startHeight) * t;
 
       dummy.position.set(x, height / 2, z);
       dummy.scale.set(1, height, 1);
