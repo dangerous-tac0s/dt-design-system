@@ -1,5 +1,13 @@
 # @dangerousthings/hex-background
 
+## 0.2.1
+
+### Fixed
+- Animation no longer degrades to noise over time — replaced frame-rate-dependent lerp with duration-based smoothstep easing
+
+### Added
+- `animationDuration` prop (default 1200ms) controls how long each hexagon takes to reach its target height
+
 ## 0.2.0
 
 ### Minor Changes
