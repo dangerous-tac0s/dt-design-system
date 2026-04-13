@@ -22,6 +22,8 @@ export interface HexGridBackgroundProps {
   maxHeight?: number;
   /** Height target refresh interval in ms @default 1500 */
   animationInterval?: number;
+  /** Duration (ms) for each hex to ease to target @default 1200 */
+  animationDuration?: number;
   /** Camera orbital speed @default 0.02 */
   cameraSpeed?: number;
   /** Camera orbital radius @default 8 */
@@ -62,6 +64,7 @@ export function HexGridBackground({
   margin = 0.05,
   maxHeight = 3,
   animationInterval = 1500,
+  animationDuration = 1200,
   cameraSpeed = 0.02,
   cameraRadius = 8,
   fov = 40,
@@ -134,6 +137,7 @@ export function HexGridBackground({
           margin={margin}
           maxHeight={maxHeight}
           animationInterval={animationInterval}
+          animationDuration={animationDuration}
         />
       </Suspense>
     </Canvas>
