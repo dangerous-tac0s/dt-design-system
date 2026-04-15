@@ -41,6 +41,9 @@ export type DTGalleryItem =
 
 interface DTGalleryProps {
   items: DTGalleryItem[];
+  /** Externally-controlled active index. When this value changes, the gallery
+   *  jumps to the corresponding item. Thumbnail clicks still work normally. */
+  activeIndex?: number;
   /** Color variant @default 'normal' */
   variant?: DTVariant;
   /** Aspect ratio (width / height) for the display area @default 1 */
@@ -85,12 +88,20 @@ const fillStyle: CSSProperties = {
 
 export function DTGallery({
   items,
+  activeIndex: activeIndexProp,
   variant = 'normal',
   aspectRatio = 1,
   className,
   style,
 }: DTGalleryProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(activeIndexProp ?? 0);
+
+  // Sync external activeIndex prop to internal state when it changes
+  useEffect(() => {
+    if (activeIndexProp != null && activeIndexProp >= 0 && activeIndexProp < items.length) {
+      setActiveIndex(activeIndexProp);
+    }
+  }, [activeIndexProp, items.length]);
 
   const hasModel = items.some((i) => i.type === 'model3d');
   useModelViewerScript(hasModel);
