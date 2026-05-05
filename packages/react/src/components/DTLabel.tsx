@@ -25,7 +25,7 @@ export function DTLabel({
 }: DTLabelProps) {
   return (
     <span
-      className={cx('badge', 'badge-mode', getVariantClass(variant), className)}
+      className={cx('badge', 'p-3', 'badge-mode', getVariantClass(variant), className)}
       style={style}>
       {children}
     </span>
