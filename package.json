@@ -1,7 +1,6 @@
 {
   "name": "dt-design-system",
   "version": "0.0.0",
-  "private": true,
   "description": "Dangerous Things design system — shared tokens, web CSS, and React Native components",
   "repository": {
     "type": "git",
