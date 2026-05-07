@@ -1,5 +1,11 @@
 # @dangerousthings/web
 
+## 0.5.0
+
+### Minor Changes
+
+- `dt-scale-in` keyframes now hold `transform: none, opacity: 0` during `animation-delay` (the period when `animation-fill-mode: both` shows the first keyframe), then snap to `scale(0)` at animation start before scaling/fading to 1. Visual difference vs prior is a subtle fade-in alongside the scale-in. **Why:** prior keyframes held descendants at `transform: scale(0)` during the delay, which caused any child performing `getBoundingClientRect()`-based self-measurement on mount (R3F `<Canvas>`, ResizeObserver-driven charts, virtualized lists, etc.) to read a near-zero rect and never recover — `transform` changes don't fire `ResizeObserver` when they end. Fixes the SuggestedPlacements 3D viewer "blank teal block until scroll" bug on the Hydrogen storefront product pages.
+
 ## 0.4.1
 
 ### Patch Changes

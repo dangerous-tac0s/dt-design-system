@@ -7,8 +7,16 @@
    ============================================================================ */
 
 @keyframes dt-scale-in {
-  from { transform: scale(0); }
-  to   { transform: scale(1); }
+  /* During animation-delay (with fill-mode: both), this 0% keyframe holds.
+     transform: none lets descendants self-measure correctly on mount —
+     critical for ResizeObserver-based components (R3F Canvas, charts,
+     virtualized lists) whose initial getBoundingClientRect() would
+     otherwise be transform-multiplied to ~0 inside a scale(0) ancestor. */
+  0%       { opacity: 0; transform: none; }
+  /* Snap to scale(0) at animation start so the entrance is still a
+     visible scale-in (with a brief fade-in alongside). */
+  0.001%   { opacity: 0; transform: scale(0); }
+  100%     { opacity: 1; transform: scale(1); }
 }
 
 @keyframes dt-fade-in {
