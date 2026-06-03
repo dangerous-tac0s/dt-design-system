@@ -5,7 +5,7 @@
  * .dt-filter-overlay-content
  */
 
-import { useEffect, useCallback, useRef, type ReactNode, type CSSProperties } from 'react';
+import { useEffect, useCallback, useRef, useId, type ReactNode, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { DTVariant } from '@dangerousthings/tokens';
 import { cx } from '../utils/cx';
@@ -40,6 +40,7 @@ export function DTMobileFilterOverlay({
 }: DTMobileFilterOverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const headingId = useId();
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -105,8 +106,18 @@ export function DTMobileFilterOverlay({
 
   return createPortal(
     <div className={cx('dt-filter-overlay', getVariantClass(variant), className)} style={style}>
-      <div className="dt-filter-overlay-backdrop" onClick={onDismiss} />
-      <div ref={panelRef} className="dt-filter-overlay-content">
+      <div
+        className="dt-filter-overlay-backdrop"
+        onClick={onDismiss}
+        aria-hidden="true"
+      />
+      <div
+        ref={panelRef}
+        className="dt-filter-overlay-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId}
+      >
         {/* Header */}
         <div
           style={{
@@ -116,7 +127,7 @@ export function DTMobileFilterOverlay({
             padding: '16px',
             borderBottom: '1px solid rgba(var(--color-primary-rgb), 0.2)',
           }}>
-          <span style={{ fontWeight: 700, fontSize: '1.125rem', letterSpacing: '0.05em' }}>
+          <span id={headingId} style={{ fontWeight: 700, fontSize: '1.125rem', letterSpacing: '0.05em' }}>
             {heading}
             {activeFilterCount !== undefined && activeFilterCount > 0 && (
               <span
@@ -144,6 +155,7 @@ export function DTMobileFilterOverlay({
             <button
               onClick={onDismiss}
               type="button"
+              aria-label={`Close ${heading}`}
               style={{
                 background: 'none',
                 border: 'none',
