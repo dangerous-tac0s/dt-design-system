@@ -226,6 +226,9 @@
 [data-brand="dt"] .badge {
   --badge-border-color: var(--color-border);
   --badge-fill: var(--color-surface);
+  /* inline-block so a wrapping badge stays one box — clip-path and the
+     ::before fill fragment across line boxes on a plain inline span */
+  display: inline-block;
   position: relative;
   isolation: isolate;
   background: var(--badge-border-color);
