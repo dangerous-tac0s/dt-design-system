@@ -407,9 +407,10 @@
 
 /* Media frame placeholder — shows when no image/video is present.
    Surface-colored background is already provided by ::before.
-   This adds centered "MISSING MEDIA" text via ::after. */
+   This adds centered "LOADING MEDIA" text via ::after. Mostly seen while
+   lazy media loads, so it must read as a loading state, not an error. */
 .dt-bevel-media::after {
-  content: 'MISSING MEDIA';
+  content: 'LOADING MEDIA';
   position: absolute;
   inset: 0;
   display: flex;
@@ -427,7 +428,7 @@
    Uses surface background and centered placeholder text. */
 .dt-badge-parent:empty::after,
 .card-body-flush:empty::after {
-  content: 'MISSING MEDIA';
+  content: 'LOADING MEDIA';
   display: flex;
   align-items: center;
   justify-content: center;
